@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/scrollView1">
+    <!--<fragment-->
+    <!--android:id="@+id/detailFragment"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--class="com.example.aaa.workoutwithfriend.FragmentForBodyPartChooser" />-->
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/activity_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <ImageButton
+                android:id="@+id/goToPreviousDayButton"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_height="wrap_content"
+                android:onClick="changeDateButtonClicked"
+                app:srcCompat="@drawable/arrow_left_thick" />
+
+
+            <TextView
+                android:id="@+id/currentDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/goToNextDayButton"
+                android:layout_toRightOf="@id/goToPreviousDayButton"
+                android:gravity="center"/>
+                <!--android:text="@string/currentDatePlaceholder" -->
+
+            <ImageButton
+                android:id="@+id/goToNextDayButton"
+                android:layout_alignParentRight="true"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="changeDateButtonClicked"
+                app:srcCompat="@drawable/arrow_right_thick" />
+        </RelativeLayout>
+    </TableLayout>
+</ScrollView>
