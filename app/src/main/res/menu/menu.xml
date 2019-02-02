@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_showProgress"
+        android:title="@string/showProgress">
+    </item>
+
+    <item
+        android:id="@+id/restoreFactorySettings"
+        android:title="@string/factorySettings">
+    </item>
+
+    <item
+        android:id="@+id/action_calendar"
+        android:title="@string/calendar"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/calendar">
+    </item>
+
+    <item
+        android:id="@+id/action_add"
+        android:title="@string/addNewWorkout"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_add_black_24dp">
+    </item>
+
+</menu>
+
+<!--<item-->
+<!--android:id="@+id/copyWorkout"-->
+<!--android:title="Copy workout">-->
+<!--</item>-->
