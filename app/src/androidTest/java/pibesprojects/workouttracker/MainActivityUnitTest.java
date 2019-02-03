@@ -103,6 +103,30 @@ public class MainActivityUnitTest {
     }
 
     @Test
+    public void ensureAddWorkoutButtonStartsProperClass() {
+        MainActivity activity = rule.getActivity();
+        Menu menu = activity.m_menu;
+        Intents.init();
+
+        activity.onOptionsItemSelected(menu.findItem(R.id.action_add));
+        android.os.SystemClock.sleep(1000);
+        intended(hasComponent(ChooserBodyPart.class.getName()));
+        Intents.release();
+    }
+
+    @Test
+    public void ensureShowProgressButtonStartsProperClass() {
+        MainActivity activity = rule.getActivity();
+        Menu menu = activity.m_menu;
+        Intents.init();
+
+        activity.onOptionsItemSelected(menu.findItem(R.id.action_showProgress));
+        android.os.SystemClock.sleep(1000);
+        intended(hasComponent(ShowProgress.class.getName()));
+        Intents.release();
+    }
+
+    @Test
     public void ensureCustomCalendarIsCalledAndProperDateIsSet(){
         MainActivity activity = rule.getActivity();
         Menu menu = activity.m_menu;
@@ -139,7 +163,7 @@ public class MainActivityUnitTest {
                 calendar.m_listener.onSelectedDayChange(calendar.m_calendarView, 2000, 4,10);
             }
         });
-        android.os.SystemClock.sleep(500);
+        android.os.SystemClock.sleep(1000);
 
         assertThat(calendar.getCurrentDate(), comparesEqualTo(currentDate));
         assertThat(activity.getCurrentDate(), comparesEqualTo(currentDate));

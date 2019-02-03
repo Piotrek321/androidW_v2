@@ -21,6 +21,8 @@ public class CustomCalendar extends AppCompatActivity {
     //TODO it is done for testing purpose, is there any way to call onSelectedDayChange from
     //tests?
     public CalendarView.OnDateChangeListener m_listener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +30,9 @@ public class CustomCalendar extends AppCompatActivity {
         SimpleDateFormat sdf;
         sdf = new SimpleDateFormat(dateFormat, Locale.US);
         m_calendarView = findViewById(R.id.calendarView);
+        m_currentDate = sdf.format(new Date());
 
-        if(getIntent().getExtras() == null)
-        {
-            m_currentDate = sdf.format(new Date());
-        }else
+        if(getIntent().getExtras() != null)
         {
             m_currentDate =  getIntent().getExtras().getString(EXTRA_DATE);
         }
@@ -56,20 +56,8 @@ public class CustomCalendar extends AppCompatActivity {
         m_listener = new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Log.v("Debug", "day: " + dayOfMonth);
-                String day = Integer.toString(dayOfMonth);
-                if(dayOfMonth < 10)
-                {
-                    day = "0" + dayOfMonth;
-                }
-                //TODO Why +1??
-                String month_ = Integer.toString(month+1);
-                if(month < 9)
-                {
-                    month_ = "0" + (month+1);
-                }
-                m_currentDate = year + "/" + month_ + "/" + day;
-                Log.v("Debug", "CustomCalendar date: " + m_currentDate);
+
+                parseDate(year, month, dayOfMonth);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(EXTRA_DATE, m_currentDate);
                 //returnIntent.putExtra(IS_COPY_MODE, isCopyMode);
@@ -78,8 +66,24 @@ public class CustomCalendar extends AppCompatActivity {
             }
         };
         m_calendarView.setOnDateChangeListener(m_listener);
-    }
 
+    }
+    void parseDate(int year, int month, int dayOfMonth)
+    {
+        String day = Integer.toString(dayOfMonth);
+        if(dayOfMonth < 10)
+        {
+            day = "0" + dayOfMonth;
+        }
+        //TODO Why +1??
+        String month_ = Integer.toString(month+1);
+        if(month < 9)
+        {
+            month_ = "0" + (month+1);
+        }
+        m_currentDate = year + "/" + month_ + "/" + day;
+        Log.v("Debug", "CustomCalendar date: " + m_currentDate);
+    }
     public String getCurrentDate()
     {
         return m_currentDate;

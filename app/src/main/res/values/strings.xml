@@ -2,7 +2,7 @@
     <string name="app_name">WorkoutTracker</string>
     <string name="calendar">Calendar</string>
     <string name="addNewWorkout">AddNewWorkout</string>
-    <string name="showProgress">ShowProgress</string>
+    <string name="showProgress">Show Progress</string>
     <string name="factorySettings">Factory Settings</string>
     <string name="arrow_right_thick">arrow_right_thick</string>
     <string name="arrow_left_thick">arrow_left_thick</string>

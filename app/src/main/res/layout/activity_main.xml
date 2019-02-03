@@ -24,8 +24,6 @@
                 app:srcCompat="@drawable/arrow_left_thick"
                 android:contentDescription="@string/arrow_left_thick" />
 
-
-
             <TextView
                 android:id="@+id/currentDateText"
                 android:layout_width="wrap_content"

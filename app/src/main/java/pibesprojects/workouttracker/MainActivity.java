@@ -21,46 +21,48 @@ import static pibesprojects.workouttracker.CustomCalendar.dateFormat;
 
 public class MainActivity extends AppCompatActivity {
     private final int GET_DATE_FROM_CALENDAR= 10;
-
-    private SimpleDateFormat sdf;
-    private String m_currentDate;
     private ImageButton m_goToPreviousDayButton;
     private ImageButton m_goToNextDayButton;
+    private DateHandler m_DateHandler;
     public Menu m_menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sdf = new SimpleDateFormat(dateFormat, Locale.US);
-
-        m_currentDate = sdf.format(new Date());
-        setTitle(m_currentDate);
+        m_DateHandler = new DateHandler();
 
         m_goToPreviousDayButton = findViewById(R.id.goToPreviousDayButton);
         m_goToNextDayButton = findViewById(R.id.goToNextDayButton);
+        TextView dateText = findViewById(R.id.currentDateText);
+        dateText.setText(m_DateHandler.getCurrentDate());
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId()) {
             case R.id.action_add:
                 Log.v("Debug", "R.id.action_add");
-
+                Intent chooserBodyPartIntent = new Intent(this, ChooserBodyPart.class);
+                startActivityForResult(chooserBodyPartIntent, GET_DATE_FROM_CALENDAR);
                 break;
             case R.id.restoreFactorySettings:
                 Log.v("Debug", "R.id.restoreFactorySettings");
                 break;
             case R.id.action_calendar:
                 Log.v("Debug", "R.id.action_calendar");
-                runCalendar();
+                startCalendar();
                 break;
             case R.id.action_showProgress:
                 Log.v("Debug", "R.id.action_showProgress");
-
+                Intent showProgressIntent = new Intent(this, ShowProgress.class);
+                startActivity(showProgressIntent);
                 break;
         }
         return false;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -79,32 +81,19 @@ public class MainActivity extends AppCompatActivity {
         return m_goToNextDayButton;
     }
 
-    public void changeDateButtonClicked(View view) throws ParseException {
-        Calendar c = Calendar.getInstance();
-        c.setTime(sdf.parse(m_currentDate));
-        ImageButton imageButton = (ImageButton)view;
-        if(imageButton == getGoToNextDayButton())
-        {
-            c.add(Calendar.DATE, 1);  // number of days to add
-        }else if(imageButton == getGoToPreviousDayButton())
-        {
-            c.add(Calendar.DATE, -1);  // number of days to add
-        }
-        m_currentDate = sdf.format(c.getTime());  // dt is now the new date
-        TextView dateText = findViewById(R.id.currentDateText);
-        dateText.setText(m_currentDate);
-        //generateActivityViewForDate();
+    public void changeDateButtonClicked(View view) throws ParseException
+    {
+        m_DateHandler.changeDateButtonClicked(view);
     }
 
     public String getCurrentDate()
     {
-        return m_currentDate;
+        return m_DateHandler.getCurrentDate();
     }
 
-    private void runCalendar()
+    private void startCalendar()
     {
         Intent intent = new Intent(this, CustomCalendar.class);
-
         startActivityForResult(intent, GET_DATE_FROM_CALENDAR);
     }
 
@@ -117,9 +106,49 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == GET_DATE_FROM_CALENDAR) {
             String date = data.getStringExtra(EXTRA_DATE);
-            m_currentDate = date;
+            m_DateHandler.setCurrentDate(date);
             Log.v("Debug", "onActivityResult date: " + date);
             //m_tableLayout.removeAllViews();
+            //generateActivityViewForDate();
+        }
+    }
+
+
+    private class DateHandler
+    {
+        private SimpleDateFormat sdf;
+        private String m_currentDate;
+        DateHandler()
+        {
+            sdf = new SimpleDateFormat(dateFormat, Locale.US);
+            m_currentDate = sdf.format(new Date());
+        }
+
+        public String getCurrentDate()
+        {
+            return m_currentDate;
+        }
+
+        public void setCurrentDate(String newDate)
+        {
+            m_currentDate = newDate;
+        }
+
+        public void changeDateButtonClicked(View view) throws ParseException {
+            Calendar c = Calendar.getInstance();
+            c.setTime(sdf.parse(m_currentDate));
+            ImageButton imageButton = (ImageButton)view;
+            if(imageButton == getGoToNextDayButton())
+            {
+                c.add(Calendar.DATE, 1);  // number of days to add
+            }
+            else if(imageButton == getGoToPreviousDayButton())
+            {
+                c.add(Calendar.DATE, -1);  // number of days to add
+            }
+            m_currentDate = sdf.format(c.getTime());  // dt is now the new date
+            TextView dateText = findViewById(R.id.currentDateText);
+            dateText.setText(m_currentDate);
             //generateActivityViewForDate();
         }
     }

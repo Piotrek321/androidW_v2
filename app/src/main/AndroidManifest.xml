@@ -24,6 +24,29 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <activity android:name=".ChooserBodyPart"
+            android:parentActivityName=".MainActivity">
+            android:theme="@style/Theme.AppCompat" >
+
+            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity android:name=".ShowProgress"
+            android:parentActivityName=".MainActivity">
+            android:theme="@style/Theme.AppCompat" >
+
+            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
     </application>
+
+
 
 </manifest>
