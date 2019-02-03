@@ -1,6 +1,7 @@
 package pibesprojects.workouttracker;
 
 import android.app.Activity;
+import android.view.View;
 
 /**
  * Created by aaa on 2018-03-27.
@@ -13,9 +14,9 @@ public abstract class IChoose extends Activity //implements View.OnClickListener
 
     public static final String EXTRA_MESSAGE_WORKOUT_NAME = "WORKOUT_NAME";
 
-//    public void relativeLayoutClicked(View view) {
-//        finish();
-//    }
+    public void relativeLayoutClicked(View view) {
+        finish();
+    }
 //
 //    protected void createAndAddButton(String text) {
 //        LinearLayout linear = findViewById(R.id.linearLayout_);

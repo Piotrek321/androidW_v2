@@ -7,5 +7,164 @@
     <string name="arrow_right_thick">arrow_right_thick</string>
     <string name="arrow_left_thick">arrow_left_thick</string>
 
+    <!--WORKOUTS-->
+    <string name="abs">Abs</string>
+    <string name="back">Back</string>
+    <string name="chest">Chest</string>
+    <string name="biceps">Biceps</string>
+    <string name="triceps">Triceps</string>
+    <string name="legs">Legs</string>
 
+    <string-array name="workouts">
+        <item>@string/abs</item>
+        <item>@string/back</item>
+        <item>@string/chest</item>
+        <item>@string/biceps</item>
+        <item>@string/triceps</item>
+        <item>@string/legs</item>
+    </string-array>
+
+    <!--BACK-->
+    <string name="BarbellDeadlift">Barbell Deadlift</string>
+    <string name="BentOverBarbellDeadlift">Bent-Over Barbell Deadlift</string>
+    <string name="WideGripPullUp">Wide-Grip Pull-Up</string>
+    <string name="StandingTBarRow">Standing T-Bar Row</string>
+    <string name="WideGripSeatedCableRow">Wide-Grip Seated Cable Row</string>
+    <string name="CloseGripPullDown">Close-Grip Pull-Down</string>
+    <string name="SingleArmDumbbellRow">Single-Arm Dumbbell Row</string>
+
+    <string-array name="Back">
+        <item>@string/BarbellDeadlift</item>
+        <item>@string/BentOverBarbellDeadlift</item>
+        <item>@string/WideGripPullUp</item>
+        <item>@string/StandingTBarRow</item>
+        <item>@string/WideGripSeatedCableRow</item>
+        <item>@string/CloseGripPullDown</item>
+        <item>@string/SingleArmDumbbellRow</item>
+    </string-array>
+
+    <!--BICEPS-->
+    <string name="BarbellCurl">Barbell Curl</string>
+    <string name="DumbbellCurl">Dumbbell Curl</string>
+    <string name="HammerCurl">Hammer Curl</string>
+    <string name="OverheadCableCurl">Overhead Cable Curl</string>
+    <string name="InclineDumbbellCurl">Incline Dumbbell Curl</string>
+    <string name="StandingBicepsCableCurl">Standing Biceps Cable Curl</string>
+    <string name="ConcentrationCurl">Concentration Curl</string>
+    <string name="DeclineDumbbellCurl">Decline Dumbbell Curl</string>
+
+    <string-array name="Biceps">
+        <item>@string/BarbellCurl</item>
+        <item>@string/DumbbellCurl</item>
+        <item>@string/HammerCurl</item>
+        <item>@string/OverheadCableCurl</item>
+        <item>@string/InclineDumbbellCurl</item>
+        <item>@string/StandingBicepsCableCurl</item>
+        <item>@string/ConcentrationCurl</item>
+        <item>@string/DeclineDumbbellCurl</item>
+    </string-array>
+
+    <!--ABS-->
+    <string name="CableChops">Cable Chops</string>
+    <string name="TRXPushup">TRX Pushup</string>
+    <string name="HangingKneeup">Hanging Knee-up</string>
+    <string name="HangingKneeHolds">Hanging Knee Holds</string>
+    <string name="ToestoBar">Toes to Bar</string>
+    <string name="LSitswithBentKnees">L-Sits with Bent Knees</string>
+    <string name="LSitswithStraightLegs">L-Sits with Straight Legs</string>
+    <string name="HollowBodyHold">Hollow Body Hold</string>
+    <string name="LegLowers">Leg Lowers</string>
+    <string name="BicycleCrunches">Bicycle Crunches</string>
+    <string name="StabilityBallPlank">Stability Ball Plank</string>
+    <string name="SidePlank">SidePlank</string>
+    <string name="Plank">Plank</string>
+
+    <string-array name="Abs">
+        <item>@string/CableChops</item>
+        <item>@string/TRXPushup</item>
+        <item>@string/HangingKneeup</item>
+        <item>@string/HangingKneeHolds</item>
+        <item>@string/ToestoBar</item>
+        <item>@string/LSitswithBentKnees</item>
+        <item>@string/LSitswithStraightLegs</item>
+        <item>@string/HollowBodyHold</item>
+        <item>@string/LegLowers</item>
+        <item>@string/BicycleCrunches</item>
+        <item>@string/StabilityBallPlank</item>
+        <item>@string/SidePlank</item>
+        <item>@string/Plank</item>
+    </string-array>
+
+    <!--TRICEPS-->
+    <string name="CloseGripBarbellBenchPress">Close-Grip Barbell Bench Press</string>
+    <string name="DipMachine">Dip Machine</string>
+    <string name="SeatedOverheadTricepsExtension">Seated Overhead Triceps Extension</string>
+    <string name="EZBarSkullcrusher">EZ-Bar Skullcrusher</string>
+    <string name="TricepsOverheadExtensionwithRope">Triceps Overhead Extension with Rope</string>
+    <string name="ParallelBarDip">Parallel Bar Dip</string>
+    <string name="TricepDumbbellKickback">Tricep Dumbbell Kickback</string>
+    <string name="StandingOneArmDumbbellTricepsExtension">Standing One-Arm Dumbbell Triceps Extension</string>
+
+    <string-array name="Triceps">
+        <item>@string/CloseGripBarbellBenchPress</item>
+        <item>@string/DipMachine</item>
+        <item>@string/SeatedOverheadTricepsExtension</item>
+        <item>@string/EZBarSkullcrusher</item>
+        <item>@string/TricepsOverheadExtensionwithRope</item>
+        <item>@string/ParallelBarDip</item>
+        <item>@string/TricepDumbbellKickback</item>
+        <item>@string/StandingOneArmDumbbellTricepsExtension</item>
+    </string-array>
+
+    <!--Chest-->
+    <string name="BarbellBenchPress">Barbell Bench Press</string>
+    <string name="FlatBenchDumbbellPress">Flat Bench Dumbbell Press</string>
+    <string name="InclineBarbellBenchPress">Incline Barbell Bench Press</string>
+    <string name="SeatedMachineChestPress">Seated Machine Chest Press</string>
+    <string name="InclineDumbbellPress">Incline Dumbbell Press</string>
+    <string name="DipsForChest">Dips For Chest</string>
+    <string name="PecDeckMachine">Pec-Deck Machine</string>
+    <string name="BarbellInclineBenchPressMediumGrip">Barbell Incline Bench Press Medium-Grip</string>
+    <string name="InclineDumbbellFlyes">Incline Dumbbell Flyes</string>
+
+    <string-array name="Chest">
+        <item>@string/BarbellBenchPress</item>
+        <item>@string/FlatBenchDumbbellPress</item>
+        <item>@string/InclineBarbellBenchPress</item>
+        <item>@string/SeatedMachineChestPress</item>
+        <item>@string/InclineDumbbellPress</item>
+        <item>@string/DipsForChest</item>
+        <item>@string/PecDeckMachine</item>
+        <item>@string/BarbellInclineBenchPressMediumGrip</item>
+        <item>@string/InclineDumbbellFlyes</item>
+    </string-array>
+
+    <!--LEGS-->
+    <string name="BarbellFrontSquat">Barbell Front Squat</string>
+    <string name="LegPress">Leg Press</string>
+    <string name="DumbbellWalkingLunge">Dumbbell Walking Lunge</string>
+    <string name="LegExtensions">Leg Extensions</string>
+    <string name="RomanianDeadlift">Romanian Deadlift</string>
+    <string name="LyingLegCurls">Lying Leg Curls</string>
+    <string name="StandingCalfRaises">Standing Calf Raises</string>
+    <string name="GobletSquat">Goblet Squat</string>
+    <string name="DonkeyCalfRaises">Donkey Calf Raises</string>
+    <string name="SeatedLegCurl">Seated Leg Curl</string>
+    <string name="HackSquat">Hack Squat</string>
+    <string name="OneLeggedCableKickback">One-Legged Cable Kickback</string>
+
+    <string-array name="Legs">
+        <item>@string/BarbellFrontSquat</item>
+        <item>@string/LegPress</item>
+        <item>@string/DumbbellWalkingLunge</item>
+        <item>@string/LegExtensions</item>
+        <item>@string/RomanianDeadlift</item>
+        <item>@string/LyingLegCurls</item>
+        <item>@string/StandingCalfRaises</item>
+        <item>@string/GobletSquat</item>
+        <item>@string/DonkeyCalfRaises</item>
+        <item>@string/SeatedLegCurl</item>
+        <item>@string/HackSquat</item>
+        <item>@string/OneLeggedCableKickback</item>
+    </string-array>
 </resources>

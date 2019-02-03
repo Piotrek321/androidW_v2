@@ -43,4 +43,5 @@
                 android:contentDescription="@string/arrow_right_thick" />
         </RelativeLayout>
     </TableLayout>
+
 </ScrollView>

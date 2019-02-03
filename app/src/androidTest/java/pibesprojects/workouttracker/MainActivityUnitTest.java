@@ -54,6 +54,7 @@ public class MainActivityUnitTest {
     public void ensureGoToNextDayButtonIsPresent() {
         MainActivity activity = rule.getActivity();
         ImageButton nextDayButton = activity.getGoToNextDayButton();
+        onView(withId(R.id.goToNextDayButton)).check(matches((isDisplayed())));
         assertThat(nextDayButton, notNullValue());
     }
 

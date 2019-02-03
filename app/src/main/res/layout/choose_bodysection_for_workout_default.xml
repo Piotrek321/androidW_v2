@@ -19,11 +19,11 @@
             android:layout_height="fill_parent"
             android:layout_weight="0.15"
             android:orientation="horizontal"
-            android:onClick="relativeLayoutClicked"
-            />
+            android:onClick="relativeLayoutClicked"/>
+
 
         <RelativeLayout
-            android:id="@+id/relLayout"
+            android:id="@+id/backgroundLayout"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="0.7"
@@ -42,42 +42,43 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Back"/>
+                android:text="@string/abs"/>
 
                 <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Chest"/>
+                android:text="@string/back"/>
 
                 <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Biceps"/>
+                android:text="@string/biceps"/>
 
                 <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Triceps"/>
+                android:text="@string/chest"/>
 
                 <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="ABS"/>
+                android:text="@string/triceps"/>
 
                 <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClick"
-                android:text="Legs"/>
+                android:text="@string/legs"/>
+
             </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relLayout_"
+            android:id="@+id/rightLayout"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="0.15"
