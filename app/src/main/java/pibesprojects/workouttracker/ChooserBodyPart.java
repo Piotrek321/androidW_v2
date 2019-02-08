@@ -15,6 +15,7 @@ public class ChooserBodyPart extends IChoose
 //        if(workouts.size() == 0)
 //        {
              setContentView(R.layout.choose_bodysection_for_workout_default);
+             initializeDefaultButtons();
 //        }
 //        else
 //        {

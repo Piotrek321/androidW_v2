@@ -6,6 +6,8 @@
     <string name="factorySettings">Factory Settings</string>
     <string name="arrow_right_thick">arrow_right_thick</string>
     <string name="arrow_left_thick">arrow_left_thick</string>
+    <string name="changeWorkoutName">Change workout name:</string>
+
 
     <!--WORKOUTS-->
     <string name="abs">Abs</string>

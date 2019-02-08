@@ -4,6 +4,7 @@ import android.support.test.annotation.UiThreadTest;
 import android.support.test.filters.MediumTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -64,4 +65,40 @@ public class ChooseBodyPartUnitTest {
         rightLayout.performClick();
         assertTrue(chooserBodyPart.isFinishing());
     }
+
+    @UiThreadTest
+    @Test
+    public void bodyPartNameLongClicked_ShouldBeAbleToChangeButtonName()
+    {
+        ChooserBodyPart chooserBodyPart = rule.getActivity();
+        LinearLayout linearLayout = chooserBodyPart.findViewById(R.id.linearLayout_);
+
+        Button button = (Button)linearLayout.getChildAt(0);
+        button.performLongClick();
+        button.performClick();
+
+//        onView(withId(R.id.ABC))
+//                .perform(click());
+                //.check(matches(isDisplayed()));
+      //  assertTrue(chooserBodyPart.longClicked);
+        //assertTrue(chooserBodyPart.shortClicked);
+        //assertThat(linearLayout.getChildCount(), comparesEqualTo(workouts.length));
+    }
+
+    @UiThreadTest
+    @Test
+    public void isButtonTextValid_ChangingNameToExistingAndNonExistingName()
+    {
+        ChooserBodyPart chooserBodyPart = rule.getActivity();
+
+        assertFalse(chooserBodyPart.isButtonTextValid(chooserBodyPart.getResources().getString(R.string.abs)));
+
+        assertTrue(chooserBodyPart.isButtonTextValid("New workout name"));
+        assertFalse(chooserBodyPart.isButtonTextValid(chooserBodyPart.getResources().getString(R.string.abs).toLowerCase()));
+
+        assertFalse(chooserBodyPart.isButtonTextValid(chooserBodyPart.getResources().getString(R.string.abs) + " "));
+        assertFalse(chooserBodyPart.isButtonTextValid(" " + chooserBodyPart.getResources().getString(R.string.abs)));
+
+    }
+
 }
