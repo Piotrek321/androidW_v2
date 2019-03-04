@@ -1,0 +1,143 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:id="@+id/ScrollView" android:orientation="horizontal"
+    android:background="#88000000">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutContainer"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            android:id="@+id/leftRelativeLayout"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15"
+            android:orientation="horizontal" />
+
+        <RelativeLayout
+            android:id="@+id/middleLayout"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.7">
+
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/CableChops"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/TRXPushup"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/HangingKneeup"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/HangingKneeHolds"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/ToestoBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/LSitswithBentKnees"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/LSitswithStraightLegs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/HollowBodyHold"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/LegLowers"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/BicycleCrunches"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/StabilityBallPlank"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/SidePlank"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:text="@string/Plank"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="onClick"
+                    android:visibility="invisible"
+                    android:text="NOTHING"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rightFill"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15"/>
+
+    </LinearLayout>
+</ScrollView>

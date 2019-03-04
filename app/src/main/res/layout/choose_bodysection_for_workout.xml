@@ -1,0 +1,100 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:id="@+id/ScrollView" android:orientation="horizontal"
+    android:background="#88000000"
+    android:fillViewport="true"
+    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layoutContainer"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    >
+
+    <RelativeLayout
+        android:id="@+id/leftLayout"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.15"
+        android:orientation="horizontal"
+        android:onClick="relativeLayoutClicked"
+        />
+
+    <RelativeLayout
+        android:id="@+id/relLayout"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.7"
+        android:onClick="relativeLayoutClicked"
+        >
+
+        <!-- This is the part that's 70% of the total width. I'm inserting a LinearLayout and buttons.-->
+        <LinearLayout
+            android:id="@+id/linearLayout_"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="Back"/>-->
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="Chest"/>-->
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="Biceps"/>-->
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="Triceps"/>-->
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="ABS"/>-->
+
+            <!--<Button-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="buttonClicked"-->
+                <!--android:text="Legs"/>-->
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relLayout_"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.15"
+        android:onClick="relativeLayoutClicked">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/fab_add"
+        android:onClick="FABClicked"/>
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+</ScrollView>
+

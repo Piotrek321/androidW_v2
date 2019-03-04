@@ -1,0 +1,113 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:id="@+id/ScrollView" android:orientation="horizontal"
+    android:background="#88000000">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutContainer"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            android:id="@+id/leftRelativeLayout"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15"
+            android:orientation="horizontal" />
+
+        <RelativeLayout
+            android:id="@+id/middleLayout"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.7">
+
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rightRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.15"></RelativeLayout>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/BarbellCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/DumbbellCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/HammerCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/OverheadCableCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/InclineDumbbellCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/StandingBicepsCableCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/ConcentrationCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:text="@string/DeclineDumbbellCurl"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+                <Button
+                    android:onClick="buttonClicked"
+                    android:visibility="invisible"
+                    android:text="NOTHING"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                </Button>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rightFill"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.15"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99999999">
+
+    <!-- Left border-->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.05"
+        android:orientation="horizontal">
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="224dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.90"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="TextView"
+                android:textSize="20dp"/>
+
+            <RelativeLayout
+                android:layout_below="@id/textView"
+                android:id="@+id/WeightRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="117dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_above="@+id/plusButtonWeight"
+                    android:layout_marginBottom="2dp"
+                    android:background="#05a705"
+                    android:orientation="vertical"/>
+
+                <ImageButton
+                    android:id="@+id/plusButtonWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="26dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@null"
+                    android:onClick="buttonClicked"
+                    android:src="@drawable/plus_circle" />
+
+                <Spinner
+                    android:id="@+id/spinnerWeight"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/holo_green_dark" />
+
+                <ImageButton
+                    android:id="@+id/minusButtonWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginLeft= "30dp"
+                    android:background="@null"
+                    android:onClick="buttonClicked"
+                    android:src="@drawable/minus_circle" />
+
+                <TextView
+                    android:id="@+id/weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Weight:" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/RepsRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_below="@+id/WeightRelativeLayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_above="@+id/plusButtonReps"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="2dp"
+                    android:background="#05a705"
+                    android:orientation="vertical"/>
+
+                <ImageButton
+                    android:id="@+id/plusButtonReps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="26dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@null"
+                    android:onClick="buttonClicked"
+                    android:src="@drawable/plus_circle" />
+
+                <Spinner
+                    android:id="@+id/spinnerReps"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/holo_blue_dark" />
+
+                <ImageButton
+                    android:id="@+id/minusButtonReps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="@null"
+                    android:onClick="buttonClicked"
+                    android:src="@drawable/minus_circle" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Reps" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ButtonsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_below="@+id/RepsRelativeLayout"
+                android:layout_centerHorizontal="true">
+
+                <Button
+                    android:id="@+id/SaveButton"
+                    android:layout_width="144dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:onClick="saveButtonClicked"
+                    android:text="Save" />
+
+                <Button
+                    android:id="@+id/ClearButton"
+                    android:layout_width="144dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:onClick="clearButtonClicked"
+                    android:text="Clear" />
+            </RelativeLayout>
+
+
+            <ScrollView
+                android:id="@+id/ScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/ButtonsLayout">
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutForExercises"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+            </ScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="13dp"
+                android:layout_marginEnd="11dp"
+                android:clickable="true"
+                app:srcCompat="@android:drawable/ic_dialog_info"
+                android:onClick="fabClicked"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Right border-->
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.05">
+    </RelativeLayout>
+</LinearLayout>
