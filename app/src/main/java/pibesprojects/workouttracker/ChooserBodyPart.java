@@ -1,11 +1,19 @@
 package pibesprojects.workouttracker;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 
 public class ChooserBodyPart extends IChoose
 {
 // implements View.OnClickListener {
 //
+
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -15,7 +23,8 @@ public class ChooserBodyPart extends IChoose
 //        if(workouts.size() == 0)
 //        {
              setContentView(R.layout.choose_bodysection_for_workout_default);
-             initializeDefaultButtons();
+             LinearLayout linearLayout = findViewById(R.id.linearLayout_);
+             initializeDefaultButtons(linearLayout);
 //        }
 //        else
 //        {
@@ -72,15 +81,15 @@ public class ChooserBodyPart extends IChoose
 //        finish();
 //    }
 //
-//    @Override
-//    public void onClick(View view)
-//    {
-//        Log.v("Debug", "buttonClicked view.getId()" + view.getId());
-//        Intent intent = new Intent(this, ChooseWorkout.class);
-//        intent.putExtra(EXTRA_MESSAGE_WORKOUT_NAME, ((Button)view).getText().toString());
-//        int requestCode = 1; // Or some number you choose
-//        startActivityForResult(intent, requestCode);
-//    }
+    @Override
+    public void onClick(View view)
+    {
+        Log.v("Debug", "buttonClicked view.getId()" + view.getId());
+        Intent intent = new Intent(this, ChooseWorkout.class);
+        intent.putExtra(EXTRA_MESSAGE_WORKOUT_NAME, ((Button)view).getText().toString());
+        int requestCode = 1; // Or some number you choose
+        startActivityForResult(intent, requestCode);
+    }
 //
 ////TODO CHANGE IT!!!!
 //    public void changeWorkoutName(LinearLayout layout, View view, String nameBeforeChange)
