@@ -10,15 +10,31 @@ import java.util.ArrayList;
 public class WorkoutNamesEntity implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     public int uid;
-    public String bodyPart;
-    public ArrayList<String> workoutNames;
+    private String bodyPart;
+    private ArrayList<String> workoutNames;
 
-    public WorkoutNamesEntity()
+    public String getBodyPart() {
+        return bodyPart;
+    }
+
+    public void setBodyPart(String bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
+    public ArrayList<String> getWorkoutNames() {
+        return workoutNames;
+    }
+
+    public void setWorkoutNames(ArrayList<String> workoutNames) {
+        this.workoutNames = workoutNames;
+    }
+
+    WorkoutNamesEntity()
     {
         workoutNames = new ArrayList<>();
     }
 
-    public WorkoutNamesEntity(Parcel in) {
+    private WorkoutNamesEntity(Parcel in) {
         uid = in.readInt();
         bodyPart = in.readString();
         workoutNames = in.createStringArrayList();

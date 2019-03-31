@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,43 +21,36 @@ import static org.junit.Assert.assertEquals;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
-public class DatabaseTest {
-public AppDatabase m_database;
+public class WorkoutDetailsEntityTest {
+    private AppDatabase m_database;
     private Integer sets = 2;
-    private ArrayList<Integer> repetitions = new ArrayList<>();
-    private ArrayList<Double> weights = new ArrayList<>();
+    private ArrayList<Integer> repetitions = new ArrayList<>(
+            Arrays.asList(1,2));
+    private ArrayList<Double> weights = new ArrayList<>(
+            Arrays.asList(1.0,2.0));
+
     private String workoutName = "workoutName";
     private String date = "2019/03/01";
     private String bodyPart = "bodyPart";
-    private String newBodyPartName = "newBodyPart";
 
     private Integer sets2 = 3;
-    private ArrayList<Integer> repetitions2 = new ArrayList<>();
-    private ArrayList<Double> weights2 = new ArrayList<>();
+    private ArrayList<Integer> repetitions2 = new ArrayList<>(
+            Arrays.asList(3,4));
+    private ArrayList<Double> weights2 = new ArrayList<>(
+            Arrays.asList(3.0,4.0));
+
     private String workoutName2 = "workoutName2";
     private String date2 = "2019/03/30";
-
     private String bodyPart2 = "bodyPart2";
 
-    private String dateAfterPeriod = "2019/02/01";
-    private String dateBeforePeriod= "2019/05/01";
+    private int sleepDuration = 10;
 
     @Before
-    public void initDb() throws Exception {
+    public void initDb()  {
         m_database = Room.inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getContext(),
                 AppDatabase.class)
                 .build();
-
-        repetitions.add(1);
-        repetitions.add(2);
-        weights.add(1.0);
-        weights.add(2.0);
-
-        repetitions2.add(3);
-        repetitions2.add(4);
-        weights2.add(3.0);
-        weights2.add(4.0);
     }
 
     @After
@@ -110,7 +104,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -125,7 +119,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -141,7 +135,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
@@ -158,10 +152,11 @@ public AppDatabase m_database;
     {
         WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        String dateAfterPeriod = "2019/02/01";
         WorkoutDetailsEntity workoutDetailsEntity3 = createTestWorkoutDetailsEntity2().setDate(dateAfterPeriod).build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2, workoutDetailsEntity3);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
@@ -176,10 +171,11 @@ public AppDatabase m_database;
     {
         WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        String dateBeforePeriod = "2019/05/01";
         WorkoutDetailsEntity workoutDetailsEntity3 = createTestWorkoutDetailsEntity2().setDate(dateBeforePeriod).build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2, workoutDetailsEntity3);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
@@ -196,7 +192,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
@@ -222,7 +218,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -242,7 +238,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -259,7 +255,7 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity );
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
 
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntityFromDB.get(0) );
@@ -273,8 +269,9 @@ public AppDatabase m_database;
         WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
 
         m_database.workoutDetailsDao().insertAll(workoutDetailsEntity );
-        android.os.SystemClock.sleep(100);
+        android.os.SystemClock.sleep(sleepDuration);
         List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        String newBodyPartName = "newBodyPart";
         workoutDetailsEntityFromDB.get(0).setBodyPart(newBodyPartName);
 
         m_database.workoutDetailsDao().update(workoutDetailsEntityFromDB.get(0));
