@@ -1,4 +1,4 @@
-package pibesprojects.workouttracker.Choosers;
+package pibesprojects.workouttracker;
 
 import android.content.Intent;
 import android.os.Bundle;

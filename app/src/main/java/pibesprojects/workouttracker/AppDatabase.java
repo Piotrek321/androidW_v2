@@ -12,8 +12,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
 
-    public abstract WorkoutDetailsDao m_workoutDetailsDao();
-    public abstract WorkoutNamesDao m_workoutNamesDao();
+    public abstract WorkoutDetailsDao workoutDetailsDao();
+    public abstract WorkoutNamesDao workoutNamesDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {

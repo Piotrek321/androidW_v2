@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add:
                 Log.v("Debug", "R.id.action_add");
-                Intent chooserBodyPartIntent = new Intent(this, ChooserBodyPart.class);
-                startActivityForResult(chooserBodyPartIntent, GET_DATE_FROM_CALENDAR);
+                Intent chooseBodyPartIntent = new Intent(this, ChooseBodyPart.class);
+                startActivityForResult(chooseBodyPartIntent, GET_DATE_FROM_CALENDAR);
                 break;
             case R.id.restoreFactorySettings:
                 Log.v("Debug", "R.id.restoreFactorySettings");
@@ -135,18 +135,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void changeDateButtonClicked(View view) throws ParseException {
-            Calendar c = Calendar.getInstance();
-            c.setTime(sdf.parse(m_currentDate));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(m_currentDate));
             ImageButton imageButton = (ImageButton)view;
             if(imageButton == getGoToNextDayButton())
             {
-                c.add(Calendar.DATE, 1);  // number of days to add
+                calendar.add(Calendar.DATE, 1);  // number of days to add
             }
             else if(imageButton == getGoToPreviousDayButton())
             {
-                c.add(Calendar.DATE, -1);  // number of days to add
+                calendar.add(Calendar.DATE, -1);  // number of days to add
             }
-            m_currentDate = sdf.format(c.getTime());  // dt is now the new date
+            m_currentDate = sdf.format(calendar.getTime());  // dt is now the new date
             TextView dateText = findViewById(R.id.currentDateText);
             dateText.setText(m_currentDate);
             //generateActivityViewForDate();

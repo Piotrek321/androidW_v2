@@ -3,6 +3,7 @@ package pibesprojects.workouttracker;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public interface WorkoutDetailsDao {
 
     @Query("DELETE FROM workoutDetailsTable")
-    void nukeTable();
+    void deleteAll();
 
     @Query("DELETE FROM workoutDetailsTable WHERE date=:date")
     void deleteForGivenDate(String date);
@@ -26,7 +27,7 @@ public interface WorkoutDetailsDao {
     @Query("SELECT * FROM workoutDetailsTable WHERE date BETWEEN :dateFirst AND :dayLast")
     List<WorkoutDetailsEntity> getWorkoutsForGivenPeriod(String dateFirst, String dayLast);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(WorkoutDetailsEntity... workouts);
     @Update
     void update(WorkoutDetailsEntity... workouts);

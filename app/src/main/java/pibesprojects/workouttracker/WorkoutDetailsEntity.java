@@ -13,13 +13,20 @@ public class WorkoutDetailsEntity implements Parcelable
     @PrimaryKey(autoGenerate = true)
     public int uid;
     private Integer sets;
-    private ArrayList reps;
+    private ArrayList<Integer> repetitions;
+    private ArrayList<Double> weights;
     private String workoutName;
-    private ArrayList weightForEachSet;
     private String date;
     private String bodyPart;
 
-    public WorkoutDetailsEntity(){
+    public WorkoutDetailsEntity(Integer sets, ArrayList<Integer> repetitions, ArrayList<Double> weights,
+                                String workoutName, String date, String bodyPart){
+        this.sets = sets;
+        this.repetitions = repetitions;
+        this.weights = weights;
+        this.workoutName = workoutName;
+        this.date = date;
+        this.bodyPart = bodyPart;
     }
 
     public static final Parcelable.Creator<WorkoutDetailsEntity> CREATOR = new Parcelable.Creator<WorkoutDetailsEntity>()
@@ -40,9 +47,9 @@ public class WorkoutDetailsEntity implements Parcelable
     @Override
     public void writeToParcel(Parcel pc, int flags) {
         pc.writeInt(sets);
-        pc.writeList(reps);
+        pc.writeList(repetitions);
+        pc.writeList(weights);
         pc.writeString(workoutName);
-        pc.writeList(weightForEachSet);
         pc.writeString(date);
         pc.writeString(bodyPart);
     }
@@ -50,19 +57,17 @@ public class WorkoutDetailsEntity implements Parcelable
     /**Ctor from Parcel, reads back fields IN THE ORDER they were written */
     public WorkoutDetailsEntity(Parcel pc){
         sets = pc.readInt();
-        reps = pc.readArrayList(Integer.class.getClassLoader());
+        repetitions = pc.readArrayList(Integer.class.getClassLoader());
+        weights = pc.readArrayList(Double.class.getClassLoader());
         workoutName = pc.readString();
-        weightForEachSet = pc.readArrayList(Double.class.getClassLoader());
         date = pc.readString();
         bodyPart = pc.readString();
-    }
-
-    public ArrayList getReps() {
-        return reps;
-    }
-
-    public void setReps(ArrayList<Integer> reps) {
-        this.reps = reps;
+        if(sets != repetitions.size() || sets != weights.size())
+        {
+            String message = Thread.currentThread().getStackTrace().toString();
+            message += " number of sets must be equal to repetitions size and weights size";
+            throw new RuntimeException(message);
+        }
     }
 
     public Integer getSets() {
@@ -81,12 +86,20 @@ public class WorkoutDetailsEntity implements Parcelable
         this.workoutName = workoutName;
     }
 
-    public ArrayList getWeightForEachSet() {
-        return weightForEachSet;
+    public ArrayList getRepetitions() {
+        return repetitions;
     }
 
-    public void setWeightForEachSet(ArrayList<Double> setsWeight) {
-        this.weightForEachSet = setsWeight;
+    public void setRepetitions(ArrayList<Integer> repetitions) {
+        this.repetitions = repetitions;
+    }
+
+    public ArrayList getWeights() {
+        return weights;
+    }
+
+    public void setWeights(ArrayList<Double> weights) {
+        this.weights = weights;
     }
 
     public String getDate() { return date; }

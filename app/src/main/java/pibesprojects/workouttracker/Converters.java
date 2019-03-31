@@ -1,6 +1,7 @@
 package pibesprojects.workouttracker;
 
 import android.arch.persistence.room.TypeConverter;
+import android.support.v4.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,14 +24,31 @@ class Converters {
     }
 
     @TypeConverter
-    public static String fromArrayListDouble(ArrayList<Double> list) {
+    public static String fromArrayListPairIntegerAndDouble(ArrayList<Pair<Integer,Double>> list) {
+        return  list.toString();
+    }
+
+    @TypeConverter
+    public static ArrayList<Integer> toArrayListInteger(String value) {
+        Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
+        return new Gson().fromJson(value, listType);
+    }
+
+    @TypeConverter
+    public static ArrayList<Double> toArrayListDouble(String value) {
+        Type listType = new TypeToken<ArrayList<Double>>() {}.getType();
+        return new Gson().fromJson(value, listType);
+    }
+
+    @TypeConverter
+    public static String fromArrayListInt(ArrayList<Integer> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;
     }
 
     @TypeConverter
-    public static String fromArrayList(ArrayList<Integer> list) {
+    public static String fromArrayListDouble(ArrayList<Double> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;
