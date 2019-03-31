@@ -27,12 +27,12 @@ import static org.junit.Assert.assertTrue;
 public class ChooseBodyPartTest {
 
     @Rule
-    public ActivityTestRule<pibesprojects.workouttracker.ChooseBodyPart> rule = new ActivityTestRule<>(pibesprojects.workouttracker.ChooseBodyPart.class);
+    public ActivityTestRule<ChooseBodyPart> rule = new ActivityTestRule<>(ChooseBodyPart.class);
 
     @Test
     public void onCreate_DefaultSetup_EnsureProperNumberOfRow()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         LinearLayout linearLayout = chooserBodyPart.findViewById(R.id.linearLayout_);
         String[] workouts = chooserBodyPart.getResources().getStringArray(R.array.workouts);
         assertThat(linearLayout.getChildCount(), comparesEqualTo(workouts.length));
@@ -42,7 +42,7 @@ public class ChooseBodyPartTest {
     @Test
     public void backgroundClicked_EnsureFinishIsCalled()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         RelativeLayout backgroundLayout = chooserBodyPart.findViewById(R.id.backgroundLayout);
         assertFalse(chooserBodyPart.isFinishing());
         backgroundLayout.performClick();
@@ -53,7 +53,7 @@ public class ChooseBodyPartTest {
     @Test
     public void leftLayoutClicked_EnsureFinishIsCalled()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         RelativeLayout leftLayout = chooserBodyPart.findViewById(R.id.leftLayout);
         assertFalse(chooserBodyPart.isFinishing());
         leftLayout.performClick();
@@ -64,7 +64,7 @@ public class ChooseBodyPartTest {
     @Test
     public void rightLayoutClicked_EnsureFinishIsCalled()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         RelativeLayout rightLayout = chooserBodyPart.findViewById(R.id.rightLayout);
         assertFalse(chooserBodyPart.isFinishing());
         rightLayout.performClick();
@@ -75,7 +75,7 @@ public class ChooseBodyPartTest {
     @Test
     public void bodyPartNameLongClicked_ShouldBeAbleToChangeButtonName()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         LinearLayout linearLayout = chooserBodyPart.findViewById(R.id.linearLayout_);
 
         final Button button = (Button)linearLayout.getChildAt(0);
@@ -103,6 +103,7 @@ public class ChooseBodyPartTest {
       //  android.os.SystemClock.sleep(2000);
 
         // button.performClick();
+        // button.performClick();
 
      //   onView(withId(R.id.editTextDialogUserInput))
        //         .perform(click());
@@ -120,7 +121,7 @@ public class ChooseBodyPartTest {
     {
 //      //  Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(ChooseBodyPart.class.getName(), null, false);
 //        final String newWorkout = "New workout";
-        final pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        final ChooseBodyPart chooserBodyPart = rule.getActivity();
         Button a = new Button(chooserBodyPart);
         chooserBodyPart.FABClicked(a);
 
@@ -199,7 +200,7 @@ try{
     @Test
     public void isButtonTextValid_ChangingNameToExistingAndNonExistingName()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
 
         assertFalse(chooserBodyPart.isButtonTextValid(chooserBodyPart.getResources().getString(R.string.abs)));
 
@@ -214,10 +215,10 @@ try{
     @Test
     public void handlePositiveButtonClicked_ChangingNameToNonExisting_ShouldReturnTrue()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
 
         Button button = new Button(chooserBodyPart);
-        pibesprojects.workouttracker.IChoose.AlertDialogHandler alertDialogHandler = chooserBodyPart.new AlertDialogHandler();
+        IChoose.AlertDialogHandler alertDialogHandler = chooserBodyPart.new AlertDialogHandler();
         EditText editText = new EditText(chooserBodyPart);
         editText.setText("Non existing workout name");
         assertTrue(alertDialogHandler.handlePositiveButtonClicked(button, editText, true));
@@ -227,10 +228,10 @@ try{
     @Test
     public void handlePositiveButtonClicked_ChangingNameToExisting_ShouldReturnFalse()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
 
         Button button = new Button(chooserBodyPart);
-        pibesprojects.workouttracker.IChoose.AlertDialogHandler alertDialogHandler = chooserBodyPart.new AlertDialogHandler();
+        IChoose.AlertDialogHandler alertDialogHandler = chooserBodyPart.new AlertDialogHandler();
         EditText editText = new EditText(chooserBodyPart);
         editText.setText(chooserBodyPart.getResources().getString(R.string.abs));
         assertFalse(alertDialogHandler.handlePositiveButtonClicked(button, editText, true));
@@ -240,7 +241,7 @@ try{
     @Test
     public void backPressed_DefaultSetup_ShouldNotCrash()
     {
-        pibesprojects.workouttracker.ChooseBodyPart chooserBodyPart = rule.getActivity();
+        ChooseBodyPart chooserBodyPart = rule.getActivity();
         chooserBodyPart.onBackPressed();
     }
 }
