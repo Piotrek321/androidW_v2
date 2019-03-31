@@ -28,6 +28,7 @@ public AppDatabase m_database;
     private String workoutName = "workoutName";
     private String date = "2019/03/01";
     private String bodyPart = "bodyPart";
+    private String newBodyPartName = "newBodyPart";
 
     private Integer sets2 = 3;
     private ArrayList<Integer> repetitions2 = new ArrayList<>();
@@ -266,4 +267,20 @@ public AppDatabase m_database;
         assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
     }
 
+    @Test
+    public void test_UpdateWorkoutDetailsEntityWithTheSameUidTwice_ShouldReturnOneEntity()
+    {
+        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
+
+        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity );
+        android.os.SystemClock.sleep(100);
+        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        workoutDetailsEntityFromDB.get(0).setBodyPart(newBodyPartName);
+
+        m_database.workoutDetailsDao().update(workoutDetailsEntityFromDB.get(0));
+        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
+        assertThat(newBodyPartName, comparesEqualTo( workoutDetailsEntityFromDB.get(0).getBodyPart()));
+
+    }
 }
