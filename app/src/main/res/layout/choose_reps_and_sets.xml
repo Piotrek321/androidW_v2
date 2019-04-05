@@ -25,7 +25,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/workoutNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -34,7 +34,7 @@
                 android:textSize="20dp"/>
 
             <RelativeLayout
-                android:layout_below="@id/textView"
+                android:layout_below="@id/workoutNameText"
                 android:id="@+id/WeightRelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="117dp">
@@ -207,14 +207,13 @@
                 android:id="@+id/floatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="13dp"
+                android:layout_alignParentBottom="true"
                 android:layout_marginEnd="11dp"
+                android:layout_marginBottom="13dp"
                 android:clickable="true"
-                app:srcCompat="@android:drawable/ic_dialog_info"
                 android:onClick="fabClicked"
-                />
+                app:srcCompat="@drawable/done" />
         </RelativeLayout>
     </LinearLayout>
 

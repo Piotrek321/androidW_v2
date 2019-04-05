@@ -62,24 +62,24 @@ public class ChooseBodyPart extends IChoose
 ////        }
 //    }
 //
-//    protected void onActivityResult (int requestCode, int resultCode, Intent data)
-//    {
-//        if(data == null)
-//        {
-//            return;
-//        }
-//        WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra("message123");
-//
-//        Log.v("Debug", "ChooseBodyPart::onActivityResult " +
-//                "workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
-//        Log.v("Debug", "ChooseBodyPart::onActivityResult " +
-//                "workoutDetailsEntity.getSetsWeight(): " + workoutDetailsEntity.getSetsWeight());
-//
-//        Intent i = new Intent();
-//        i.putExtra("message", workoutDetailsEntity);
-//        setResult(RESULT_OK, i);
-//        finish();
-//    }
+    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+        if(data == null)
+        {
+            return;
+        }
+        WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra("message123");
+
+        Log.v("Debug", "ChooseBodyPart::onActivityResult " +
+                "workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
+        Log.v("Debug", "ChooseBodyPart::onActivityResult " +
+                "workoutDetailsEntity.getSetsWeight(): " + workoutDetailsEntity.getWeights());
+
+        Intent i = new Intent();
+        i.putExtra("message", workoutDetailsEntity);
+        setResult(RESULT_OK, i);
+        finish();
+    }
 //
     @Override
     public void onClick(View view)

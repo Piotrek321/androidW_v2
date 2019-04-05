@@ -64,18 +64,18 @@ import android.widget.LinearLayout;
     protected void onActivityResult (int requestCode, int resultCode, Intent data)
     {
         // Collect data from the intent and use it
-//        WorkoutDetailsEntity details = data.getParcelableExtra("message");
-//        if(details.getSets() == 0 && details.getSetsWeight().size() == 0 && details.getReps().size() == 0)
-//        {
-//            return;
-//        }
-//        Log.v("TAG", "onActivityResult " + "ChooseWorkout" + details.getSets());
-//        details.setWorkoutName(currentWorkout);
-//        details.setBodyPart(m_BodyPart);
-//        Intent i = new Intent();
-//        i.putExtra("message123", details);
-//        setResult(RESULT_OK, i);
-//        finish();
+        WorkoutDetailsEntity details = data.getParcelableExtra("message");
+        if(details.getSets() == 0 && details.getWeights().size() == 0 && details.getRepetitions().size() == 0)
+        {
+            return;
+        }
+        Log.v("TAG", "onActivityResult " + "ChooseWorkout" + details.getSets());
+        details.setWorkoutName(currentWorkout);
+        details.setBodyPart(m_BodyPart);
+        Intent i = new Intent();
+        i.putExtra("message123", details);
+        setResult(RESULT_OK, i);
+        finish();
     }
 
     public void changeWorkoutName(LinearLayout layout, View view, String nameBeforeChange)

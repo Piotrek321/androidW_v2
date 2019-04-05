@@ -5,21 +5,25 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import static pibesprojects.workouttracker.ChooseWorkout.EXTRA_MESSAGE_BODYPART_NAME;
 import static pibesprojects.workouttracker.IChoose.EXTRA_MESSAGE_WORKOUT_NAME;
+import static pibesprojects.workouttracker.MainActivity.GET_EDIT_DATA;
 
 public class ChooseRepsAndSets extends Activity {
     private final int GET_EDIT_DATA_INT = 20;
-    public static final String CHILD_INDEX = "childIndex";
 
     Spinner spinnerWeight;
     Spinner spinnerReps;
@@ -28,195 +32,194 @@ public class ChooseRepsAndSets extends Activity {
     Integer currentExerciseDetailsId =0;
     String m_WorkoutName;
     String m_BodyPart;
-    Integer childsIndex;
-    public void onCreate(Bundle savedInstanceState)
+
+    private <Type> ArrayAdapter<Type> createSpinner()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.choose_reps_and_sets);
-        childsIndex = Integer.valueOf(999);
-        m_WorkoutName = getIntent().getStringExtra(EXTRA_MESSAGE_WORKOUT_NAME);
-        m_BodyPart = getIntent().getStringExtra(EXTRA_MESSAGE_BODYPART_NAME);
-        spinnerWeight = findViewById(R.id.spinnerWeight);
-        TextView txt = findViewById(R.id.textView);
-        txt.setText(m_WorkoutName);
-        ArrayAdapter<Double> spinnerAdapter =
+        ArrayAdapter<Type> spinnerAdapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerWeight.setAdapter(spinnerAdapter);
-
-        for(double i =0; i <300; i+=0.5)
-        {
-            spinnerAdapter.add(i);
-        }
         spinnerAdapter.notifyDataSetChanged();
 
+        return spinnerAdapter;
+    }
+    public void onCreate(Bundle savedInstanceState)
+    {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.choose_reps_and_sets);
+        m_WorkoutName = getIntent().getStringExtra(EXTRA_MESSAGE_WORKOUT_NAME);
+        m_BodyPart = getIntent().getStringExtra(EXTRA_MESSAGE_BODYPART_NAME);
+        TextView workoutNameText = findViewById(R.id.workoutNameText);
+        workoutNameText.setText(m_WorkoutName);
+        spinnerWeight = findViewById(R.id.spinnerWeight);
         spinnerReps = findViewById(R.id.spinnerReps);
-        ArrayAdapter<Integer> spinnerAdapterReps =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
-        spinnerAdapterReps.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerReps.setAdapter(spinnerAdapterReps);
 
-        for(int i =1; i <300; ++i)
+        ArrayAdapter<Double> weightAdapter = createSpinner();
+        ArrayAdapter<Integer> repsAdapter = createSpinner();
+        for(double i =0; i <300; i+=0.5)
         {
-            spinnerAdapterReps.add(i);
+            weightAdapter.add(i);
+            if(i % 1 == 0 && i != 0)
+            {
+                repsAdapter.add((int)i);
+            }
         }
-        spinnerAdapterReps.notifyDataSetChanged();
-//        ArrayList<WorkoutDetailsEntity> workoutDetailsEntityList = getIntent().getParcelableArrayListExtra(GET_EDIT_DATA);
-//
-//        if(workoutDetailsEntityList != null)
-//        {
-//            childsIndex = getIntent().getIntExtra(CHILD_INDEX, 99999);
-//            for(int i = 0; i< workoutDetailsEntityList.get(0).getSets(); ++i)
-//            {
-//                LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
-//                LayoutInflater inflater = this.getLayoutInflater();
-//                View rowView = inflater.inflate(R.layout.layout_helpers, layout, false);
-//                RelativeLayout main = rowView.findViewById(R.id.exerciseDetails);
-//
-//                TextView view_ = rowView.findViewById(R.id.setView);
-//                view_.setText(String.valueOf(i+1));
-//
-//                view_=  rowView.findViewById(R.id.repsView);
-//                view_.setText(workoutDetailsEntityList.get(0).getReps().get(i).toString() + (workoutDetailsEntityList.get(0).getReps().get(i).toString().equals("1") ? " rep" : " reps")) ;
-//
-//                view_=  rowView.findViewById(R.id.weightView);
-//                view_.setText(workoutDetailsEntityList.get(0).getSetsWeight().get(i).toString() + " kg");
-//                layout.addView(main);
-//            }
-//            m_WorkoutName = workoutDetailsEntityList.get(0).getWorkoutName();
-//            m_BodyPart = workoutDetailsEntityList.get(0).getBodyPart();
-//            txt.setText(m_WorkoutName);
-//
-//            sets = workoutDetailsEntityList.get(0).getSets();
-//        }
+        spinnerWeight.setAdapter(weightAdapter);
+        spinnerReps.setAdapter(repsAdapter);
 
+        ArrayList<WorkoutDetailsEntity> workoutDetailsEntityList = getIntent().getParcelableArrayListExtra(GET_EDIT_DATA);
 
+        if(workoutDetailsEntityList != null)
+        {
+            for(int i = 0; i< workoutDetailsEntityList.get(0).getSets(); ++i)
+            {
+                String repetitionsFromSpinner =  workoutDetailsEntityList.get(0).getRepetitions().get(i).toString();
+                String repetitionsText = repetitionsFromSpinner + (repetitionsFromSpinner.equals("1") ? " rep" : " reps");
+                String weightText = getString(R.string.Kg, workoutDetailsEntityList.get(0).getWeights().get(i).toString());
 
+                createNewEntry(String.valueOf(i+1), repetitionsText, weightText);
+            }
 
-//        getIntent().getParcelableArrayListExtra(GET_EDIT_DATA))
-
+            sets = workoutDetailsEntityList.get(0).getSets();
+        }
     }
 
     public void clearButtonClicked(View view)
     {
         if(((Button)view).getText().toString().equals(getString(R.string.ClearButton)))
         {
-            Log.v("Debug", "Clear ");
             spinnerReps.setSelection(0);
             spinnerWeight.setSelection(0);
         }
-//        else if(((Button)view).getText().toString().equals(getString(R.string.DeleteButton)))
-//        {
-//            Log.v("Debug", "Delete ");
-//            ScrollView scroll = findViewById(R.id.ScrollView);
-//            LinearLayout layout_ = (LinearLayout)scroll.getChildAt(0);
-//            if(layout_.getChildCount() == 0)
-//            {
-//                return;
-//            }
-//
-//            layout_.removeViewAt(currentExerciseDetailsId-1);
-//            Log.v("Debug", "Delete: layoutsChildCount before delete: " + layout_.getChildCount());
-//            --sets;
-//            for(int i= currentExerciseDetailsId-1; i<layout_.getChildCount(); ++i)
-//            {
-//                RelativeLayout rel =(RelativeLayout)layout_.getChildAt(i);
-//                LinearLayout ll = (LinearLayout)rel.getChildAt(0);
-//                TextView setsView = (TextView)(ll).getChildAt(0);
-//                setsView.setText(String.valueOf(i+1));
-//            }
-//
-//            if(layout_.getChildCount() < currentExerciseDetailsId)
-//            {
-//                currentExerciseDetailsId = layout_.getChildCount();
-//            }
-//            if(layout_.getChildCount() == 0)
-//            {
-//                ((Button)findViewById(R.id.SaveButton)).setText(getString(R.string.SaveButton));
-//                ((Button)findViewById(R.id.ClearButton)).setText(getString(R.string.ClearButton));
-//            }
-//
-//            Log.v("Debug", "Delete: layoutsChildCount after delete: " + layout_.getChildCount());
-//            Log.v("Debug", "Delete: currentExerciseDetailsId: " + currentExerciseDetailsId);
-//            Log.v("Debug", "Delete: sets: " + sets);
-//        }
+        else if(((Button)view).getText().toString().equals(getString(R.string.DeleteButton)))
+        {
+            LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
+
+            if(layout.getChildCount() == 0)
+            {
+                return;
+            }
+
+            layout.removeViewAt(currentExerciseDetailsId-1);
+            --sets;
+            for(int i= currentExerciseDetailsId-1; i<layout.getChildCount(); ++i)
+            {
+                TextView setsView = geSetsTextView(i);
+                setsView.setText(String.valueOf(i+1));
+            }
+
+            if(layout.getChildCount() < currentExerciseDetailsId)
+            {
+                currentExerciseDetailsId = layout.getChildCount();
+            }
+
+            if(layout.getChildCount() == 0)
+            {
+                ((Button)findViewById(R.id.SaveButton)).setText(getString(R.string.SaveButton));
+                ((Button)findViewById(R.id.ClearButton)).setText(getString(R.string.ClearButton));
+            }
+        }
     }
+
+    private LinearLayout getExerciseDetailsLayout(int childIndex)
+    {
+        LinearLayout linearLayoutForExercises = findViewById(R.id.linearLayoutForExercises);
+        RelativeLayout rel = (RelativeLayout) linearLayoutForExercises.getChildAt(childIndex);
+        return (LinearLayout) rel.getChildAt(0);
+    }
+
+    private TextView geSetsTextView(int childIndex)
+    {
+        LinearLayout exerciseDetailsLayout = getExerciseDetailsLayout(childIndex);
+        return (TextView) (exerciseDetailsLayout.getChildAt(0));
+    }
+
+    private TextView getRepetitionsTextView(int childIndex)
+    {
+        LinearLayout exerciseDetailsLayout = getExerciseDetailsLayout(childIndex);
+        return (TextView) (exerciseDetailsLayout.getChildAt(1));
+    }
+
+    private TextView geWeightTextView(int childIndex)
+    {
+        LinearLayout exerciseDetailsLayout = getExerciseDetailsLayout(childIndex);
+        return (TextView) (exerciseDetailsLayout.getChildAt(2));
+    }
+
 
     public void saveButtonClicked(View view)
     {
-//        if(Integer.parseInt(spinnerReps.getSelectedItem().toString()) != 0)
-//        {
-//            if(((Button)view).getText().toString().equals(getString(R.string.ChangeButton)))
-//            {
-//                Log.v("Debug", "Change ");
-//                ScrollView scroll = findViewById(R.id.ScrollView);
-//
-//                LinearLayout layout_ = (LinearLayout) scroll.getChildAt(0);
-//                RelativeLayout rel = (RelativeLayout) layout_.getChildAt(currentExerciseDetailsId - 1);
-//
-//                layout_ = (LinearLayout) rel.getChildAt(0);
-//                TextView reps = (TextView) ((layout_).getChildAt(1));
-//                TextView weight = (TextView) ((layout_).getChildAt(2));
-//                Log.v("Debug", "reps " + reps.getText().toString());
-//                Log.v("Debug", "weight " + weight.getText().toString());
-//                reps.setText(spinnerReps.getSelectedItem().toString() + (spinnerReps.getSelectedItem().toString().equals("1") ? " rep" : " reps"));
-//                weight.setText(getString(R.string.Kg, spinnerWeight.getSelectedItem().toString()));
-//            }
-//            else if(((Button)view).getText().toString().equals(getString(R.string.SaveButton)))
-//            {
-//                Log.v("Debug", "Save ");
-//                LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
-//
-//                LayoutInflater inflater = this.getLayoutInflater();
-//                View rowView = inflater.inflate(R.layout.layout_helpers, layout, false);
-//                RelativeLayout main = rowView.findViewById(R.id.exerciseDetails);
-//
-//                TextView view_ = rowView.findViewById(R.id.setView);
-//                view_.setText(String.valueOf(++sets));
-//
-//                view_=  rowView.findViewById(R.id.repsView);
-//                view_.setText(spinnerReps.getSelectedItem().toString() + (spinnerReps.getSelectedItem().toString().equals("1") ?  " rep" : " reps")) ;
-//
-//                view_=  rowView.findViewById(R.id.weightView);
-//                view_.setText(getString(R.string.Kg, spinnerWeight.getSelectedItem().toString()));
-//
-//                Log.v("Debug", "spinnerWeight value: " + Double.parseDouble(spinnerWeight.getSelectedItem().toString()));
-//
-//                layout.addView(main);
-//            }
-//        Log.v("Debug", "saveButtonClicked " + view.getId());
-//        Log.v("Debug", "spinnerReps value: " + Integer.parseInt(spinnerReps.getSelectedItem().toString()));
-//        }
+        String repetitionsFromSpinner = spinnerReps.getSelectedItem().toString();
+        String repetitionsText = repetitionsFromSpinner + (repetitionsFromSpinner.equals("1") ? " rep" : " reps");
+        String weightText = getString(R.string.Kg, spinnerWeight.getSelectedItem().toString());
+        if(Integer.parseInt(repetitionsFromSpinner) != 0)
+        {
+            String buttonText = ((Button)view).getText().toString();
+            if(buttonText.equals(getString(R.string.ChangeButton)))
+            {
+                getRepetitionsTextView(currentExerciseDetailsId - 1).setText(repetitionsText);
+                geWeightTextView(currentExerciseDetailsId - 1).setText(weightText);
+            }
+            else if(buttonText.equals(getString(R.string.SaveButton)))
+            {
+                createNewEntry(String.valueOf(++sets), repetitionsText, weightText);
+            }
+        }
+    }
+    private void createNewEntry(String setsText, String repetitionsText, String weightText)
+    {
+        LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.layout_helpers, layout, false);
+
+        RelativeLayout main = rowView.findViewById(R.id.exerciseDetailsBackground);
+
+        TextView textView = rowView.findViewById(R.id.setView);
+        textView.setText(setsText);
+
+        textView = rowView.findViewById(R.id.repsView);
+        textView.setText(repetitionsText) ;
+
+        textView = rowView.findViewById(R.id.weightView);
+        textView.setText(weightText);
+
+        layout.addView(main);
+    }
+
+    private void setLayoutToDefault()
+    {
+        isExerciseDetailsClicked = false;
+        currentExerciseDetailsId = 999;
+        ((Button)findViewById(R.id.SaveButton)).setText(R.string.SaveButton);
+        ((Button)findViewById(R.id.ClearButton)).setText(R.string.ClearButton);
+        spinnerReps.setSelection(0);
+        spinnerWeight.setSelection(0);
     }
 
     public void exerciseDetailsClicked(View view)
     {
-//        LinearLayout ll = (LinearLayout)((RelativeLayout)view).getChildAt(0);
-//
-//        Integer currentExerciseDetailsIdTemp = Integer.parseInt(((TextView)(ll.getChildAt(0))).getText().toString());
-//        if(isExerciseDetailsClicked && currentExerciseDetailsId == currentExerciseDetailsIdTemp)
-//        {
-//            isExerciseDetailsClicked = false;
-//            currentExerciseDetailsId = 999;
-//            ((Button)findViewById(R.id.SaveButton)).setText(R.string.SaveButton);
-//            ((Button)findViewById(R.id.ClearButton)).setText(R.string.ClearButton);
-//            spinnerReps.setSelection(0);
-//            spinnerWeight.setSelection(0);
-//            return;
-//        }
-//        isExerciseDetailsClicked = true;
-//        currentExerciseDetailsId = currentExerciseDetailsIdTemp;
-//        ((Button)findViewById(R.id.SaveButton)).setText(R.string.ChangeButton);
-//        ((Button)findViewById(R.id.ClearButton)).setText(R.string.DeleteButton);
-//
-//        Log.v("TAG", "layoutClicked: " + view.getId() + " currentExerciseDetailsId: " + currentExerciseDetailsId);
-//
-//        TextView reps = (TextView)(ll.getChildAt(1));
-//        TextView weight = (TextView)(ll.getChildAt(2));
-//
-//        spinnerReps.setSelection(Integer.parseInt(reps.getText().toString().split(" ")[0])-1);
-//        Double val = Double.parseDouble(weight.getText().toString().split(" ")[0])*2;
-//        spinnerWeight.setSelection(val.intValue());
+        LinearLayout ll = (LinearLayout)((RelativeLayout)view).getChildAt(0);
+
+        Integer currentExerciseDetailsIdTemp = Integer.parseInt(((TextView)(ll.getChildAt(0))).getText().toString());
+        if(isExerciseDetailsClicked && currentExerciseDetailsId.equals(currentExerciseDetailsIdTemp))
+        {
+            setLayoutToDefault();
+            return;
+        }
+        isExerciseDetailsClicked = true;
+        currentExerciseDetailsId = currentExerciseDetailsIdTemp;
+        ((Button)findViewById(R.id.SaveButton)).setText(R.string.ChangeButton);
+        ((Button)findViewById(R.id.ClearButton)).setText(R.string.DeleteButton);
+
+        Log.v("TAG", "layoutClicked: " + view.getId() + " currentExerciseDetailsId: " + currentExerciseDetailsId);
+
+        TextView reps = (TextView)(ll.getChildAt(1));
+        TextView weight = (TextView)(ll.getChildAt(2));
+
+        spinnerReps.setSelection(Integer.parseInt(reps.getText().toString().split(" ")[0])-1);
+        Double val = Double.parseDouble(weight.getText().toString().split(" ")[0])*2;
+        spinnerWeight.setSelection(val.intValue());
     }
 
     public void buttonClicked(View view)
@@ -240,47 +243,46 @@ public class ChooseRepsAndSets extends Activity {
         }
     }
 
+    private WorkoutDetailsEntity collectDataBeforeExiting()
+    {
+        ArrayList<Double> weights = new ArrayList<>(sets);
+        ArrayList<Integer> reps = new ArrayList<>(sets);
+
+        for(int i =0; i< sets; ++i)
+        {
+            TextView repetitions = getRepetitionsTextView(i);
+            TextView weightsView = geWeightTextView(i);
+
+            Double weight = Double.parseDouble(weightsView.getText().toString().split(" ")[0]);
+            Integer repetition = Integer.parseInt(repetitions.getText().toString().split(" ")[0]);
+
+            weights.add(weight);
+            reps.add(repetition);
+            Log.v("Debug", "onBackPressed weights.get(" + i + ") = " + weights.get(i));
+            Log.v("Debug", "onBackPressed reps.get(" + i + ") = " + reps.get(i));
+        }
+
+        return new WorkoutDetailsEntityBuilder().setRepetitions(reps).
+                setWeights(weights).
+                setSets(sets).
+                setWorkoutName(m_WorkoutName).
+                setBodyPart(m_BodyPart).
+                build();
+    }
+
     @Override
     public void onBackPressed()
     {
-//        if(isExerciseDetailsClicked)
-//        {
-//            isExerciseDetailsClicked = false;
-//            currentExerciseDetailsId = 999;
-//            ((Button)findViewById(R.id.SaveButton)).setText(R.string.SaveButton);
-//            ((Button)findViewById(R.id.ClearButton)).setText(R.string.ClearButton);
-//            spinnerReps.setSelection(0);
-//            spinnerWeight.setSelection(0);
-//            return;
-//        }
-//        Log.v("Debug", "onBackPressed ");
-//        WorkoutDetailsEntity wd = new WorkoutDetailsEntity();
-//        ArrayList<Double> weights = new ArrayList<>(sets);
-//        ArrayList<Integer> reps = new ArrayList<>(sets);
-//        ScrollView scroll = findViewById(R.id.ScrollView);
-//        LinearLayout layout_ =(LinearLayout)scroll.getChildAt(0);
-//
-//        for(int i =0; i< sets; ++i)
-//        {
-//            RelativeLayout rel  = (RelativeLayout)layout_.getChildAt(i);
-//            LinearLayout layout_2 = (LinearLayout)rel.getChildAt(0);
-//            TextView reps_ = (TextView)((layout_2).getChildAt(1));
-//            TextView weight_ = (TextView)((layout_2).getChildAt(2));
-//
-//            weights.add(Double.parseDouble(weight_.getText().toString().split(" ")[0]));
-//            reps.add(Integer.parseInt(reps_.getText().toString().split(" ")[0]));
-//            Log.v("Debug", "onBackPressed weights.get(" + i + ") = " + weights.get(i));
-//            Log.v("Debug", "onBackPressed reps.get(" + i + ") = " + reps.get(i));
-//        }
-//        wd.setReps(reps);
-//        wd.setSetsWeight(weights);
-//        wd.setSets(sets);
-//        wd.setWorkoutName(m_WorkoutName);
-//        wd.setBodyPart(m_BodyPart);
-//        Log.v("Debug", "onBackPressed m_BodyPart " + m_BodyPart);
-//
-//        Intent i = new Intent();
-//        i.putExtra("message", wd);
+        if(isExerciseDetailsClicked)
+        {
+            setLayoutToDefault();
+            return;
+        }
+        Log.v("Debug", "onBackPressed ");
+        Log.v("Debug", "onBackPressed m_BodyPart " + m_BodyPart);
+
+        Intent i = new Intent();
+        i.putExtra("message", collectDataBeforeExiting());
 //        if(childsIndex != 999)
 //        {
 //            i.putExtra(CHILD_INDEX, childsIndex);
@@ -288,12 +290,12 @@ public class ChooseRepsAndSets extends Activity {
 //            setResult(GET_EDIT_DATA_INT, i);
 //            finish();
 //        }
-//        setResult(RESULT_OK, i);
-//        finish();
+        setResult(RESULT_OK, i);
+        finish();
     }
 
     public void fabClicked(View view) throws UnsupportedEncodingException {
-        String query = new String(m_BodyPart + " " + m_WorkoutName + " workout");
+        String query = m_BodyPart + " " + m_WorkoutName + " workout";
         String escapedQuery = URLEncoder.encode(query, "UTF-8");
         Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);

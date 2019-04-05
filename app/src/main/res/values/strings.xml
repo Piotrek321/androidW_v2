@@ -9,8 +9,15 @@
     <string name="changeWorkoutName">Change workout name:</string>
     <string name="SaveButton">Save</string>
     <string name="ClearButton">Clear</string>
+    <string name="ChangeButton">Change</string>
+    <string name="DeleteButton">Delete</string>
+    <string name="Kg">%1s kg</string>
 
-
+    <string name="Reps">Reps:    %1$s</string>
+    <string name="Sets">Sets:      %1$s</string>
+    <string name="SetsInteger">Sets:      %1$d</string>
+    <string name="Weight">Weight: %1$s</string>
+    <string name="SetNumberOfSets">%1$d</string>
     <!--WORKOUTS-->
     <string name="abs">Abs</string>
     <string name="back">Back</string>
