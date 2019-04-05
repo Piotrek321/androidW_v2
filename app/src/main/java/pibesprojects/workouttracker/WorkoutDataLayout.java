@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-public class WorkoutEntryList extends RelativeLayout {
+public class WorkoutDataLayout extends RelativeLayout {
     private RelativeLayout mContentView;
     static int i =0;
     private TextView m_NumberOfReps;
@@ -21,11 +21,11 @@ public class WorkoutEntryList extends RelativeLayout {
     private ImageView m_WorkoutImage;
     private TextView m_BodyPart;
 
-    public WorkoutEntryList(Context context) {
+    public WorkoutDataLayout(Context context) {
         this(context, null);
     }
 
-    public WorkoutEntryList(Context context, AttributeSet attrs)
+    public WorkoutDataLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -48,7 +48,7 @@ public class WorkoutEntryList extends RelativeLayout {
         m_BodyPart.setText(bodyPart);
     }
 
-    public WorkoutEntryList(Context context, AttributeSet attrs, int defStyle) {
+    public WorkoutDataLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         //Inflate and attach your child XML
         LayoutInflater.from(context).inflate(R.layout.workout_row, this);

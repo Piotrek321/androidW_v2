@@ -111,54 +111,55 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
-        if (requestCode == GET_DATE_FROM_CALENDAR) {
-            String date = data.getStringExtra(EXTRA_DATE);
-            m_DateHandler.setCurrentDate(date);
-            TextView dateText = findViewById(R.id.currentDateText);
-            dateText.setText(m_DateHandler.getCurrentDate());
-            Log.v("Debug", "onActivityResult date: " + date);
-            //m_tableLayout.removeAllViews();
-            //generateActivityViewForDate();
-        }
-        else {
-            WorkoutDetailsEntity wd = data.getParcelableExtra("message");
-            wd.setDate(m_DateHandler.m_currentDate);
-            Log.v("Debug", "getWorkoutName " + wd.getWorkoutName());
-            Log.v("Debug", "getSetsWeight " + wd.getWeights());
+        switch(requestCode) {
+            case GET_DATE_FROM_CALENDAR:
+            {
+                String date = data.getStringExtra(EXTRA_DATE);
+                m_DateHandler.setCurrentDate(date);
+                TextView dateText = findViewById(R.id.currentDateText);
+                dateText.setText(m_DateHandler.getCurrentDate());
+                //m_tableLayout.removeAllViews();
+                //generateActivityViewForDate();
+                break;
+            }
+            case ACTION_ADD:
+            {
+                WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra("message");
+                workoutDetailsEntity.setDate(m_DateHandler.m_currentDate);
 
-            String reps = wd.getRepetitions().toString().substring(1, wd.getRepetitions().toString().length() - 1);
-            reps = reps.replace(",", "");
-            String weight = wd.getWeights().toString().substring(1, wd.getWeights().toString().length() - 1);
-            weight = weight.replace(",", "");
-            WorkoutEntryList workoutEntryList = new WorkoutEntryList(this, null);
-            workoutEntryList.createEntry(
-                    wd.getWorkoutName(),
-                    getString(R.string.SetsInteger, wd.getRepetitions().size()),
-                    getString(R.string.Reps, reps),
-                    getString(R.string.Weight, weight),
-                    BitmapFactory.decodeResource(getResources(), R.drawable.benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
-                    wd.getBodyPart());
+                WorkoutDataLayout workoutDataLayout = convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity);
 
-            Log.v("Debug", "onActivityResult getBodyPart: " + wd.getBodyPart());
 
-            Log.v("Debug", "onActivityResult before m_tableLayout.add m_tableLayout.childCount" + m_tableLayout.getChildCount());
 //        m_tableLayout.addView(findViewById(R.id.activity_label));
 
-            m_tableLayout.addView(workoutEntryList);
+                m_tableLayout.addView(workoutDataLayout);
 
-            List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
-            for (int i = 1; i < m_tableLayout.getChildCount(); ++i) {
+                List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
+                for (int i = 1; i < m_tableLayout.getChildCount(); ++i) {
 //                WorkoutDetailsEntity workoutDetailsEntity = convertWorkoutEntryListToWorkoutDetails((WorkoutEntryList) m_tableLayout.getChildAt(i));
 //                Log.v("Debug", "onActivityResult workoutDetailsEntity getBodyPart: " + workoutDetailsEntity.getBodyPart());
 //
 //                workoutList.add(workoutDetailsEntity);
-            }
+                }
 
-           // m_databaseHandler.populateDataBase(workoutList);
-            Log.v("Debug", "onActivityResult after m_tableLayout.add m_tableLayout.childCount" + m_tableLayout.getChildCount());
+                // m_databaseHandler.populateDataBase(workoutList);
+            }
         }
     }
 
+    WorkoutDataLayout convertWorkoutDetailsEntityToWorkoutDataLayout(WorkoutDetailsEntity workoutDetailsEntity)
+    {
+        WorkoutDataLayout workoutDataLayout = new WorkoutDataLayout(this, null);
+        workoutDataLayout.createEntry(
+                workoutDetailsEntity.getWorkoutName(),
+                getString(R.string.SetsInteger, workoutDetailsEntity.getRepetitions().size()),
+                getString(R.string.Reps, workoutDetailsEntity.getRepetitionsAsString()),
+                getString(R.string.Weight, workoutDetailsEntity.getWeightAsString()),
+                BitmapFactory.decodeResource(getResources(), R.drawable.benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
+                workoutDetailsEntity.getBodyPart());
+
+        return workoutDataLayout;
+    }
 
     private class DateHandler
     {

@@ -44,7 +44,6 @@ public class ChooseRepsAndSets extends Activity {
     }
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_reps_and_sets);
         m_WorkoutName = getIntent().getStringExtra(EXTRA_MESSAGE_WORKOUT_NAME);
@@ -166,6 +165,7 @@ public class ChooseRepsAndSets extends Activity {
             }
         }
     }
+
     private void createNewEntry(String setsText, String repetitionsText, String weightText)
     {
         LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
@@ -258,8 +258,6 @@ public class ChooseRepsAndSets extends Activity {
 
             weights.add(weight);
             reps.add(repetition);
-            Log.v("Debug", "onBackPressed weights.get(" + i + ") = " + weights.get(i));
-            Log.v("Debug", "onBackPressed reps.get(" + i + ") = " + reps.get(i));
         }
 
         return new WorkoutDetailsEntityBuilder().setRepetitions(reps).

@@ -13,22 +13,6 @@ public class WorkoutNamesEntity implements Parcelable {
     private String bodyPart;
     private ArrayList<String> workoutNames;
 
-    public String getBodyPart() {
-        return bodyPart;
-    }
-
-    public void setBodyPart(String bodyPart) {
-        this.bodyPart = bodyPart;
-    }
-
-    public ArrayList<String> getWorkoutNames() {
-        return workoutNames;
-    }
-
-    public void setWorkoutNames(ArrayList<String> workoutNames) {
-        this.workoutNames = workoutNames;
-    }
-
     WorkoutNamesEntity()
     {
         workoutNames = new ArrayList<>();
@@ -61,5 +45,22 @@ public class WorkoutNamesEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(bodyPart);
         dest.writeList(workoutNames);
+    }
+
+
+    public String getBodyPart() {
+        return bodyPart;
+    }
+
+    public void setBodyPart(String bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
+    public ArrayList<String> getWorkoutNames() {
+        return workoutNames;
+    }
+
+    public void setWorkoutNames(ArrayList<String> workoutNames) {
+        this.workoutNames = workoutNames;
     }
 }

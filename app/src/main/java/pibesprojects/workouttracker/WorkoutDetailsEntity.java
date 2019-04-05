@@ -113,4 +113,22 @@ public class WorkoutDetailsEntity implements Parcelable
     public String getBodyPart() { return bodyPart; }
 
     public void setBodyPart(String bodyPart) { this.bodyPart = bodyPart; }
+
+    public <Type> String arrayToString(ArrayList<Type> array)
+    {
+        //It must be done like this because toString on Array returns [1, 2, 3] and I need to remove [ and ]
+        String toString = array.toString().substring(1, array.toString().length() - 1);
+        return toString.replace(",", "");
+    }
+
+    public String getRepetitionsAsString()
+    {
+
+        return arrayToString(repetitions);
+    }
+
+    public String getWeightAsString()
+    {
+        return arrayToString(weights);
+    }
 }
