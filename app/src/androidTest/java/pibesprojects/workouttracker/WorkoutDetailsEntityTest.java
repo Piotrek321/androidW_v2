@@ -22,6 +22,15 @@ import static org.junit.Assert.assertEquals;
 @MediumTest
 @RunWith(AndroidJUnit4.class)
 public class WorkoutDetailsEntityTest {
+    public static <T> void assertNotNull(T object) {
+        if (object == null)
+            throw new AssertionError("Object cannot be null");
+    }
+    public static <T> void assertNull(T object) {
+        if (object != null)
+            throw new AssertionError("Object must be null");
+    }
+
     private AppDatabase m_database;
     private Integer sets = 2;
     private ArrayList<Integer> repetitions = new ArrayList<>(
@@ -101,183 +110,232 @@ public class WorkoutDetailsEntityTest {
     @Test
     public void test_CreateWorkoutDetailsEntity_InsertIntoDBAndThenReadFromIt()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity);
+        List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
+        workoutDetailsEntities.add(createTestWorkoutDetailsEntity1().build());
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
+        
+        m_database.workoutDetailsDao().insertAll(workoutsForDay);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+        compareWorkoutDetails1(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
     }
 
     @Test
     public void test_CreateTwoWorkoutDetailsEntities_InsertIntoDBAndThenReadAllFromIt()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
+        workoutDetailsEntities.add(createTestWorkoutDetailsEntity1().build());
+        workoutDetailsEntities.add(createTestWorkoutDetailsEntity2().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(2));
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
-        compareWorkoutDetails2(workoutDetailsEntityFromDB.get(1), date2);
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
+
+        compareWorkoutDetails1(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
+        compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(1), date2);
     }
 
     @Test
     public void test_CreateTwoWorkoutDetailsEntitiesForDifferentDates_InsertIntoDBAndGetWorkoutForGivenDate()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(sleepDuration);
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
-        assertThat(workoutDetailsEntityFromDB2.size(), comparesEqualTo(1));
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
-        compareWorkoutDetails2(workoutDetailsEntityFromDB2.get(0), date2);
+        WorkoutsForDay workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+
+        assertThat(workoutForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
+        assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
+
+        compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
+        compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0), date2);
     }
 
     @Test
     public void test_CreateThreeWorkoutDetailsEntitiesThirdWorkoutsDateIsAfterPeriod_InsertIntoDBAndThenReadForPeriod()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
         String dateAfterPeriod = "2019/02/01";
-        WorkoutDetailsEntity workoutDetailsEntity3 = createTestWorkoutDetailsEntity2().setDate(dateAfterPeriod).build();
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2, workoutDetailsEntity3);
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
+
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
+        WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateAfterPeriod, workoutDetailsEntities2);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
+        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(2));
+        assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
-        compareWorkoutDetails2(workoutDetailsEntityFromDB.get(1), date2);
+        compareWorkoutDetails1(workoutForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
+        compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0), date2);
     }
 
     @Test
     public void test_CreateThreeWorkoutDetailsEntitiesThirdWorkoutsDateIsBeforePeriod_InsertIntoDBAndThenReadForPeriod()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
         String dateBeforePeriod = "2019/05/01";
-        WorkoutDetailsEntity workoutDetailsEntity3 = createTestWorkoutDetailsEntity2().setDate(dateBeforePeriod).build();
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2, workoutDetailsEntity3);
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
+
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
+        WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateBeforePeriod, workoutDetailsEntities2);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
+        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(2));
+        assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
-        compareWorkoutDetails2(workoutDetailsEntityFromDB.get(1), date2);
+        compareWorkoutDetails1(workoutForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
+        compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0), date2);
     }
 
     @Test
     public void test_CreateTwoWorkoutDetailsEntitiesForDifferentDates_InsertIntoDBAndGetWorkoutForGivenDateDeleteWorkoutForGivenDate()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
-        android.os.SystemClock.sleep(sleepDuration);
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
-        assertThat(workoutDetailsEntityFromDB2.size(), comparesEqualTo(1));
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        compareWorkoutDetails1(workoutDetailsEntityFromDB.get(0));
-        compareWorkoutDetails2(workoutDetailsEntityFromDB2.get(0), date2);
+        WorkoutsForDay workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+
+        assertNotNull(workoutForDayFromDB);
+        assertNotNull(workoutForDayFromDB2);
+        assertThat(workoutForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
+        assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
+
+        compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
+        compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0), date2);
 
         m_database.workoutDetailsDao().deleteForGivenDate(date);
-        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        workoutDetailsEntityFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+        workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        assertNull(workoutForDayFromDB);
+        assertNotNull(workoutForDayFromDB2);
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(0));
-        assertThat(workoutDetailsEntityFromDB2.size(), comparesEqualTo(1));
+        assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
     }
 
     @Test
     public void test_CreateTwoWorkoutDetailsEntities_DeleteWorkout()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(2));
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
 
-        m_database.workoutDetailsDao().delete(workoutDetailsEntityFromDB.get(0));
+        m_database.workoutDetailsDao().delete(workoutsForDayFromDB.get(0));
 
-        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
     }
 
     @Test
     public void test_CreateTwoWorkoutDetailsEntities_DeleteAll()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
-        WorkoutDetailsEntity workoutDetailsEntity2 = createTestWorkoutDetailsEntity2().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity, workoutDetailsEntity2);
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(2));
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
         m_database.workoutDetailsDao().deleteAll();
 
-        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(0));
+        workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(0));
     }
 
     @Test
-    public void test_InsertWorkoutDetailsEntityWithTheSameUidTwice_ShouldReturnOneEntity()
+    public void test_InsertWorkoutDetailsEntityWithTheSameDateTwice_ShouldReturnOneEntity()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity );
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities1);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntityFromDB.get(0) );
-        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
     }
 
     @Test
     public void test_UpdateWorkoutDetailsEntityWithTheSameUidTwice_ShouldReturnOneEntity()
     {
-        WorkoutDetailsEntity workoutDetailsEntity = createTestWorkoutDetailsEntity1().build();
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutDetailsEntity );
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        m_database.workoutDetailsDao().insertAll(workoutsForDay);
         android.os.SystemClock.sleep(sleepDuration);
-        List<WorkoutDetailsEntity> workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
+
         String newBodyPartName = "newBodyPart";
-        workoutDetailsEntityFromDB.get(0).setBodyPart(newBodyPartName);
+        workoutsForDay.getWorkoutDetailsEntityList().get(0).setBodyPart(newBodyPartName);
 
-        m_database.workoutDetailsDao().update(workoutDetailsEntityFromDB.get(0));
-        workoutDetailsEntityFromDB = m_database.workoutDetailsDao().getAll();
-        assertThat(workoutDetailsEntityFromDB.size(), comparesEqualTo(1));
-        assertThat(newBodyPartName, comparesEqualTo( workoutDetailsEntityFromDB.get(0).getBodyPart()));
-
+        m_database.workoutDetailsDao().update(workoutsForDay);
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+        assertThat(newBodyPartName, comparesEqualTo( workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0).getBodyPart()));
     }
 }

@@ -12,12 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static pibesprojects.workouttracker.CommonData.EXTRA_DATE;
+import static pibesprojects.workouttracker.CommonData.dateFormat;
+
 public class CustomCalendar extends AppCompatActivity {
-    public static final String EXTRA_DATE = "DATE";
-    private boolean isCopyMode;
     public CalendarView m_calendarView;
     private String m_currentDate;
-    public static final String dateFormat = "yyyy/MM/dd";
     //TODO it is done for testing purpose, is there any way to call onSelectedDayChange from
     //tests?
     public CalendarView.OnDateChangeListener m_listener;

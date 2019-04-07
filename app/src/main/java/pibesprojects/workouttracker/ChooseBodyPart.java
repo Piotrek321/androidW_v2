@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
+import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
+
 
 public class ChooseBodyPart extends IChoose
 {
@@ -76,7 +79,7 @@ public class ChooseBodyPart extends IChoose
                 "workoutDetailsEntity.getSetsWeight(): " + workoutDetailsEntity.getWeights());
 
         Intent i = new Intent();
-        i.putExtra("message", workoutDetailsEntity);
+        i.putExtra(GET_EDIT_DATA, workoutDetailsEntity);
         setResult(RESULT_OK, i);
         finish();
     }

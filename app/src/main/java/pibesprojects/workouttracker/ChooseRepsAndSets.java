@@ -18,12 +18,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import static pibesprojects.workouttracker.ChooseWorkout.EXTRA_MESSAGE_BODYPART_NAME;
-import static pibesprojects.workouttracker.IChoose.EXTRA_MESSAGE_WORKOUT_NAME;
-import static pibesprojects.workouttracker.MainActivity.GET_EDIT_DATA;
+import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_BODYPART_NAME;
+import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
+import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
 
 public class ChooseRepsAndSets extends Activity {
-    private final int GET_EDIT_DATA_INT = 20;
 
     Spinner spinnerWeight;
     Spinner spinnerReps;
@@ -280,7 +279,7 @@ public class ChooseRepsAndSets extends Activity {
         Log.v("Debug", "onBackPressed m_BodyPart " + m_BodyPart);
 
         Intent i = new Intent();
-        i.putExtra("message", collectDataBeforeExiting());
+        i.putExtra(GET_EDIT_DATA, collectDataBeforeExiting());
 //        if(childsIndex != 999)
 //        {
 //            i.putExtra(CHILD_INDEX, childsIndex);

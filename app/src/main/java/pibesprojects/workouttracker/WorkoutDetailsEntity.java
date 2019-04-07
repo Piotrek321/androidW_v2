@@ -1,6 +1,5 @@
 package pibesprojects.workouttracker;
 
-import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
@@ -8,16 +7,16 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-@Entity(tableName = "workoutDetailsTable")
 public class WorkoutDetailsEntity implements Parcelable
 {
     @PrimaryKey(autoGenerate = true)
     public int uid;
+    private String date;
     private Integer sets;
     private ArrayList<Integer> repetitions;
     private ArrayList<Double> weights;
     private String workoutName;
-    private String date;
+
     private String bodyPart;
 
     @Ignore

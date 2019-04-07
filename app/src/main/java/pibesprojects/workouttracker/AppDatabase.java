@@ -6,13 +6,13 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
-@Database(entities = {WorkoutDetailsEntity.class, WorkoutNamesEntity.class, }, version = 1 , exportSchema = false)
+@Database(entities = {WorkoutsForDay.class, WorkoutNamesEntity.class, }, version = 2 , exportSchema = false)
 @TypeConverters({Converters.class, Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
 
-    public abstract WorkoutDetailsDao workoutDetailsDao();
+    public abstract WorkoutsForDayDao workoutDetailsDao();
     public abstract WorkoutNamesDao workoutNamesDao();
 
     public static AppDatabase getAppDatabase(Context context) {

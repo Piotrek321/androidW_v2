@@ -15,34 +15,48 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static pibesprojects.workouttracker.CustomCalendar.EXTRA_DATE;
-import static pibesprojects.workouttracker.CustomCalendar.dateFormat;
+import static pibesprojects.workouttracker.CommonData.*;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String GET_EDIT_DATA = "message";
-    private final int GET_DATE_FROM_CALENDAR= 10;
-    private final int ACTION_ADD = 20;
+
     private ImageButton m_goToPreviousDayButton;
     private ImageButton m_goToNextDayButton;
     private DateHandler m_DateHandler;
     public Menu m_menu;
     public TableLayout m_tableLayout;
+    public AppDatabase m_AppDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        m_AppDatabase = AppDatabase.getAppDatabase(this);
         m_DateHandler = new DateHandler();
         m_tableLayout = findViewById(R.id.tableLayout);
         m_goToPreviousDayButton = findViewById(R.id.goToPreviousDayButton);
         m_goToNextDayButton = findViewById(R.id.goToNextDayButton);
         TextView dateText = findViewById(R.id.currentDateText);
         dateText.setText(m_DateHandler.getCurrentDate());
+
+        insertWorkoutDataToLayout();
+    }
+
+    public void insertWorkoutDataToLayout()
+    {
+        WorkoutsForDay workoutDetailsEntities = m_AppDatabase.workoutDetailsDao().getWorkoutForGivenDate(m_DateHandler.m_currentDate);
+        if(workoutDetailsEntities != null)
+        {
+            for (WorkoutDetailsEntity workoutDetailsEntity : workoutDetailsEntities.getWorkoutDetailsEntityList())
+            {
+                m_tableLayout.addView(convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity));
+            }
+        }
     }
 
     @Override
@@ -56,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.restoreFactorySettings:
                 Log.v("Debug", "R.id.restoreFactorySettings");
+                resetApplication();
                 break;
             case R.id.action_calendar:
                 Log.v("Debug", "R.id.action_calendar");
@@ -88,9 +103,19 @@ public class MainActivity extends AppCompatActivity {
         return m_goToNextDayButton;
     }
 
+    public void removeWorkoutDataLayouts()
+    {
+        int childCount = m_tableLayout.getChildCount();
+        for(int i =1; i <childCount; ++i)
+        {
+            m_tableLayout.removeViewAt(1);
+        }
+    }
     public void changeDateButtonClicked(View view) throws ParseException
     {
+        removeWorkoutDataLayouts();
         m_DateHandler.changeDateButtonClicked(view);
+        insertWorkoutDataToLayout();
     }
 
     public String getCurrentDate()
@@ -102,6 +127,13 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, CustomCalendar.class);
         startActivityForResult(intent, GET_DATE_FROM_CALENDAR);
+    }
+
+    public void resetApplication()
+    {
+        removeWorkoutDataLayouts();
+        m_AppDatabase.workoutDetailsDao().deleteAll();
+        m_AppDatabase.workoutNamesDao().deleteAll();
     }
 
     @Override
@@ -124,22 +156,36 @@ public class MainActivity extends AppCompatActivity {
             }
             case ACTION_ADD:
             {
-                WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra("message");
+                WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra(GET_EDIT_DATA);
                 workoutDetailsEntity.setDate(m_DateHandler.m_currentDate);
 
                 WorkoutDataLayout workoutDataLayout = convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity);
+                m_tableLayout.addView(workoutDataLayout);
 
 
 //        m_tableLayout.addView(findViewById(R.id.activity_label));
 
-                m_tableLayout.addView(workoutDataLayout);
+
 
                 List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
                 for (int i = 1; i < m_tableLayout.getChildCount(); ++i) {
+                    WorkoutDetailsEntity workoutDetailsEntity2 = convertWorkoutEntryListToWorkoutDetails((WorkoutDataLayout) m_tableLayout.getChildAt(i));
+                    workoutList.add(workoutDetailsEntity2);
 //                WorkoutDetailsEntity workoutDetailsEntity = convertWorkoutEntryListToWorkoutDetails((WorkoutEntryList) m_tableLayout.getChildAt(i));
 //                Log.v("Debug", "onActivityResult workoutDetailsEntity getBodyPart: " + workoutDetailsEntity.getBodyPart());
 //
 //                workoutList.add(workoutDetailsEntity);
+                }
+
+                if(m_tableLayout.getChildCount() != 2)
+                {
+                    WorkoutsForDay w = new WorkoutsForDay(m_DateHandler.m_currentDate, workoutList);
+                    m_AppDatabase.workoutDetailsDao().update(w);
+                }
+                else {
+                    WorkoutsForDay w = new WorkoutsForDay(m_DateHandler.m_currentDate, workoutList);
+                    m_AppDatabase.workoutDetailsDao().deleteForGivenDate(m_DateHandler.m_currentDate);
+                    m_AppDatabase.workoutDetailsDao().insertAll(w);
                 }
 
                 // m_databaseHandler.populateDataBase(workoutList);
@@ -160,7 +206,55 @@ public class MainActivity extends AppCompatActivity {
 
         return workoutDataLayout;
     }
+    private WorkoutDetailsEntity convertWorkoutEntryListToWorkoutDetails(WorkoutDataLayout workoutEntryList)
+    {
+        WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
+        String ss = workoutEntryList.getNumberOfReps().getText().toString();
+        ArrayList<String> str = new ArrayList<>(Arrays.asList(ss.split(" ")));
+        ArrayList<Integer> intg = new ArrayList<>();
+        for(String fav:str){
+            if(fav.equals("Reps:") || fav.equals(" ") || fav.equals("") ) continue;
+            intg.add(Integer.parseInt(fav.trim()));
+        }
+        workoutDetailsEntity.setRepetitions(intg);
+
+        String ss1 = workoutEntryList.getWeight().getText().toString();
+        ArrayList<String> str1 = new ArrayList<>(Arrays.asList(ss1.split(" ")));
+        ArrayList<Double> dbl = new ArrayList<>();
+        for(String fav:str1){
+            if(fav.equals("Weight:") || fav.equals(" ") || fav.equals("") ) continue;
+            dbl.add(Double.parseDouble(fav.trim()));
+        }
+        workoutDetailsEntity.setRepetitions(intg);
+        workoutDetailsEntity.setWeights(dbl);
+        workoutDetailsEntity.setWorkoutName(workoutEntryList.getWorkoutName().getText().toString());
+
+        int position = isInteger(workoutEntryList.getNumberOfSets().getText().toString());
+        String number = workoutEntryList.getNumberOfSets().getText().toString().substring(position);
+        workoutDetailsEntity.setSets(Integer.parseInt(number));
+        workoutDetailsEntity.setDate(m_DateHandler.m_currentDate);
+        workoutDetailsEntity.setBodyPart(workoutEntryList.getBodyPart().getText().toString());
+        Log.v("Debug", "convertWorkoutEntryListToWorkoutDetails workoutEntryList.m_BodyPart: " + workoutEntryList.getBodyPart());
+
+        Log.v("Debug", "convertWorkoutEntryListToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
+
+        return workoutDetailsEntity;
+    }
+
+    public static Integer isInteger(String s)
+    {
+        int position = -1;
+        for(int i =0; i<s.length(); ++i)
+        {
+            position = i;
+            if (Character.isDigit(s.charAt(position)))
+            {
+                return position;
+            }
+        }
+        return position;
+    }
     private class DateHandler
     {
         private SimpleDateFormat sdf;

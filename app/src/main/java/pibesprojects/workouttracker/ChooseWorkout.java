@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-    public class ChooseWorkout extends IChoose implements View.OnClickListener, View.OnLongClickListener {
+import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_BODYPART_NAME;
+import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
+import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
+
+public class ChooseWorkout extends IChoose implements View.OnClickListener, View.OnLongClickListener {
     private String currentWorkout;
     private String m_BodyPart;
 
-    public static final String EXTRA_MESSAGE_BODYPART_NAME = "BODYPART_NAME";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,7 +67,7 @@ import android.widget.LinearLayout;
     protected void onActivityResult (int requestCode, int resultCode, Intent data)
     {
         // Collect data from the intent and use it
-        WorkoutDetailsEntity details = data.getParcelableExtra("message");
+        WorkoutDetailsEntity details = data.getParcelableExtra(GET_EDIT_DATA);
         if(details.getSets() == 0 && details.getWeights().size() == 0 && details.getRepetitions().size() == 0)
         {
             return;

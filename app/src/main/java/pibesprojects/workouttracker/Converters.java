@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 class Converters {
     @TypeConverter
@@ -52,5 +53,18 @@ class Converters {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;
+    }
+
+    @TypeConverter
+    public static String fromArrayListDouble2(List<WorkoutDetailsEntity> list) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        return json;
+    }
+
+    @TypeConverter
+    public static List<WorkoutDetailsEntity> toArrayListDouble2(String value) {
+        Type listType = new TypeToken<ArrayList<WorkoutDetailsEntity>>() {}.getType();
+        return new Gson().fromJson(value, listType);
     }
 }

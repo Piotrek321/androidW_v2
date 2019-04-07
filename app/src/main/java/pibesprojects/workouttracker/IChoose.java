@@ -25,7 +25,6 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
     public LayoutInflater li;
     public AlertDialog.Builder alertDialogBuilder;
     public EditText userInput;
-    public static final String EXTRA_MESSAGE_WORKOUT_NAME = "WORKOUT_NAME";
 
     public void relativeLayoutClicked(View view) {
         finish();
