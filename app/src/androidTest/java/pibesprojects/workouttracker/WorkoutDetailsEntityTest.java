@@ -73,7 +73,6 @@ public class WorkoutDetailsEntityTest {
         .setRepetitions(repetitions)
         .setWeights(weights)
         .setWorkoutName(workoutName)
-        .setDate(date)
         .setBodyPart(bodyPart);
     }
 
@@ -92,7 +91,6 @@ public class WorkoutDetailsEntityTest {
                 .setRepetitions(repetitions2)
                 .setWeights(weights2)
                 .setWorkoutName(workoutName2)
-                .setDate(date2)
                 .setBodyPart(bodyPart2);
     }
 
@@ -335,5 +333,48 @@ public class WorkoutDetailsEntityTest {
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
         assertThat(newBodyPartName, comparesEqualTo( workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0).getBodyPart()));
+    }
+
+    @Test
+    public void test_UpdateWorkoutDetailsEntityWith_ShouldReturnOneEntity()
+    {
+        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        m_database.workoutDetailsDao().insertAll(workoutsForDay);
+        android.os.SystemClock.sleep(sleepDuration);
+
+        workoutsForDay.getWorkoutDetailsEntityList().add(createTestWorkoutDetailsEntity2().build());
+
+        m_database.workoutDetailsDao().update(workoutsForDay);
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
+    }
+
+    @Test
+    public void test_UpdateWorkoutDetailsEntityWith_ShouldReturnOneEntity2()
+    {
+//        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+//        workoutDetailsEntities1.add(createTestWorkoutDetailsEntity1().build());
+//
+//        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+//        m_database.workoutDetailsDao().insertAll(workoutsForDay);
+//        android.os.SystemClock.sleep(sleepDuration);
+//
+//
+//        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+//        workoutDetailsEntities2.add(createTestWorkoutDetailsEntity2().build());
+//        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities2);
+//
+//        m_database.workoutDetailsDao().update(workoutsForDay2);
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+//        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+//        compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0), date);
+//        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
+//
+//        WorkoutsForDay workoutsForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+//        assertThat(workoutsForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
     }
 }

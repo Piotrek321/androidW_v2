@@ -8,7 +8,6 @@ public class WorkoutDetailsEntityBuilder {
     private ArrayList<Integer> repetitions;
     private ArrayList<Double> weights;
     private String workoutName;
-    private String date;
     private String bodyPart;
 
     public WorkoutDetailsEntityBuilder setSets(Integer sets) {
@@ -31,11 +30,6 @@ public class WorkoutDetailsEntityBuilder {
         return this;
     }
 
-    public WorkoutDetailsEntityBuilder setDate(String date) {
-        this.date = date;
-        return this;
-    }
-
     public WorkoutDetailsEntityBuilder setBodyPart(String bodyPart) {
         this.bodyPart = bodyPart;
         return this;
@@ -43,6 +37,6 @@ public class WorkoutDetailsEntityBuilder {
 
     WorkoutDetailsEntity build()
     {
-        return new WorkoutDetailsEntity(sets, repetitions, weights, workoutName, date, bodyPart);
+        return new WorkoutDetailsEntity(sets, repetitions, weights, workoutName, bodyPart);
     }
 }

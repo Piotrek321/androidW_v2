@@ -29,7 +29,8 @@ public interface WorkoutsForDayDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(WorkoutsForDay... workouts);
-    @Update
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(WorkoutsForDay... workouts);
     @Delete
     void delete(WorkoutsForDay workout);

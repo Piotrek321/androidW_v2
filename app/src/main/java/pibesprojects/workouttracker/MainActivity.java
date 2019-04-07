@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void insertWorkoutDataToLayout()
     {
-        WorkoutsForDay workoutDetailsEntities = m_AppDatabase.workoutDetailsDao().getWorkoutForGivenDate(m_DateHandler.m_currentDate);
+        WorkoutsForDay workoutDetailsEntities = m_AppDatabase.workoutDetailsDao().getWorkoutForGivenDate(getCurrentDate());
         if(workoutDetailsEntities != null)
         {
             for (WorkoutDetailsEntity workoutDetailsEntity : workoutDetailsEntities.getWorkoutDetailsEntityList())
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             m_tableLayout.removeViewAt(1);
         }
     }
+
     public void changeDateButtonClicked(View view) throws ParseException
     {
         removeWorkoutDataLayouts();
@@ -160,29 +161,22 @@ public class MainActivity extends AppCompatActivity {
                 WorkoutDataLayout workoutDataLayout = convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity);
                 m_tableLayout.addView(workoutDataLayout);
 
-
-//        m_tableLayout.addView(findViewById(R.id.activity_label));
-
-
-
                 List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
-                for (int i = 1; i < m_tableLayout.getChildCount(); ++i) {
+                for (int i = 1; i < m_tableLayout.getChildCount(); ++i)
+                {
                     WorkoutDetailsEntity workoutDetailsEntity2 = convertWorkoutEntryListToWorkoutDetails((WorkoutDataLayout) m_tableLayout.getChildAt(i));
                     workoutList.add(workoutDetailsEntity2);
-//                WorkoutDetailsEntity workoutDetailsEntity = convertWorkoutEntryListToWorkoutDetails((WorkoutEntryList) m_tableLayout.getChildAt(i));
-//                Log.v("Debug", "onActivityResult workoutDetailsEntity getBodyPart: " + workoutDetailsEntity.getBodyPart());
-//
-//                workoutList.add(workoutDetailsEntity);
                 }
 
                 if(m_tableLayout.getChildCount() != 2)
                 {
-                    WorkoutsForDay w = new WorkoutsForDay(m_DateHandler.m_currentDate, workoutList);
-                    m_AppDatabase.workoutDetailsDao().update(w);
-                }
-                else {
-                    WorkoutsForDay w = new WorkoutsForDay(m_DateHandler.m_currentDate, workoutList);
-                    m_AppDatabase.workoutDetailsDao().deleteForGivenDate(m_DateHandler.m_currentDate);
+                WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+                m_AppDatabase.workoutDetailsDao().update(w);
+            }
+                else
+                    {
+                    WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+                    //m_AppDatabase.workoutDetailsDao().deleteForGivenDate(getCurrentDate());
                     m_AppDatabase.workoutDetailsDao().insertAll(w);
                 }
 
@@ -204,31 +198,31 @@ public class MainActivity extends AppCompatActivity {
 
         return workoutDataLayout;
     }
+
     private WorkoutDetailsEntity convertWorkoutEntryListToWorkoutDetails(WorkoutDataLayout workoutEntryList)
     {
         WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
-        String ss = workoutEntryList.getNumberOfReps().getText().toString();
-        ArrayList<String> str = new ArrayList<>(Arrays.asList(ss.split(" ")));
-        ArrayList<Integer> intg = new ArrayList<>();
-        for(String fav:str){
-            if(fav.equals("Reps:") || fav.equals(" ") || fav.equals("") ) continue;
-            intg.add(Integer.parseInt(fav.trim()));
+        String reps = workoutEntryList.getNumberOfReps().getText().toString();
+        ArrayList<String> splittedRepsString = new ArrayList<>(Arrays.asList(reps.split(" ")));
+        ArrayList<Integer> splittedRepsInteger = new ArrayList<>();
+        for(String rep: splittedRepsString){
+            if(rep.equals("Reps:") || rep.equals(" ") || rep.equals("") ) continue;
+            splittedRepsInteger.add(Integer.parseInt(rep.trim()));
         }
-        workoutDetailsEntity.setRepetitions(intg);
+        workoutDetailsEntity.setRepetitions(splittedRepsInteger);
 
-        String ss1 = workoutEntryList.getWeight().getText().toString();
-        ArrayList<String> str1 = new ArrayList<>(Arrays.asList(ss1.split(" ")));
-        ArrayList<Double> dbl = new ArrayList<>();
-        for(String fav:str1){
+        String weights = workoutEntryList.getWeight().getText().toString();
+        ArrayList<String> splittedWeightString = new ArrayList<>(Arrays.asList(weights.split(" ")));
+        ArrayList<Double> splittedWeightDouble = new ArrayList<>();
+        for(String fav: splittedWeightString){
             if(fav.equals("Weight:") || fav.equals(" ") || fav.equals("") ) continue;
-            dbl.add(Double.parseDouble(fav.trim()));
+            splittedWeightDouble.add(Double.parseDouble(fav.trim()));
         }
-        workoutDetailsEntity.setRepetitions(intg);
-        workoutDetailsEntity.setWeights(dbl);
+        workoutDetailsEntity.setWeights(splittedWeightDouble);
         workoutDetailsEntity.setWorkoutName(workoutEntryList.getWorkoutName().getText().toString());
 
-        int position = isInteger(workoutEntryList.getNumberOfSets().getText().toString());
+        int position = findIntegersPosition(workoutEntryList.getNumberOfSets().getText().toString());
         String number = workoutEntryList.getNumberOfSets().getText().toString().substring(position);
         workoutDetailsEntity.setSets(Integer.parseInt(number));
         workoutDetailsEntity.setBodyPart(workoutEntryList.getBodyPart().getText().toString());
@@ -239,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         return workoutDetailsEntity;
     }
 
-    public static Integer isInteger(String s)
+    public static Integer findIntegersPosition(String s)
     {
         int position = -1;
         for(int i =0; i<s.length(); ++i)
@@ -252,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return position;
     }
+
     private class DateHandler
     {
         private SimpleDateFormat sdf;

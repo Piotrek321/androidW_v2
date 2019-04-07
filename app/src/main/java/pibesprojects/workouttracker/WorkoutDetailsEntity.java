@@ -22,7 +22,7 @@ public class WorkoutDetailsEntity implements Parcelable
     public WorkoutDetailsEntity(){}
 
     public WorkoutDetailsEntity(Integer sets, ArrayList<Integer> repetitions, ArrayList<Double> weights,
-                                String workoutName, String date, String bodyPart){
+                                String workoutName, String bodyPart){
         this.sets = sets;
         this.repetitions = repetitions;
         this.weights = weights;
