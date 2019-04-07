@@ -83,7 +83,6 @@ public class WorkoutDetailsEntityTest {
         assertEquals(repetitions,workoutDetailsEntity.getRepetitions());
         assertEquals(weights,workoutDetailsEntity.getWeights());
         assertThat(workoutName, comparesEqualTo( workoutDetailsEntity.getWorkoutName()));
-        assertThat(date, comparesEqualTo( workoutDetailsEntity.getDate()));
         assertThat(bodyPart, comparesEqualTo( workoutDetailsEntity.getBodyPart()));
     }
 
@@ -103,7 +102,6 @@ public class WorkoutDetailsEntityTest {
         assertEquals(repetitions2,workoutDetailsEntity.getRepetitions());
         assertEquals(weights2,workoutDetailsEntity.getWeights());
         assertThat(workoutName2, comparesEqualTo( workoutDetailsEntity.getWorkoutName()));
-        assertThat(dateToCompare, comparesEqualTo( workoutDetailsEntity.getDate()));
         assertThat(bodyPart2, comparesEqualTo( workoutDetailsEntity.getBodyPart()));
     }
 

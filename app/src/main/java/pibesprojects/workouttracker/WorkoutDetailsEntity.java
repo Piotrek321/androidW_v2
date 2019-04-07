@@ -11,7 +11,6 @@ public class WorkoutDetailsEntity implements Parcelable
 {
     @PrimaryKey(autoGenerate = true)
     public int uid;
-    private String date;
     private Integer sets;
     private ArrayList<Integer> repetitions;
     private ArrayList<Double> weights;
@@ -28,7 +27,6 @@ public class WorkoutDetailsEntity implements Parcelable
         this.repetitions = repetitions;
         this.weights = weights;
         this.workoutName = workoutName;
-        this.date = date;
         this.bodyPart = bodyPart;
     }
 
@@ -53,7 +51,6 @@ public class WorkoutDetailsEntity implements Parcelable
         pc.writeList(repetitions);
         pc.writeList(weights);
         pc.writeString(workoutName);
-        pc.writeString(date);
         pc.writeString(bodyPart);
     }
 
@@ -63,7 +60,6 @@ public class WorkoutDetailsEntity implements Parcelable
         repetitions = pc.readArrayList(Integer.class.getClassLoader());
         weights = pc.readArrayList(Double.class.getClassLoader());
         workoutName = pc.readString();
-        date = pc.readString();
         bodyPart = pc.readString();
         if(sets != repetitions.size() || sets != weights.size())
         {
@@ -104,10 +100,6 @@ public class WorkoutDetailsEntity implements Parcelable
     public void setWeights(ArrayList<Double> weights) {
         this.weights = weights;
     }
-
-    public String getDate() { return date; }
-
-    public void setDate(String date) { this.date = date; }
 
     public String getBodyPart() { return bodyPart; }
 

@@ -157,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
             case ACTION_ADD:
             {
                 WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra(GET_EDIT_DATA);
-                workoutDetailsEntity.setDate(m_DateHandler.m_currentDate);
-
                 WorkoutDataLayout workoutDataLayout = convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity);
                 m_tableLayout.addView(workoutDataLayout);
 
@@ -233,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
         int position = isInteger(workoutEntryList.getNumberOfSets().getText().toString());
         String number = workoutEntryList.getNumberOfSets().getText().toString().substring(position);
         workoutDetailsEntity.setSets(Integer.parseInt(number));
-        workoutDetailsEntity.setDate(m_DateHandler.m_currentDate);
         workoutDetailsEntity.setBodyPart(workoutEntryList.getBodyPart().getText().toString());
         Log.v("Debug", "convertWorkoutEntryListToWorkoutDetails workoutEntryList.m_BodyPart: " + workoutEntryList.getBodyPart());
 
