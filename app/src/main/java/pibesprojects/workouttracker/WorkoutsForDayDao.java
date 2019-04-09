@@ -14,16 +14,16 @@ public interface WorkoutsForDayDao {
 
     @Query("DELETE FROM WorkoutsForDay")
     void deleteAll();
-//
+
     @Query("DELETE FROM WorkoutsForDay WHERE date=:date")
     void deleteForGivenDate(String date);
-//
+
     @Query("SELECT * FROM WorkoutsForDay")
     List<WorkoutsForDay> getAll();
 
     @Query("SELECT * FROM WorkoutsForDay WHERE date=:date")
     WorkoutsForDay getWorkoutForGivenDate(String date);
-//
+
     @Query("SELECT * FROM WorkoutsForDay WHERE date BETWEEN :dateFirst AND :dayLast")
     List<WorkoutsForDay> getWorkoutsForGivenPeriod(String dateFirst, String dayLast);
 

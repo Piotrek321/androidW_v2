@@ -19,7 +19,7 @@ import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
-public class WorkoutDetailsEntityTest {
+public class DatabaseTest {
     public static <T> void assertNotNull(T object) {
         if (object == null)
             throw new AssertionError("Object cannot be null");
@@ -43,6 +43,7 @@ public class WorkoutDetailsEntityTest {
                 InstrumentationRegistry.getContext(),
                 AppDatabase.class)
                 .build();
+        m_database.workoutDetailsDao().deleteAll();
     }
 
     @After
@@ -51,14 +52,14 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_CreateWorkoutDetailsEntity_InsertIntoDBAndThenReadFromIt()
+    public void test_InsertAll_OneDefaultEntity_GetAllShouldReturnProperValue()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
         workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity1().build());
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
         
         m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -67,7 +68,7 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_CreateTwoWorkoutDetailsEntities_InsertIntoDBAndThenReadAllFromIt()
+    public void test_InsertAll_OneDefaultEntityWithTwoWorkoutDetails_GetAllShouldReturnProperValue()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
         workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -76,7 +77,7 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
 
         m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -84,11 +85,11 @@ public class WorkoutDetailsEntityTest {
         assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 
         helpers.compareWorkoutDetails1(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
-        helpers.compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(1), date2);
+        helpers.compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(1));
     }
 
     @Test
-    public void test_CreateTwoWorkoutDetailsEntitiesForDifferentDates_InsertIntoDBAndGetWorkoutForGivenDate()
+    public void test_GetWorkoutForGivenDate_TwoDefaultEntitiesWithDifferentDates_GetWorkoutForGivenDateShouldReturnProperValue()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -108,11 +109,11 @@ public class WorkoutDetailsEntityTest {
         assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
 
         helpers.compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
-        helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0), date2);
+        helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0));
     }
 
     @Test
-    public void test_CreateThreeWorkoutDetailsEntitiesThirdWorkoutsDateIsAfterPeriod_InsertIntoDBAndThenReadForPeriod()
+    public void test_GetWorkoutsForGivenPeriod_TwoEntitiesWithinRangeOneIsAfterPeriod_GetWorkoutForGivenPeriodShouldReturnTwoEntities()
     {
         String dateAfterPeriod = "2019/02/01";
 
@@ -127,18 +128,18 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateAfterPeriod, workoutDetailsEntities2);
 
         m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
         assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
         helpers.compareWorkoutDetails1(workoutForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
-        helpers.compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0), date2);
+        helpers.compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0));
     }
 
     @Test
-    public void test_CreateThreeWorkoutDetailsEntitiesThirdWorkoutsDateIsBeforePeriod_InsertIntoDBAndThenReadForPeriod()
+    public void test_GetWorkoutsForGivenPeriod_TwoEntitiesWithinRangeOneIsBeforePeriod_GetWorkoutForGivenPeriodShouldReturnTwoEntities()
     {
         String dateBeforePeriod = "2019/05/01";
 
@@ -153,18 +154,18 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateBeforePeriod, workoutDetailsEntities2);
 
         m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
 
         assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
         helpers.compareWorkoutDetails1(workoutForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
-        helpers.compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0), date2);
+        helpers.compareWorkoutDetails2(workoutForDayFromDB.get(1).getWorkoutDetailsEntityList().get(0));
     }
 
     @Test
-    public void test_CreateTwoWorkoutDetailsEntitiesForDifferentDates_InsertIntoDBAndGetWorkoutForGivenDateDeleteWorkoutForGivenDate()
+    public void test_DeleteForGivenDate_TwoEntitiesWithDifferentDate_GetWorkoutForGivenDateShouldReturnProperEntities()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -186,7 +187,7 @@ public class WorkoutDetailsEntityTest {
         assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
 
         helpers.compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
-        helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0), date2);
+        helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0));
 
         m_database.workoutDetailsDao().deleteForGivenDate(date);
         workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
@@ -198,7 +199,7 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_CreateTwoWorkoutDetailsEntities_DeleteWorkout()
+    public void test_Delete_TwoEntitiesWithDifferentDate_MakeSureItDeleteOnlyOneEntity()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -210,7 +211,7 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
         m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -224,7 +225,7 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_CreateTwoWorkoutDetailsEntities_DeleteAll()
+    public void test_DeleteAll_TwoEntitiesWithDifferentDate_MakeSureItDeleteAll()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -236,7 +237,7 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
         m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
 
@@ -248,30 +249,37 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_InsertWorkoutDetailsEntityWithTheSameDateTwice_ShouldReturnOneEntity()
+    public void test_Insert_TwoEntitiesWithTheSameDate_ShouldReturnOneEntity()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 
-        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities1);
+        List<WorkoutDetailsEntity> workoutDetailsEntities2 = new ArrayList<>();
+        workoutDetailsEntities2.add(helpers.createTestWorkoutDetailsEntity2().build());
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
-        android.os.SystemClock.sleep(sleepDuration);
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities2);
+
+        m_database.workoutDetailsDao().insertAll(workoutsForDay);
+        m_database.workoutDetailsDao().insertAll(workoutsForDay2);
+        
 
         List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+        helpers.compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
+
+
     }
 
     @Test
-    public void test_UpdateWorkoutDetailsEntityWithTheSameUidTwice_ShouldReturnOneEntity()
+    public void test_Update_InsertEntityFirstChangeItsValueAndThenCallUpdate_GetAllShouldReturnChangedEntity()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         String newBodyPartName = "newBodyPart";
         workoutsForDay.getWorkoutDetailsEntityList().get(0).setBodyPart(newBodyPartName);
@@ -283,25 +291,7 @@ public class WorkoutDetailsEntityTest {
     }
 
     @Test
-    public void test_UpdateWorkoutDetailsEntityWith_ShouldReturnOneEntity()
-    {
-        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
-        workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
-
-        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        android.os.SystemClock.sleep(sleepDuration);
-
-        workoutsForDay.getWorkoutDetailsEntityList().add(helpers.createTestWorkoutDetailsEntity2().build());
-
-        m_database.workoutDetailsDao().update(workoutsForDay);
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
-        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
-        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
-    }
-
-    @Test
-    public void test_UpdateWorkoutDetailsEntityWith_ShouldReturnOneEntity2()
+    public void test_Update_InsertEntityWithTwoItemsRemoveOneItemAndUpdate_ShouldReturnEntityWithOneItem()
     {
         List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
         workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity1().build());
@@ -310,15 +300,32 @@ public class WorkoutDetailsEntityTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
         m_database.workoutDetailsDao().insertAll(workoutsForDay);
 
-        android.os.SystemClock.sleep(sleepDuration);
         WorkoutsForDay workoutsForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
         assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 
         workoutsForDayFromDB.getWorkoutDetailsEntityList().remove(0);
         m_database.workoutDetailsDao().update(workoutsForDayFromDB);
-        android.os.SystemClock.sleep(sleepDuration);
+        
 
         workoutsForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
         assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
     }
+
+//    @Test
+//    public void test_UpdateWorkoutDetailsEntityWith_ShouldReturnOneEntity()
+//    {
+//        List<WorkoutDetailsEntity> workoutDetailsEntities1 = new ArrayList<>();
+//        workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
+//
+//        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
+//        m_database.workoutDetailsDao().insertAll(workoutsForDay);
+//        
+//
+//        workoutsForDay.getWorkoutDetailsEntityList().add(helpers.createTestWorkoutDetailsEntity2().build());
+//
+//        m_database.workoutDetailsDao().update(workoutsForDay);
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+//        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
+//        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
+//    }
 }

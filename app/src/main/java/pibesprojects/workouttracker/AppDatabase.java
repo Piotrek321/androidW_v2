@@ -7,7 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
 @Database(entities = {WorkoutsForDay.class, WorkoutNamesEntity.class, }, version = 2 , exportSchema = false)
-@TypeConverters({Converters.class, Converters.class})
+@TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

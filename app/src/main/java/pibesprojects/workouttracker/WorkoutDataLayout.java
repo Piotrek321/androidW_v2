@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 public class WorkoutDataLayout extends RelativeLayout {
     private RelativeLayout mContentView;
-    static int i =0;
     private TextView m_NumberOfReps;
     private TextView m_WorkoutName;
     private TextView m_NumberOfSets;

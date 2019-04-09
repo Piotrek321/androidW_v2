@@ -40,7 +40,7 @@ public class MainActivity2Test {
     }
 
     @Test
-    public void trashButtonClicked_DeleteProperLayout() throws Throwable {
+    public void test_trashButtonClicked_CreateOneDataLayoutAndClickTrashButton_MakeSureLayoutIsDeleted() throws Throwable {
 
         runOnUiThread(new Runnable()
         {
@@ -52,10 +52,47 @@ public class MainActivity2Test {
                 WorkoutDataLayout workoutDataLayout = m_MainActivity.getWorkoutDataLayoutAt(0);
                 workoutDataLayout.pressTrashBinButton();
                 assertThat(m_MainActivity.m_tableLayout.getChildCount(), comparesEqualTo(1));
-
             }
         });
-
     }
 
+    @Test
+    public void test_trashButtonClicked_CreateTwoDataLayoutsAndClickTrashButtonOnFirst_MakeSureProperLayoutIsDeletedAndIdIsChanged() throws Throwable {
+
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                m_MainActivity.insertWorkoutDetailsEntityIntoMainLayout(helpers.createTestWorkoutDetailsEntity1().build());
+                m_MainActivity.insertWorkoutDetailsEntityIntoMainLayout(helpers.createTestWorkoutDetailsEntity2().build());
+                helpers.compareWorkoutDetails1(m_MainActivity.convertWorkoutDataLayoutToWorkoutDetails(m_MainActivity.getWorkoutDataLayoutAt(0)));
+                helpers.compareWorkoutDetails2(m_MainActivity.convertWorkoutDataLayoutToWorkoutDetails(m_MainActivity.getWorkoutDataLayoutAt(1)));
+
+                assertThat(m_MainActivity.m_tableLayout.getChildCount(), comparesEqualTo(3));
+
+                WorkoutDataLayout workoutDataLayout = m_MainActivity.getWorkoutDataLayoutAt(0);
+                workoutDataLayout.pressTrashBinButton();
+                assertThat(m_MainActivity.m_tableLayout.getChildCount(), comparesEqualTo(2));
+                helpers.compareWorkoutDetails2(m_MainActivity.convertWorkoutDataLayoutToWorkoutDetails(m_MainActivity.getWorkoutDataLayoutAt(0)));
+            }
+        });
+    }
+
+    @Test
+    public void test_trashButtonClicked_CreateTwoDataLayoutsAndClickTrashButtonOnSecond_MakeSureProperLayoutIsDeletedAndIdIsChanged() throws Throwable {
+
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                m_MainActivity.insertWorkoutDetailsEntityIntoMainLayout(helpers.createTestWorkoutDetailsEntity1().build());
+                m_MainActivity.insertWorkoutDetailsEntityIntoMainLayout(helpers.createTestWorkoutDetailsEntity2().build());
+
+                WorkoutDataLayout workoutDataLayout = m_MainActivity.getWorkoutDataLayoutAt(1);
+                workoutDataLayout.pressTrashBinButton();
+                assertThat(m_MainActivity.m_tableLayout.getChildCount(), comparesEqualTo(2));
+                helpers.compareWorkoutDetails1(m_MainActivity.convertWorkoutDataLayoutToWorkoutDetails(m_MainActivity.getWorkoutDataLayoutAt(0)));
+            }
+        });
+    }
 }

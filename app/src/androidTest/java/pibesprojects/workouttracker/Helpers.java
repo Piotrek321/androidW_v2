@@ -19,9 +19,9 @@ public class Helpers {
 
     public Integer sets2 = 3;
     public ArrayList<Integer> repetitions2 = new ArrayList<>(
-            Arrays.asList(3,4));
+            Arrays.asList(3,4,5));
     public ArrayList<Double> weights2 = new ArrayList<>(
-            Arrays.asList(3.0,4.0));
+            Arrays.asList(3.0,4.0, 5.0));
 
     public String workoutName2 = "workoutName2";
     public String bodyPart2 = "bodyPart2";
@@ -53,7 +53,7 @@ public class Helpers {
                 .setBodyPart(bodyPart2);
     }
 
-    public void compareWorkoutDetails2(WorkoutDetailsEntity workoutDetailsEntity, String dateToCompare)
+    public void compareWorkoutDetails2(WorkoutDetailsEntity workoutDetailsEntity)
     {
         assertThat(sets2, comparesEqualTo( workoutDetailsEntity.getSets()));
         assertEquals(repetitions2,workoutDetailsEntity.getRepetitions());

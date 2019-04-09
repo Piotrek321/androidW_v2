@@ -246,7 +246,8 @@ public class MainActivity extends AppCompatActivity {
         return workoutDataLayout;
     }
 
-    private WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails(WorkoutDataLayout workoutEntryList)
+    //TODO maybe it should be part of WorkoutDataLayout
+    public WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails(WorkoutDataLayout workoutEntryList)
     {
         WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
