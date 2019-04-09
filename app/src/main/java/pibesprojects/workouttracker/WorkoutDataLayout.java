@@ -3,12 +3,16 @@ package pibesprojects.workouttracker;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class WorkoutDataLayout extends RelativeLayout {
@@ -50,14 +54,54 @@ public class WorkoutDataLayout extends RelativeLayout {
         m_BodyPart.setText(bodyPart);
     }
 
-    public WorkoutDataLayout(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        //Inflate and attach your child XML
-        LayoutInflater.from(context).inflate(R.layout.workout_row, this);
-        //Get a reference to the layout where you want children to be placed
-        mContentView = findViewById(R.id.relativeLayout);
+    public WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails()
+    {
+        WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
+
+        String reps = getNumberOfReps().getText().toString();
+        ArrayList<String> splittedRepsString = new ArrayList<>(Arrays.asList(reps.split(" ")));
+        ArrayList<Integer> splittedRepsInteger = new ArrayList<>();
+        for(String rep: splittedRepsString){
+            if(rep.equals("Reps:") || rep.equals(" ") || rep.equals("") ) continue;
+            splittedRepsInteger.add(Integer.parseInt(rep.trim()));
+        }
+        workoutDetailsEntity.setRepetitions(splittedRepsInteger);
+
+        String weights = getWeight().getText().toString();
+        ArrayList<String> splittedWeightString = new ArrayList<>(Arrays.asList(weights.split(" ")));
+        ArrayList<Double> splittedWeightDouble = new ArrayList<>();
+        for(String fav: splittedWeightString){
+            if(fav.equals("Weight:") || fav.equals(" ") || fav.equals("") ) continue;
+            splittedWeightDouble.add(Double.parseDouble(fav.trim()));
+        }
+        workoutDetailsEntity.setWeights(splittedWeightDouble);
+        workoutDetailsEntity.setWorkoutName(getWorkoutName().getText().toString());
+
+        int position = findIntegersPosition(getNumberOfSets().getText().toString());
+        String number = getNumberOfSets().getText().toString().substring(position);
+        workoutDetailsEntity.setSets(Integer.parseInt(number));
+        workoutDetailsEntity.setBodyPart(getBodyPart().getText().toString());
+        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails m_BodyPart: " + getBodyPart());
+
+        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
+
+        return workoutDetailsEntity;
     }
 
+
+    private static Integer findIntegersPosition(String s)
+    {
+        int position = -1;
+        for(int i =0; i<s.length(); ++i)
+        {
+            position = i;
+            if (Character.isDigit(s.charAt(position)))
+            {
+                return position;
+            }
+        }
+        return position;
+    }
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         if(mContentView == null)

@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i =1; i< gp.getChildCount(); ++i)
         {
-            WorkoutDetailsEntity workoutDetailsEntity = convertWorkoutDataLayoutToWorkoutDetails((WorkoutDataLayout) gp.getChildAt(i));
+            WorkoutDetailsEntity workoutDetailsEntity = ((WorkoutDataLayout) gp.getChildAt(i)).convertWorkoutDataLayoutToWorkoutDetails();
             Log.v("Debug", "trashButtonClicked workoutDetailsEntity" + workoutDetailsEntity.getBodyPart());
 
             workoutDetailsEntities.add(workoutDetailsEntity);
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
                 for (int i = 1; i < m_tableLayout.getChildCount(); ++i)
                 {
-                    WorkoutDetailsEntity workoutDetailsEntity2 = convertWorkoutDataLayoutToWorkoutDetails((WorkoutDataLayout) m_tableLayout.getChildAt(i));
+                    WorkoutDetailsEntity workoutDetailsEntity2 = ((WorkoutDataLayout) m_tableLayout.getChildAt(i)).convertWorkoutDataLayoutToWorkoutDetails();
                     workoutList.add(workoutDetailsEntity2);
                 }
 
@@ -246,58 +246,13 @@ public class MainActivity extends AppCompatActivity {
         return workoutDataLayout;
     }
 
-    //TODO maybe it should be part of WorkoutDataLayout
-    public WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails(WorkoutDataLayout workoutEntryList)
+    public void workoutRowClicked(View view)
     {
-        WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
-        String reps = workoutEntryList.getNumberOfReps().getText().toString();
-        ArrayList<String> splittedRepsString = new ArrayList<>(Arrays.asList(reps.split(" ")));
-        ArrayList<Integer> splittedRepsInteger = new ArrayList<>();
-        for(String rep: splittedRepsString){
-            if(rep.equals("Reps:") || rep.equals(" ") || rep.equals("") ) continue;
-            splittedRepsInteger.add(Integer.parseInt(rep.trim()));
-        }
-        workoutDetailsEntity.setRepetitions(splittedRepsInteger);
-
-        String weights = workoutEntryList.getWeight().getText().toString();
-        ArrayList<String> splittedWeightString = new ArrayList<>(Arrays.asList(weights.split(" ")));
-        ArrayList<Double> splittedWeightDouble = new ArrayList<>();
-        for(String fav: splittedWeightString){
-            if(fav.equals("Weight:") || fav.equals(" ") || fav.equals("") ) continue;
-            splittedWeightDouble.add(Double.parseDouble(fav.trim()));
-        }
-        workoutDetailsEntity.setWeights(splittedWeightDouble);
-        workoutDetailsEntity.setWorkoutName(workoutEntryList.getWorkoutName().getText().toString());
-
-        int position = findIntegersPosition(workoutEntryList.getNumberOfSets().getText().toString());
-        String number = workoutEntryList.getNumberOfSets().getText().toString().substring(position);
-        workoutDetailsEntity.setSets(Integer.parseInt(number));
-        workoutDetailsEntity.setBodyPart(workoutEntryList.getBodyPart().getText().toString());
-        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutEntryList.m_BodyPart: " + workoutEntryList.getBodyPart());
-
-        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
-
-        return workoutDetailsEntity;
     }
-
     public WorkoutDataLayout getWorkoutDataLayoutAt(int index)
     {
         return (WorkoutDataLayout)m_tableLayout.getChildAt(index+1);
-    }
-
-    public static Integer findIntegersPosition(String s)
-    {
-        int position = -1;
-        for(int i =0; i<s.length(); ++i)
-        {
-            position = i;
-            if (Character.isDigit(s.charAt(position)))
-            {
-                return position;
-            }
-        }
-        return position;
     }
 
     private class DateHandler
