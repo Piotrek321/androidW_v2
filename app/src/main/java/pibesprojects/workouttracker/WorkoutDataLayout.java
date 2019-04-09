@@ -20,6 +20,8 @@ public class WorkoutDataLayout extends RelativeLayout {
     private TextView m_Weight;
     private ImageView m_WorkoutImage;
     private TextView m_BodyPart;
+    private ImageView m_TrashButton;
+
 
     public WorkoutDataLayout(Context context) {
         this(context, null);
@@ -36,6 +38,7 @@ public class WorkoutDataLayout extends RelativeLayout {
         m_Weight = findViewById(R.id.weight);
         m_WorkoutImage = findViewById(R.id.workoutImage);
         m_BodyPart = findViewById(R.id.bodyPart);
+        m_TrashButton = findViewById(R.id.trashBin);
     }
 
     public void createEntry(String workoutName, String numberOfSets, String numberOfReps, String weight, Bitmap image, String bodyPart)
@@ -69,6 +72,10 @@ public class WorkoutDataLayout extends RelativeLayout {
         }
     }
 
+    public void pressTrashBinButton()
+    {
+        m_TrashButton.performClick();
+    }
 
     public TextView getNumberOfReps() {
         return m_NumberOfReps;

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     public AppDatabase m_AppDatabase;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         m_AppDatabase = AppDatabase.getAppDatabase(this);
@@ -44,15 +46,29 @@ public class MainActivity extends AppCompatActivity {
         TextView dateText = findViewById(R.id.currentDateText);
         dateText.setText(m_DateHandler.getCurrentDate());
 
-        insertWorkoutDataToLayout();
+        insertWorkoutDataToLayoutForCurrentDate();
     }
 
-    public void insertWorkoutDataToLayout()
+    public void insertWorkoutDetailsEntityIntoMainLayout(WorkoutDetailsEntity ...workoutDetailsEntity)
     {
-        WorkoutsForDay workoutDetailsEntities = m_AppDatabase.workoutDetailsDao().getWorkoutForGivenDate(getCurrentDate());
-        if(workoutDetailsEntities != null)
+        List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>(Arrays.asList(workoutDetailsEntity));
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(getCurrentDate(), workoutDetailsEntities);
+        //TODO or UPDATE?
+        m_AppDatabase.workoutDetailsDao().insertAll(workoutsForDay);
+
+        for (WorkoutDetailsEntity workoutDetailsEntity_ :workoutDetailsEntities)
         {
-            for (WorkoutDetailsEntity workoutDetailsEntity : workoutDetailsEntities.getWorkoutDetailsEntityList())
+            m_tableLayout.addView(convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity_));
+        }
+    }
+
+    public void insertWorkoutDataToLayoutForCurrentDate()
+    {
+        WorkoutsForDay workoutsForDay = m_AppDatabase.workoutDetailsDao().getWorkoutForGivenDate(getCurrentDate());
+        if(workoutsForDay != null)
+        {
+            for (WorkoutDetailsEntity workoutDetailsEntity : workoutsForDay.getWorkoutDetailsEntityList())
             {
                 m_tableLayout.addView(convertWorkoutDetailsEntityToWorkoutDataLayout(workoutDetailsEntity));
             }
@@ -116,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     {
         removeWorkoutDataLayouts();
         m_DateHandler.changeDateButtonClicked(view);
-        insertWorkoutDataToLayout();
+        insertWorkoutDataToLayoutForCurrentDate();
     }
 
     public String getCurrentDate()
@@ -135,6 +151,37 @@ public class MainActivity extends AppCompatActivity {
         removeWorkoutDataLayouts();
         m_AppDatabase.workoutDetailsDao().deleteAll();
         m_AppDatabase.workoutNamesDao().deleteAll();
+    }
+
+    public void trashButtonClicked(View view)
+    {
+        Log.v("Debug", "trashButtonClicked " + view.getId());
+        ViewGroup parent = (ViewGroup) view.getParent();
+        ViewGroup grandparent = (ViewGroup) parent.getParent();
+        //grandparent.removeView(parent);
+        TableLayout gp = (TableLayout) grandparent.getParent();
+        gp.removeView(grandparent);
+        List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
+        //m_tableLayout.addView(findViewById(R.id.activity_label));
+
+        for(int i =1; i< gp.getChildCount(); ++i)
+        {
+            WorkoutDetailsEntity workoutDetailsEntity = convertWorkoutDataLayoutToWorkoutDetails((WorkoutDataLayout) gp.getChildAt(i));
+            Log.v("Debug", "trashButtonClicked workoutDetailsEntity" + workoutDetailsEntity.getBodyPart());
+
+            workoutDetailsEntities.add(workoutDetailsEntity);
+        }
+        WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutDetailsEntities);
+        m_AppDatabase.workoutDetailsDao().update(w);
+//        if(workoutList.size() == 0)
+//        {
+//            m_databaseHandler.deleteWorkoutForGivenDate(m_currentDate);
+//        }
+//        else {
+//
+//            m_databaseHandler.populateDataBase(workoutList);
+//        }
+
     }
 
     @Override
@@ -164,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
                 for (int i = 1; i < m_tableLayout.getChildCount(); ++i)
                 {
-                    WorkoutDetailsEntity workoutDetailsEntity2 = convertWorkoutEntryListToWorkoutDetails((WorkoutDataLayout) m_tableLayout.getChildAt(i));
+                    WorkoutDetailsEntity workoutDetailsEntity2 = convertWorkoutDataLayoutToWorkoutDetails((WorkoutDataLayout) m_tableLayout.getChildAt(i));
                     workoutList.add(workoutDetailsEntity2);
                 }
 
@@ -199,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         return workoutDataLayout;
     }
 
-    private WorkoutDetailsEntity convertWorkoutEntryListToWorkoutDetails(WorkoutDataLayout workoutEntryList)
+    private WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails(WorkoutDataLayout workoutEntryList)
     {
         WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
@@ -226,11 +273,16 @@ public class MainActivity extends AppCompatActivity {
         String number = workoutEntryList.getNumberOfSets().getText().toString().substring(position);
         workoutDetailsEntity.setSets(Integer.parseInt(number));
         workoutDetailsEntity.setBodyPart(workoutEntryList.getBodyPart().getText().toString());
-        Log.v("Debug", "convertWorkoutEntryListToWorkoutDetails workoutEntryList.m_BodyPart: " + workoutEntryList.getBodyPart());
+        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutEntryList.m_BodyPart: " + workoutEntryList.getBodyPart());
 
-        Log.v("Debug", "convertWorkoutEntryListToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
+        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
 
         return workoutDetailsEntity;
+    }
+
+    public WorkoutDataLayout getWorkoutDataLayoutAt(int index)
+    {
+        return (WorkoutDataLayout)m_tableLayout.getChildAt(index+1);
     }
 
     public static Integer findIntegersPosition(String s)
