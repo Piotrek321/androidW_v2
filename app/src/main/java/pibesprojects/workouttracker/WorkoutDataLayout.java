@@ -25,11 +25,6 @@ public class WorkoutDataLayout extends RelativeLayout {
     private TextView m_BodyPart;
     private ImageView m_TrashButton;
 
-
-    public WorkoutDataLayout(Context context) {
-        this(context, null);
-    }
-
     public WorkoutDataLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
@@ -54,7 +49,7 @@ public class WorkoutDataLayout extends RelativeLayout {
         m_BodyPart.setText(bodyPart);
     }
 
-    public WorkoutDetailsEntity convertWorkoutDataLayoutToWorkoutDetails()
+    public WorkoutDetailsEntity convertToWorkoutDetailsEntity()
     {
         WorkoutDetailsEntity workoutDetailsEntity = new WorkoutDetailsEntity();
 
@@ -81,14 +76,13 @@ public class WorkoutDataLayout extends RelativeLayout {
         String number = getNumberOfSets().getText().toString().substring(position);
         workoutDetailsEntity.setSets(Integer.parseInt(number));
         workoutDetailsEntity.setBodyPart(getBodyPart().getText().toString());
-        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails m_BodyPart: " + getBodyPart());
+        Log.v("Debug", "convertToWorkoutDetailsEntity m_BodyPart: " + getBodyPart());
 
-        Log.v("Debug", "convertWorkoutDataLayoutToWorkoutDetails workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
+        Log.v("Debug", "convertToWorkoutDetailsEntity workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
 
         return workoutDetailsEntity;
     }
-
-
+    
     private static Integer findIntegersPosition(String s)
     {
         int position = -1;

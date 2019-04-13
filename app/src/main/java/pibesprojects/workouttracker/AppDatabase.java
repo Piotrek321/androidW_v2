@@ -11,8 +11,7 @@ import android.arch.persistence.room.TypeConverters;
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
-
-    public abstract WorkoutsForDayDao workoutDetailsDao();
+    public abstract WorkoutsForDayDao workoutForDayDao();
     public abstract WorkoutNamesDao workoutNamesDao();
 
     public static AppDatabase getAppDatabase(Context context) {
@@ -21,7 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "workout-database")
                             // allow queries on the main thread.
                             // Don't do this on a real app! See PersistenceBasicSample for an example.
-                            .allowMainThreadQueries()
+                            .allowMainThreadQueries()//TODO remove it
                             .fallbackToDestructiveMigration()
                             .build();
         }

@@ -16,18 +16,12 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
+import static pibesprojects.workouttracker.Helpers.assertNotNull;
+import static pibesprojects.workouttracker.Helpers.assertNull;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
-    public static <T> void assertNotNull(T object) {
-        if (object == null)
-            throw new AssertionError("Object cannot be null");
-    }
-    public static <T> void assertNull(T object) {
-        if (object != null)
-            throw new AssertionError("Object must be null");
-    }
 
     private AppDatabase m_database;
     private String date = "2019/03/01";
@@ -37,13 +31,13 @@ public class DatabaseTest {
     private int sleepDuration = 10;
 
     @Before
-    public void initDb()  {
+        public void initDb()  {
         helpers = new Helpers();
         m_database = Room.inMemoryDatabaseBuilder(
                 InstrumentationRegistry.getContext(),
                 AppDatabase.class)
                 .build();
-        m_database.workoutDetailsDao().deleteAll();
+        m_database.workoutForDayDao().deleteAll();
     }
 
     @After
@@ -57,11 +51,11 @@ public class DatabaseTest {
         List<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
         workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity1().build());
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
-        
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        
 
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        m_database.workoutForDayDao().insertAll(workoutsForDay);
+
+
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
         helpers.compareWorkoutDetails1(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
@@ -76,10 +70,10 @@ public class DatabaseTest {
 
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay);
 
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
         assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
@@ -100,10 +94,10 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        WorkoutsForDay workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        WorkoutsForDay workoutForDayFromDB = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
+        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutForDayDao().getWorkoutForGivenDate(date2);
 
         assertThat(workoutForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
         assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
@@ -127,10 +121,10 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
         WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateAfterPeriod, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
 
-        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
+
+        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutForDayDao().getWorkoutsForGivenPeriod(date, date2);
 
         assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
@@ -153,10 +147,10 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
         WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateBeforePeriod, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
 
-        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutsForGivenPeriod(date, date2);
+
+        List<WorkoutsForDay> workoutForDayFromDB = m_database.workoutForDayDao().getWorkoutsForGivenPeriod(date, date2);
 
         assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 
@@ -176,10 +170,10 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        WorkoutsForDay workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        WorkoutsForDay workoutForDayFromDB = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
+        WorkoutsForDay workoutForDayFromDB2 = m_database.workoutForDayDao().getWorkoutForGivenDate(date2);
 
         assertNotNull(workoutForDayFromDB);
         assertNotNull(workoutForDayFromDB2);
@@ -189,9 +183,9 @@ public class DatabaseTest {
         helpers.compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
         helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0));
 
-        m_database.workoutDetailsDao().deleteForGivenDate(date);
-        workoutForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
-        workoutForDayFromDB2 = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+        m_database.workoutForDayDao().deleteForGivenDate(date);
+        workoutForDayFromDB = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
+        workoutForDayFromDB2 = m_database.workoutForDayDao().getWorkoutForGivenDate(date2);
         assertNull(workoutForDayFromDB);
         assertNotNull(workoutForDayFromDB2);
 
@@ -210,16 +204,16 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
 
-        m_database.workoutDetailsDao().delete(workoutsForDayFromDB.get(0));
+        m_database.workoutForDayDao().delete(workoutsForDayFromDB.get(0));
 
-        workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
     }
@@ -236,15 +230,15 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay, workoutsForDay2);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay, workoutsForDay2);
 
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
-        m_database.workoutDetailsDao().deleteAll();
+        m_database.workoutForDayDao().deleteAll();
 
-        workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(0));
     }
 
@@ -260,11 +254,11 @@ public class DatabaseTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities2);
 
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        m_database.workoutDetailsDao().insertAll(workoutsForDay2);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay);
+        m_database.workoutForDayDao().insertAll(workoutsForDay2);
 
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
         helpers.compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
 
@@ -278,14 +272,14 @@ public class DatabaseTest {
         workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-        
+        m_database.workoutForDayDao().insertAll(workoutsForDay);
+
 
         String newBodyPartName = "newBodyPart";
         workoutsForDay.getWorkoutDetailsEntityList().get(0).setBodyPart(newBodyPartName);
 
-        m_database.workoutDetailsDao().update(workoutsForDay);
-        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+        m_database.workoutForDayDao().update(workoutsForDay);
+        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
         assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
         assertThat(newBodyPartName, comparesEqualTo( workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0).getBodyPart()));
     }
@@ -298,16 +292,16 @@ public class DatabaseTest {
         workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity2().build());
 
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
-        m_database.workoutDetailsDao().insertAll(workoutsForDay);
+        m_database.workoutForDayDao().insertAll(workoutsForDay);
 
-        WorkoutsForDay workoutsForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+        WorkoutsForDay workoutsForDayFromDB = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
         assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 
         workoutsForDayFromDB.getWorkoutDetailsEntityList().remove(0);
-        m_database.workoutDetailsDao().update(workoutsForDayFromDB);
-        
+        m_database.workoutForDayDao().update(workoutsForDayFromDB);
 
-        workoutsForDayFromDB = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+
+        workoutsForDayFromDB = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
         assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
     }
 
@@ -318,13 +312,13 @@ public class DatabaseTest {
 //        workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 //
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-//        m_database.workoutDetailsDao().insertAll(workoutsForDay);
-//        
+//        m_database.workoutForDayDao().insertAll(workoutsForDay);
+//
 //
 //        workoutsForDay.getWorkoutDetailsEntityList().add(helpers.createTestWorkoutDetailsEntity2().build());
 //
-//        m_database.workoutDetailsDao().update(workoutsForDay);
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutDetailsDao().getAll();
+//        m_database.workoutForDayDao().update(workoutsForDay);
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_database.workoutForDayDao().getAll();
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 //    }

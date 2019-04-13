@@ -65,20 +65,20 @@ public class ChooseRepsAndSets extends Activity {
         spinnerWeight.setAdapter(weightAdapter);
         spinnerReps.setAdapter(repsAdapter);
 
-        ArrayList<WorkoutDetailsEntity> workoutDetailsEntityList = getIntent().getParcelableArrayListExtra(GET_EDIT_DATA);
+        WorkoutDetailsEntity workoutDetailsEntity = getIntent().getParcelableExtra(GET_EDIT_DATA);
 
-        if(workoutDetailsEntityList != null)
+        if(workoutDetailsEntity != null)
         {
-            for(int i = 0; i< workoutDetailsEntityList.get(0).getSets(); ++i)
-            {
-                String repetitionsFromSpinner =  workoutDetailsEntityList.get(0).getRepetitions().get(i).toString();
+            for(int i =0; i< workoutDetailsEntity.getSets(); ++i) {
+                String repetitionsFromSpinner = workoutDetailsEntity.getRepetitions().get(i).toString();
                 String repetitionsText = repetitionsFromSpinner + (repetitionsFromSpinner.equals("1") ? " rep" : " reps");
-                String weightText = getString(R.string.Kg, workoutDetailsEntityList.get(0).getWeights().get(i).toString());
+                String weightText = getString(R.string.Kg, workoutDetailsEntity.getWeights().get(i).toString());
 
                 createNewEntry(String.valueOf(i+1), repetitionsText, weightText);
             }
+            sets = workoutDetailsEntity.getSets();
+            workoutNameText.setText(workoutDetailsEntity.getWorkoutName());
 
-            sets = workoutDetailsEntityList.get(0).getSets();
         }
     }
 

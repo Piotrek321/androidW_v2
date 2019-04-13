@@ -25,7 +25,10 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_add_black_24dp">
     </item>
-
+    <item
+        android:id="@+id/createTestConfig"
+        android:title="createTestConfig">
+    </item>
 </menu>
 
 <!--<item-->

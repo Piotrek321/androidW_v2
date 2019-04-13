@@ -10,13 +10,16 @@ import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 import android.view.Menu;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -30,6 +33,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -38,9 +42,22 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     private SimpleDateFormat sdf;
-
+    private Helpers helpers;
+    private MainActivity m_MainActivity;
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void setUp() throws Throwable {
+        m_MainActivity = rule.getActivity();
+        helpers = new Helpers();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                m_MainActivity.resetApplication();
+            }
+        });
+    }
 
     @Test
     public void ensureGoToPreviousDayButtonIsPresent() {
@@ -167,9 +184,40 @@ public class MainActivityTest {
         android.os.SystemClock.sleep(1000);
 
         assertThat(calendar.getCurrentDate(), comparesEqualTo(currentDate));
-        assertThat(activity.getCurrentDate(), comparesEqualTo(currentDate));
 
         Intents.release();
+    }
+
+    @Test
+    public void test() throws Throwable {
+        m_MainActivity = rule.getActivity();
+        sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+
+        String currentDate = sdf.format(new Date());
+
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(currentDate , Arrays.asList(helpers.createTestWorkoutDetailsEntity1().build()));
+        String yesterday = changeDate(currentDate, Calendar.DATE, -1);
+        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(yesterday , Arrays.asList(helpers.createTestWorkoutDetailsEntity2().build()));
+        m_MainActivity.m_WorkoutForDayRepository.insertAll(workoutsForDay,workoutsForDay2);
+
+        m_MainActivity = rule.getActivity();
+        WorkoutDataLayout workoutDataLayoutForToday =  m_MainActivity.getWorkoutDataLayoutAt(0);
+        helpers.compareWorkoutDetails1(workoutDataLayoutForToday.convertToWorkoutDetailsEntity());
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                m_MainActivity.getGoToPreviousDayButton().performClick();
+            }
+        });
+        android.os.SystemClock.sleep(1000);
+
+        TextView dateText = m_MainActivity.findViewById(R.id.currentDateText);
+        assertThat(m_MainActivity.getCurrentDate(), comparesEqualTo(yesterday));
+        assertThat(dateText.getText().toString(), comparesEqualTo(yesterday));
+
+        WorkoutDataLayout workoutDataLayoutForYesterday =  m_MainActivity.getWorkoutDataLayoutAt(0);
+        helpers.compareWorkoutDetails2(workoutDataLayoutForYesterday.convertToWorkoutDetailsEntity());
     }
 
     private Activity getActivityInstance() {

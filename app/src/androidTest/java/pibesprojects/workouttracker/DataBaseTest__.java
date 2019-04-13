@@ -105,9 +105,9 @@
 //        workoutList.add(createTestWorkoutDetailsEntity1().build());
 //
 //        WorkoutsForDay w = new WorkoutsForDay(date, workoutList);
-//        m_database.workoutDetailsDao().insertAll(w);
+//        m_database.workoutForDayDao().insertAll(w);
 //
-//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutDetailsDao().getAll();
+//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutForDayDao().getAll();
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 1);
 //        compareWorkoutDetails1(workoutDetailsEntities.get(0).workoutDetailsEntityList.get(0));
@@ -121,9 +121,9 @@
 //        workoutList.add(createTestWorkoutDetailsEntity2().build());
 //
 //        WorkoutsForDay w = new WorkoutsForDay(date, workoutList);
-//        m_database.workoutDetailsDao().insertAll(w);
+//        m_database.workoutForDayDao().insertAll(w);
 //
-//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutDetailsDao().getAll();
+//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutForDayDao().getAll();
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 2);
 //        compareWorkoutDetails1(workoutDetailsEntities.get(0).workoutDetailsEntityList.get(0));
@@ -138,9 +138,9 @@
 //        workoutList.add(createTestWorkoutDetailsEntity1().build());
 //
 //        WorkoutsForDay w = new WorkoutsForDay(date, workoutList);
-//        m_database.workoutDetailsDao().insertAll(w);
+//        m_database.workoutForDayDao().insertAll(w);
 //
-//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutDetailsDao().getAll();
+//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutForDayDao().getAll();
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 2);
 //        compareWorkoutDetails1(workoutDetailsEntities.get(0).workoutDetailsEntityList.get(0));
@@ -157,16 +157,16 @@
 //
 //        WorkoutsForDay w = new WorkoutsForDay(date, workoutList);
 //        WorkoutsForDay w2 = new WorkoutsForDay(date2, workoutList2);
-//        m_database.workoutDetailsDao().insertAll(w, w2);
+//        m_database.workoutForDayDao().insertAll(w, w2);
 //
-//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutDetailsDao().getWorkoutForGivenDate(date2);
+//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutForDayDao().getWorkoutForGivenDate(date2);
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 2);
-//        workoutDetailsEntities = m_database.workoutDetailsDao().getWorkoutForGivenDate(date);
+//        workoutDetailsEntities = m_database.workoutForDayDao().getWorkoutForGivenDate(date);
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 1);
 //
-//        workoutDetailsEntities = m_database.workoutDetailsDao().getAll();
+//        workoutDetailsEntities = m_database.workoutForDayDao().getAll();
 //        assertEquals(workoutDetailsEntities.size(), 2);
 //    }
 //
@@ -178,9 +178,9 @@
 //        workoutList.add(createTestWorkoutDetailsEntity1().build());
 //
 //        WorkoutsForDay w = new WorkoutsForDay(date, workoutList);
-//        m_database.workoutDetailsDao().update (w);
+//        m_database.workoutForDayDao().update (w);
 //
-//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutDetailsDao().getAll();
+//        List<WorkoutsForDay> workoutDetailsEntities = m_database.workoutForDayDao().getAll();
 //        assertEquals(workoutDetailsEntities.size(), 1);
 //        assertEquals(workoutDetailsEntities.get(0).workoutDetailsEntityList.size(), 1);
 //        compareWorkoutDetails1(workoutDetailsEntities.get(0).workoutDetailsEntityList.get(0));

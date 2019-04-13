@@ -9,4 +9,6 @@ public class CommonData {
 
     static final int GET_DATE_FROM_CALENDAR= 10;
     static final int ACTION_ADD = 20;
+    static final int GET_EDIT_DATA_INT = 30;
+
 }

@@ -43,7 +43,7 @@ public class WorkoutNamesEntityTest {
                 InstrumentationRegistry.getContext(),
                 AppDatabase.class)
                 .build();
-
+        m_database.workoutForDayDao().deleteAll();
         workoutNamesEntity = createDefaultWorkoutNamesEntity(bodyPart);
     }
 

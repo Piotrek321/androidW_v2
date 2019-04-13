@@ -5,7 +5,6 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.MediumTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.Menu;
 
 import org.junit.After;
@@ -28,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsAnything.anything;
-import static pibesprojects.workouttracker.ChooseRepsAndSetsTest.withIndex;
+import static pibesprojects.workouttracker.Helpers.withIndex;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
@@ -163,7 +162,119 @@ public class SWITS {
         onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("1")));
         onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("10")));
         onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("0.0")));
-        Log.v("Debug", "onActivityResult date: ");
+
         onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.TRXPushup))));
+    }
+
+    @Test
+    public void createTwoWorkoutEntryWithOneSets_ChecksIfProperEntryWasAdded_RestartMainActivity_CheckIfEverythingIsOk()
+    {
+        m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
+        onView(withId(R.id.absButton)).perform(click());
+        onView(withText(R.string.TRXPushup)).perform(click());
+
+        //Set reps
+        onView(withId(R.id.spinnerReps)).perform(click());
+        onData(anything()).atPosition(9).perform(click());
+
+        //Set weight
+        onView(withId(R.id.spinnerWeight)).perform(click());
+        onData(anything()).atPosition(0).perform(click());
+        onView(withId(R.id.SaveButton)).perform(click());
+        pressBack();
+
+        m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
+
+        onView(withId(R.id.absButton)).perform(click());
+        onView(withText(R.string.CableChops)).perform(click());
+
+        //Set reps
+        onView(withId(R.id.spinnerReps)).perform(click());
+        onData(anything()).atPosition(1).perform(click());
+
+        //Set weight
+        onView(withId(R.id.spinnerWeight)).perform(click());
+        onData(anything()).atPosition(10).perform(click());
+        onView(withId(R.id.SaveButton)).perform(click());
+        pressBack();
+        onView(withIndex(withId(R.id.numberOfSets), 1)).check(matches(withSubstring("1")));
+        onView(withIndex(withId(R.id.numberOfReps), 1)).check(matches(withSubstring("2")));
+        onView(withIndex(withId(R.id.weight), 1)).check(matches(withSubstring("5.0")));
+        onView(withIndex(withId(R.id.workoutName), 1)).check(matches(withSubstring(m_Context.getString(R.string.CableChops))));
+
+        onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("1")));
+        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("10")));
+        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("0.0")));
+
+        onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.TRXPushup))));
+
+        m_MainActivity = rule.getActivity();
+
+        onView(withIndex(withId(R.id.numberOfSets), 1)).check(matches(withSubstring("1")));
+        onView(withIndex(withId(R.id.numberOfReps), 1)).check(matches(withSubstring("2")));
+        onView(withIndex(withId(R.id.weight), 1)).check(matches(withSubstring("5.0")));
+        onView(withIndex(withId(R.id.workoutName), 1)).check(matches(withSubstring(m_Context.getString(R.string.CableChops))));
+
+        onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("1")));
+        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("10")));
+        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("0.0")));
+
+        onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.TRXPushup))));
+    }
+
+    @Test
+    public void abc_()
+    {
+        m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.createTestConfig));
+//        onView(withId(R.id.absButton)).perform(click());
+//        onView(withText(R.string.TRXPushup)).perform(click());
+//
+//        //Set reps
+//        onView(withId(R.id.spinnerReps)).perform(click());
+//        onData(anything()).atPosition(9).perform(click());
+//
+//        //Set weight
+//        onView(withId(R.id.spinnerWeight)).perform(click());
+//        onData(anything()).atPosition(0).perform(click());
+//        onView(withId(R.id.SaveButton)).perform(click());
+//        pressBack();
+//
+//        m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
+//
+//        onView(withId(R.id.absButton)).perform(click());
+//        onView(withText(R.string.CableChops)).perform(click());
+//
+//        //Set reps
+//        onView(withId(R.id.spinnerReps)).perform(click());
+//        onData(anything()).atPosition(1).perform(click());
+//
+//        //Set weight
+//        onView(withId(R.id.spinnerWeight)).perform(click());
+//        onData(anything()).atPosition(10).perform(click());
+//        onView(withId(R.id.SaveButton)).perform(click());
+//        pressBack();
+//        onView(withIndex(withId(R.id.numberOfSets), 1)).check(matches(withSubstring("1")));
+//        onView(withIndex(withId(R.id.numberOfReps), 1)).check(matches(withSubstring("2")));
+//        onView(withIndex(withId(R.id.weight), 1)).check(matches(withSubstring("5.0")));
+//        onView(withIndex(withId(R.id.workoutName), 1)).check(matches(withSubstring(m_Context.getString(R.string.CableChops))));
+//
+//        onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("1")));
+//        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("10")));
+//        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("0.0")));
+//
+//        onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.TRXPushup))));
+//
+//        m_MainActivity = rule.getActivity();
+//
+//        onView(withIndex(withId(R.id.numberOfSets), 1)).check(matches(withSubstring("1")));
+//        onView(withIndex(withId(R.id.numberOfReps), 1)).check(matches(withSubstring("2")));
+//        onView(withIndex(withId(R.id.weight), 1)).check(matches(withSubstring("5.0")));
+//        onView(withIndex(withId(R.id.workoutName), 1)).check(matches(withSubstring(m_Context.getString(R.string.CableChops))));
+//
+//        onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("1")));
+//        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("10")));
+//        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("0.0")));
+//
+//        onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.TRXPushup))));
     }
 }

@@ -1,5 +1,10 @@
 package pibesprojects.workouttracker;
 
+import android.view.View;
+
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,6 +65,33 @@ public class Helpers {
         assertEquals(weights2,workoutDetailsEntity.getWeights());
         assertThat(workoutName2, comparesEqualTo( workoutDetailsEntity.getWorkoutName()));
         assertThat(bodyPart2, comparesEqualTo( workoutDetailsEntity.getBodyPart()));
+    }
+
+    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(org.hamcrest.Description description) {
+                description.appendText("with index: ");
+                description.appendValue(index);
+                matcher.describeTo(description);
+            }
+
+            int currentIndex = 0;
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return matcher.matches(view) && currentIndex++ == index;
+            }
+        };
+    }
+
+    public static <T> void assertNotNull(T object) {
+        if (object == null)
+            throw new AssertionError("Object cannot be null");
+    }
+    public static <T> void assertNull(T object) {
+        if (object != null)
+            throw new AssertionError("Object must be null");
     }
 
 }

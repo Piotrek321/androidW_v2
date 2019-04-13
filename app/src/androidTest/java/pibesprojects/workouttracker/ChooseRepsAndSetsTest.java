@@ -4,13 +4,10 @@ import android.support.test.annotation.UiThreadTest;
 import android.support.test.filters.MediumTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.IsAnything.anything;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
+import static pibesprojects.workouttracker.Helpers.withIndex;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
@@ -147,23 +145,7 @@ public class ChooseRepsAndSetsTest {
 //        assertThat("1", Matchers.comparesEqualTo((TextView)linearLayout.getChildAt(0)).getText()));
 //        LinearLayout linearLayout2 = (LinearLayout)relativeLayout.getChildAt(1);
     }
-    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(org.hamcrest.Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
-                matcher.describeTo(description);
-            }
 
-            int currentIndex = 0;
-
-            @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
-            }
-        };
-    }
 
     @Test
     public void add2EntriesUsingSpinners_EnsureEntriesHaveProperValuesSet()
