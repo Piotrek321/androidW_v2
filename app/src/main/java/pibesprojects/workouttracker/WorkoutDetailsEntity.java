@@ -2,6 +2,8 @@ package pibesprojects.workouttracker;
 
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -121,5 +123,19 @@ public class WorkoutDetailsEntity implements Parcelable
     public String getWeightAsString()
     {
         return arrayToString(weights);
+    }
+
+
+    WorkoutDataLayout convertToWorkoutDataLayout(Context context) {
+        WorkoutDataLayout workoutDataLayout = new WorkoutDataLayout(context, null);
+        workoutDataLayout.createEntry(
+                getWorkoutName(),
+                context.getString(R.string.SetsInteger, getRepetitions().size()),
+                context.getString(R.string.Reps, getRepetitionsAsString()),
+                context.getString(R.string.Weight, getWeightAsString()),
+                BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher),//benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
+                getBodyPart());
+
+        return workoutDataLayout;
     }
 }

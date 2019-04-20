@@ -62,7 +62,7 @@ public class MainActivityTest {
     @Test
     public void ensureGoToPreviousDayButtonIsPresent() {
         MainActivity activity = rule.getActivity();
-        ImageButton previousDayButton = activity.getGoToPreviousDayButton();
+        ImageButton previousDayButton = activity.m_PreviousDayButton;
         onView(withId(R.id.goToPreviousDayButton)).check(matches((isDisplayed())));
         assertThat(previousDayButton, notNullValue());
     }
@@ -70,7 +70,7 @@ public class MainActivityTest {
     @Test
     public void ensureGoToNextDayButtonIsPresent() {
         MainActivity activity = rule.getActivity();
-        ImageButton nextDayButton = activity.getGoToNextDayButton();
+        ImageButton nextDayButton = activity.m_NextDayButton;
         onView(withId(R.id.goToNextDayButton)).check(matches((isDisplayed())));
         assertThat(nextDayButton, notNullValue());
     }
@@ -84,7 +84,7 @@ public class MainActivityTest {
         String currentDate = sdf.format(new Date());
         assertThat(activity.getCurrentDate(), comparesEqualTo(currentDate));
 
-        ImageButton previousDayButton = activity.getGoToPreviousDayButton();
+        ImageButton previousDayButton = activity.m_PreviousDayButton;
         assertThat(previousDayButton.callOnClick(), comparesEqualTo(true));
 
         currentDate = changeDate(currentDate, Calendar.DATE, -1);
@@ -101,7 +101,7 @@ public class MainActivityTest {
         String currentDate = sdf.format(new Date());
         assertThat(activity.getCurrentDate(), comparesEqualTo(currentDate));
 
-        ImageButton nextDayButton = activity.getGoToNextDayButton();
+        ImageButton nextDayButton = activity.m_NextDayButton;
         assertThat(nextDayButton.callOnClick(), comparesEqualTo(true));
 
         currentDate = changeDate(currentDate, Calendar.DATE, 1);
@@ -200,6 +200,14 @@ public class MainActivityTest {
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(yesterday , Arrays.asList(helpers.createTestWorkoutDetailsEntity2().build()));
         m_MainActivity.m_WorkoutForDayRepository.insertAll(workoutsForDay,workoutsForDay2);
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                m_MainActivity.insertCurrentWorkoutIntoLayout();
+            }
+        });
+
+
         m_MainActivity = rule.getActivity();
         WorkoutDataLayout workoutDataLayoutForToday =  m_MainActivity.getWorkoutDataLayoutAt(0);
         helpers.compareWorkoutDetails1(workoutDataLayoutForToday.convertToWorkoutDetailsEntity());
@@ -207,7 +215,7 @@ public class MainActivityTest {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                m_MainActivity.getGoToPreviousDayButton().performClick();
+                m_MainActivity.m_PreviousDayButton.performClick();
             }
         });
         android.os.SystemClock.sleep(1000);

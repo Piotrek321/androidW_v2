@@ -70,10 +70,10 @@
                 android:text="@string/triceps"/>
 
                 <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:text="@string/legs"/>
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="@string/legs" />
 
             </LinearLayout>
         </RelativeLayout>

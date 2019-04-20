@@ -78,7 +78,9 @@ public class ChooseRepsAndSets extends Activity {
             }
             sets = workoutDetailsEntity.getSets();
             workoutNameText.setText(workoutDetailsEntity.getWorkoutName());
-
+            TextView isEditModeText = ((TextView)findViewById(R.id.isEditMode));
+            isEditModeText.setText(R.string.EditMode);
+            isEditModeText.setVisibility(View.VISIBLE);
         }
     }
 

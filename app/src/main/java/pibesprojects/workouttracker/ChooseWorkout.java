@@ -23,7 +23,7 @@ public class ChooseWorkout extends IChoose implements View.OnClickListener, View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_workout_abs);
         m_BodyPart = getIntent().getExtras().getString(EXTRA_MESSAGE_WORKOUT_NAME);
-        LinearLayout linearLayout = findViewById(R.id.linear);
+        LinearLayout linearLayout = findViewById(R.id.linearLayout_);
         initializeDefaultButtons(linearLayout);
         //        WorkoutNamesEntity workoutName = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getWorkoutsNameForGivenBodyPart(m_BodyPart);
 //        if(workoutName != null) {

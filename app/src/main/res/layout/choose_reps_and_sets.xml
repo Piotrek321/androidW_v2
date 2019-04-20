@@ -25,6 +25,16 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/isEditMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="invisible"
+                android:textSize="20dp"
+                android:text="TextView" />
+
+            <TextView
                 android:id="@+id/workoutNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -214,6 +224,7 @@
                 android:clickable="true"
                 android:onClick="fabClicked"
                 app:srcCompat="@drawable/done" />
+
         </RelativeLayout>
     </LinearLayout>
 

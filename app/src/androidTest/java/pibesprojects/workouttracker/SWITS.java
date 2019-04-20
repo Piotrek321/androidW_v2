@@ -225,7 +225,7 @@ public class SWITS {
     @Test
     public void abc_()
     {
-        m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.createTestConfig));
+        //m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.createTestConfig));
 //        onView(withId(R.id.absButton)).perform(click());
 //        onView(withText(R.string.TRXPushup)).perform(click());
 //
