@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_BODYPART_NAME;
 import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
@@ -16,22 +19,26 @@ public class ChooseWorkout extends IChoose implements View.OnClickListener, View
     private String currentWorkout;
     private String m_BodyPart;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.choose_workout_abs);
+        m_WorkoutNamesRepository = new WorkoutNamesRepository(this);
+        List<WorkoutNames> x = m_WorkoutNamesRepository.getAll();
+        setContentView(R.layout.choose_workout_default);
         m_BodyPart = getIntent().getExtras().getString(EXTRA_MESSAGE_WORKOUT_NAME);
-        LinearLayout linearLayout = findViewById(R.id.linearLayout_);
-        initializeDefaultButtons(linearLayout);
-        //        WorkoutNamesEntity workoutName = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getWorkoutsNameForGivenBodyPart(m_BodyPart);
-//        if(workoutName != null) {
-//            for (String workoutName_ : workoutName.m_workoutNames)
-//            {
-//                createAndAddButton(workoutName_);
-//            }
-//        }
+        m_LinearLayout = findViewById(R.id.linearLayout_);
+        WorkoutNames workoutName = m_WorkoutNamesRepository.getWorkoutName(m_BodyPart);//AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getWorkoutsNameForGivenBodyPart(m_BodyPart);
+        if(workoutName != null && workoutName.getWorkoutNames() != null) {
+            for (String workoutName_ : workoutName.getWorkoutNames())
+            {
+                createAndAddButton(workoutName_);
+            }
+        }else
+        {
+            initializeDefaultButtons(m_LinearLayout);
+
+        }
         //choose_workout_biceps
     }
 
@@ -48,20 +55,24 @@ public class ChooseWorkout extends IChoose implements View.OnClickListener, View
         startActivityForResult(intent, requestCode);
     }
 
-    public void addLayoutsContentToDataBase(LinearLayout layout)
+    public void addLayoutsContentToDataBase()
     {
-//        WorkoutNamesEntity workoutName = new WorkoutNamesEntity();
-//        workoutName.m_BodyPart = m_BodyPart;
-//
-//        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().deleteWorkoutsNameForGivenBodyPart(m_BodyPart);
-//
-//        for (int i = 0; i < layout.getChildCount(); ++i) {
-//            Button button = (Button) layout.getChildAt(i);
-//            workoutName.m_workoutNames.add(button.getText().toString());
-//            Log.v("Debug", "workoutName: " + workoutName.m_BodyPart);
-//
-//        }
-//        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().insertAll(workoutName);
+        ArrayList<WorkoutNames> workoutList = new ArrayList<>();
+        ArrayList<String> workoutNamesStrings = new ArrayList<>();
+        WorkoutNames workoutNames = new WorkoutNames();
+        workoutNames.setBodyPart(m_BodyPart);
+        if (true) //m_LinearLayout.getChildCount() != 2) {
+        {    workoutList = new ArrayList<>();
+            for(int i = 0; i< m_LinearLayout.getChildCount(); ++i) {
+                workoutNamesStrings.add(Globals.viewToString(m_LinearLayout.getChildAt(i)));
+            }
+            workoutNames.setWorkoutNames(workoutNamesStrings);
+
+        } else {
+
+            int x =10;
+        }
+        m_WorkoutNamesRepository.insertAll(workoutNames);
     }
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data)

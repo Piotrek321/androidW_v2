@@ -12,13 +12,13 @@ import java.util.List;
 @Dao
 public interface WorkoutNamesDao {
     @Query("SELECT * FROM workoutNamesTable")
-    List<WorkoutNamesEntity> getAll();
+    List<WorkoutNames> getAll();
 
     @Query("SELECT bodyPart FROM workoutNamesTable")
     List<String> getAllBodyParts();
 
     @Query("SELECT * FROM workoutNamesTable WHERE bodyPart=:bodyPart_")
-    WorkoutNamesEntity getWorkoutsNameEnitiy(String bodyPart_);
+    WorkoutNames getWorkoutsNameEnitiy(String bodyPart_);
 
     @Query("DELETE FROM workoutNamesTable")
     void deleteAll();
@@ -26,10 +26,13 @@ public interface WorkoutNamesDao {
     @Query("DELETE FROM workoutNamesTable WHERE bodyPart=:bodyPart_")
     void deleteWorkoutsNameEntity(String bodyPart_);
 
+    @Query("SELECT * FROM workoutNamesTable WHERE bodyPart=:bodyPart_")
+    WorkoutNames getWorkoutsNameForGivenBodyPart(String bodyPart_);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(WorkoutNamesEntity... workoutNameEntities);
-    @Update
-    void update(WorkoutNamesEntity... workouts);
+    void insertAll(WorkoutNames... workoutNameEntities);
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void update(WorkoutNames... workouts);
     @Delete
-    void delete(WorkoutNamesEntity workoutNameEntities);
+    void delete(WorkoutNames workoutNameEntities);
 }

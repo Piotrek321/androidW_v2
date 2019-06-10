@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+
+import java.util.List;
 
 import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
@@ -13,47 +13,99 @@ import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
 
 public class ChooseBodyPart extends IChoose
 {
-// implements View.OnClickListener {
-//
-
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//        List<WorkoutNamesEntity> workouts = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getAll();
+        setContentView(R.layout.choose_bodysection_for_workout);
+
+        m_WorkoutNamesRepository = new WorkoutNamesRepository(this);
+        m_LinearLayout = findViewById(R.id.linearLayout_);
+
+        List<WorkoutNames> workoutNames = m_WorkoutNamesRepository.getAll();
+        if(workoutNames.size() == 0)
+        {
+            // initializeDefaultButtons(m_LinearLayout);
+        }
+        else
+        {
+        }
+        for(WorkoutNames workoutName : workoutNames)
+        {
+            createAndAddButton(workoutName.getBodyPart());
+        }
+    }
+
+
+    public void addLayoutsContentToDataBase()
+    {
+        WorkoutNames[] workoutList = new WorkoutNames[m_LinearLayout.getChildCount()];
+        if (m_LinearLayout.getChildCount() >= 2)
+        {
+            //workoutList = new ArrayList<>();
+            for(int i = 0; i< m_LinearLayout.getChildCount(); ++i) // -1
+            {
+                String bodyPartName = Globals.viewToString(m_LinearLayout.getChildAt(i));
+                WorkoutNames workoutNames = new WorkoutNames();
+                workoutNames.setBodyPart(bodyPartName);
+
+                workoutNames = m_WorkoutNamesRepository.getWorkoutName(bodyPartName);
+
+                if(workoutNames != null) {
+                    //wn.setBodyPart(bodyPartName);
+                    //workoutNames.setWorkoutNames(wn.getWorkoutNames());
+
+                }
+                else
+                {
+                    workoutNames = new WorkoutNames(bodyPartName);
+                }
+                workoutList[i] = workoutNames;
+
+            }
+            //WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+            m_WorkoutNamesRepository.deleteAll();
+            m_WorkoutNamesRepository.insertAll(workoutList);
+
+           // m_WorkoutNamesRepository.update(workoutList);
+
+        } else {
+            WorkoutNames workoutNames = new WorkoutNames( Globals.viewToString(m_LinearLayout.getChildAt(0)));
+//            WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+//            m_WorkoutsForDayRepository.deleteForGivenDate(getCurrentDate());
+            m_WorkoutNamesRepository.deleteAll();
+
+            m_WorkoutNamesRepository.insertAll(workoutNames);
+        }
+//        WorkoutNames workoutName = new WorkoutNames();
+//        workoutName.setBodyPart(m_BodyPart);
 //
-//        if(workouts.size() == 0)
-//        {
-             setContentView(R.layout.choose_bodysection_for_workout_default);
-             LinearLayout linearLayout = findViewById(R.id.linearLayout_);
-             initializeDefaultButtons(linearLayout);
+//        //AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().deleteWorkoutsNameForGivenBodyPart(m_BodyPart);
+//
+//        for (int i = 0; i < layout.getChildCount(); ++i) {
+//            Button button = (Button) layout.getChildAt(i);
+//            workoutName.m_workoutNames.add(button.getText().toString());
+//            Log.v("Debug", "workoutName: " + workoutName.m_BodyPart);
+//
 //        }
-//        else
-//        {
-//            setContentView(R.layout.choose_bodysection_for_workout);
-//        }
-//        for(WorkoutNamesEntity workout : workouts)
-//        {
-//            createAndAddButton(workout.m_BodyPart);
-//        }
+//        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().insertAll(workoutName);
     }
 //
 //    public void addLayoutsContentToDataBase(LinearLayout layout)
 //    {
-//        ArrayList<WorkoutNamesEntity> workoutNameEntities = new ArrayList<>();
-//        WorkoutNamesEntity workoutName = new WorkoutNamesEntity();
-//        List<WorkoutNamesEntity> workoutNamesEntityFromDb = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getAll();
+//        ArrayList<WorkoutNames> workoutNameEntities = new ArrayList<>();
+//        WorkoutNames workoutName = new WorkoutNames();
+//        List<WorkoutNames> WorkoutNamesFromDb = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getAll();
 //
 //        Button button = (Button) layout.getChildAt(layout.getChildCount()-1);
 //        workoutName.m_BodyPart = button.getText().toString();
-//        workoutNamesEntityFromDb.add(workoutName);
+//        WorkoutNamesFromDb.add(workoutName);
 //        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().nukeTable(); //TODO CAHNGE IT
-//        for(WorkoutNamesEntity wn : workoutNamesEntityFromDb) {
+//        for(WorkoutNames wn : WorkoutNamesFromDb) {
 //            AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().insertAll(wn);
 //        }
 //
-//        List<WorkoutNamesEntity> workoutNamesEntityFromD2 = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getAll();
+//        List<WorkoutNames> WorkoutNamesFromD2 = AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getAll();
 //
 ////        for(int i =0; i<layout.getChildCount(); ++i) {
 ////            Button button = (Button) layout.getChildAt(i);
@@ -89,7 +141,7 @@ public class ChooseBodyPart extends IChoose
     {
         Log.v("Debug", "buttonClicked view.getId()" + view.getId());
         Intent intent = new Intent(this, ChooseWorkout.class);
-        intent.putExtra(EXTRA_MESSAGE_WORKOUT_NAME, ((Button)view).getText().toString());
+        intent.putExtra(EXTRA_MESSAGE_WORKOUT_NAME, Globals.viewToString(view));
         int requestCode = 1; // Or some number you choose
         startActivityForResult(intent, requestCode);
     }
@@ -98,11 +150,11 @@ public class ChooseBodyPart extends IChoose
 //    public void changeWorkoutName(LinearLayout layout, View view, String nameBeforeChange)
 //    {
 //        Button button = (Button) (view);
-//        WorkoutNamesEntity workoutNamesEntityToBeUpdated =
+//        WorkoutNames WorkoutNamesToBeUpdated =
 //                AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getWorkoutsNameForGivenBodyPart(nameBeforeChange);
 //
-//        WorkoutNamesEntity workoutName = new WorkoutNamesEntity();
-//        for( String workout : workoutNamesEntityToBeUpdated.m_workoutNames)
+//        WorkoutNames workoutName = new WorkoutNames();
+//        for( String workout : WorkoutNamesToBeUpdated.m_workoutNames)
 //        {
 //            workoutName.m_workoutNames.add(workout);
 //        }
@@ -110,7 +162,7 @@ public class ChooseBodyPart extends IChoose
 //        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().deleteWorkoutsNameForGivenBodyPart(button.getText().toString());
 //        AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().insertAll(workoutName);
 //
-//        WorkoutNamesEntity workoutNamesEntityToBeUpdated123 =
+//        WorkoutNames WorkoutNamesToBeUpdated123 =
 //                AppDatabase.getAppDatabase(getApplicationContext()).m_workoutNamesDao().getWorkoutsNameForGivenBodyPart(workoutName.m_BodyPart);
 //    }
 }

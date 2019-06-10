@@ -25,20 +25,22 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
     public LayoutInflater li;
     public AlertDialog.Builder alertDialogBuilder;
     public EditText userInput;
+    public LinearLayout m_LinearLayout;
+    public WorkoutNamesRepository m_WorkoutNamesRepository;
 
     public void relativeLayoutClicked(View view) {
         finish();
     }
 
-    //
-//    protected void createAndAddButton(String text) {
-//        LinearLayout linear = findViewById(R.id.linearLayout_);
-//        Button btn = new Button(this);
-//        btn.setText(text);
-//        btn.setOnClickListener(this);
-//        btn.setOnLongClickListener(this);
-//        linear.addView(btn);
-//    }
+    protected void createAndAddButton(String text) {
+        LinearLayout linear = findViewById(R.id.linearLayout_);
+        Button btn = new Button(this);
+        btn.setText(text);
+        btn.setOnClickListener(this);
+        btn.setOnLongClickListener(this);
+        linear.addView(btn);
+    }
+
     protected void initializeDefaultButtons(LinearLayout linearLayout) {
         for(int i =0; i< linearLayout.getChildCount(); ++i)
         {
@@ -46,10 +48,11 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
             button.setOnLongClickListener(this);
         }
     }
+
     //
 //    abstract public void changeWorkoutName(final LinearLayout layout, View view, String nameBeforeChange);
 //
-//    abstract public void addLayoutsContentToDataBase(final LinearLayout layout);
+    abstract public void addLayoutsContentToDataBase();
 //
     @Override
     public void onClick(View view) {
@@ -61,6 +64,24 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
 //        currentWorkout = b.getText().toString();
 //        intent.putExtra(EXTRA_MESSAGE_WORKOUT_NAME, currentWorkout);
 //        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public boolean onLongClick(final View view)
+    {
+        Button btn = (Button) view;
+        String previousName = btn.getText().toString();
+
+        Log.v("Debug", "userInput.getText() " + btn.getText());
+        li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.add_new_body_part_popup_window, null);
+        userInput = promptsView.findViewById(R.id.editTextDialogUserInput);
+        userInput.setText(btn.getText());
+        String newName = btn.getText().toString();
+        alertDialog = buildAlertDialog(promptsView, view, userInput, true);
+        alertDialog.show();
+        //finish();
+        return false;
     }
 
     public AlertDialog getLastDialog()
@@ -127,22 +148,7 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
     }
 
 
-    @Override
-    public boolean onLongClick(final View view)
-    {
-        Button btn = (Button) view;
 
-        Log.v("Debug", "userInput.getText() " + btn.getText());
-        li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.add_new_body_part_popup_window, null);
-        userInput = promptsView.findViewById(R.id.editTextDialogUserInput);
-        userInput.setText(btn.getText());
-
-        alertDialog = buildAlertDialog(promptsView, view, userInput, true);
-        alertDialog.show();
-        //finish();
-        return false;
-    }
 
     public boolean isButtonTextValid(String buttonText)
     {
@@ -207,6 +213,8 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
                     addButton(userInput.getText().toString());
                 }
                 Log.v("Debug", " button name changed " + userInput);
+                addLayoutsContentToDataBase();
+
 //            String nameBeforeChange = (String)((Button) (view)).getText().toString();
                 //LinearLayout layout = findViewById(R.id.linearLayout_);
                 //changeWorkoutName(layout, view, nameBeforeChange);
@@ -238,8 +246,8 @@ public abstract class IChoose extends Activity implements View.OnClickListener, 
                 public void onClick(DialogInterface dialog, int which) {
                     ViewGroup parent = (ViewGroup)view.getParent();
                     parent.removeView(view);
-                    LinearLayout layout = findViewById(R.id.linearLayout_);
-                    //addLayoutsContentToDataBase(layout);
+                    //LinearLayout layout = findViewById(R.id.linearLayout_);
+                    addLayoutsContentToDataBase();
                 }
             })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener()

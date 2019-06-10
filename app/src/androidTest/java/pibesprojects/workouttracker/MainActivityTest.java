@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,9 +49,14 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void setUp() throws Throwable {
+    public void setUp() {
         m_MainActivity = rule.getActivity();
         helpers = new Helpers();
+
+    }
+
+    @After
+    public void tearDown() throws Throwable {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -198,7 +204,7 @@ public class MainActivityTest {
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(currentDate , Arrays.asList(helpers.createTestWorkoutDetailsEntity1().build()));
         String yesterday = changeDate(currentDate, Calendar.DATE, -1);
         WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(yesterday , Arrays.asList(helpers.createTestWorkoutDetailsEntity2().build()));
-        m_MainActivity.m_WorkoutForDayRepository.insertAll(workoutsForDay,workoutsForDay2);
+        m_MainActivity.m_WorkoutsForDayRepository.insertAll(workoutsForDay,workoutsForDay2);
 
         runOnUiThread(new Runnable() {
             @Override

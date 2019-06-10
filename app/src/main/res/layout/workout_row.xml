@@ -13,7 +13,9 @@
             android:layout_width="100dip"
             android:layout_height="80dip"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher"
+            android:onClick="imageClicked"
+            />
 
         <LinearLayout
             android:id="@+id/workoutLinear"

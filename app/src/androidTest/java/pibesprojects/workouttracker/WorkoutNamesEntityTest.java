@@ -20,7 +20,7 @@ import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
-public class WorkoutNamesEntityTest {
+public class WorkoutNamesTest {
     private AppDatabase m_database;
     private String workout1 = "workout1";
     private String workout2 = "workout2";
@@ -35,7 +35,7 @@ public class WorkoutNamesEntityTest {
 
 
     private int sleepDuration = 10;
-    private WorkoutNamesEntity workoutNamesEntity;
+    private WorkoutNames WorkoutNames;
 
     @Before
     public void initDb() {
@@ -44,16 +44,16 @@ public class WorkoutNamesEntityTest {
                 AppDatabase.class)
                 .build();
         m_database.workoutForDayDao().deleteAll();
-        workoutNamesEntity = createDefaultWorkoutNamesEntity(bodyPart);
+        WorkoutNames = createDefaultWorkoutNames(bodyPart);
     }
 
-    WorkoutNamesEntity createDefaultWorkoutNamesEntity(String bodyPart)
+    WorkoutNames createDefaultWorkoutNames(String bodyPart)
     {
-        WorkoutNamesEntity workoutNamesEntity = new WorkoutNamesEntity();
-        workoutNamesEntity.setBodyPart(bodyPart);
-        workoutNamesEntity.setWorkoutNames(workoutNames);
+        WorkoutNames WorkoutNames = new WorkoutNames();
+        WorkoutNames.setBodyPart(bodyPart);
+        WorkoutNames.setWorkoutNames(workoutNames);
 
-        return workoutNamesEntity;
+        return WorkoutNames;
     }
     @After
     public void closeDb() throws Exception {
@@ -63,23 +63,23 @@ public class WorkoutNamesEntityTest {
     @Test
     public void test_CreateWorkoutNameEntity_InsertIntoDBAndThenReadFromIt()
     {
-        m_database.workoutNamesDao().insertAll(workoutNamesEntity);
+        m_database.workoutNamesDao().insertAll(WorkoutNames);
         android.os.SystemClock.sleep(sleepDuration);
 
-        List<WorkoutNamesEntity> workoutNamesEntityFromDB = m_database.workoutNamesDao().getAll();
+        List<WorkoutNames> WorkoutNamesFromDB = m_database.workoutNamesDao().getAll();
 
-        assertThat(workoutNamesEntityFromDB.size(), comparesEqualTo(1));
-        assertThat(bodyPart, comparesEqualTo( workoutNamesEntityFromDB.get(0).getBodyPart()));
-        assertEquals(workoutNames,workoutNamesEntityFromDB.get(0).getWorkoutNames());
+        assertThat(WorkoutNamesFromDB.size(), comparesEqualTo(1));
+        assertThat(bodyPart, comparesEqualTo( WorkoutNamesFromDB.get(0).getBodyPart()));
+        assertEquals(workoutNames,WorkoutNamesFromDB.get(0).getWorkoutNames());
     }
 
     @Test
     public void test_CreateThreeWorkoutNameEntities_GetAllBodyParts()
     {
-        WorkoutNamesEntity workoutNamesEntity2 = createDefaultWorkoutNamesEntity(bodyPart2);
-        WorkoutNamesEntity workoutNamesEntity3 = createDefaultWorkoutNamesEntity(bodyPart3);
+        WorkoutNames WorkoutNames2 = createDefaultWorkoutNames(bodyPart2);
+        WorkoutNames WorkoutNames3 = createDefaultWorkoutNames(bodyPart3);
 
-        m_database.workoutNamesDao().insertAll(workoutNamesEntity, workoutNamesEntity2, workoutNamesEntity3);
+        m_database.workoutNamesDao().insertAll(WorkoutNames, WorkoutNames2, WorkoutNames3);
         android.os.SystemClock.sleep(sleepDuration);
 
         List<String> bodyPartsFromDB = m_database.workoutNamesDao().getAllBodyParts();

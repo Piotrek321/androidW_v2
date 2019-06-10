@@ -2,7 +2,6 @@ package pibesprojects.workouttracker;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_BODYPART_NAME;
@@ -41,6 +39,7 @@ public class ChooseRepsAndSets extends Activity {
 
         return spinnerAdapter;
     }
+
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -86,12 +85,12 @@ public class ChooseRepsAndSets extends Activity {
 
     public void clearButtonClicked(View view)
     {
-        if(((Button)view).getText().toString().equals(getString(R.string.ClearButton)))
+        if(Globals.viewToString(view).equals(getString(R.string.ClearButton)))
         {
             spinnerReps.setSelection(0);
             spinnerWeight.setSelection(0);
         }
-        else if(((Button)view).getText().toString().equals(getString(R.string.DeleteButton)))
+        else if(Globals.viewToString(view).equals(getString(R.string.DeleteButton)))
         {
             LinearLayout layout = findViewById(R.id.linearLayoutForExercises);
 
@@ -154,7 +153,7 @@ public class ChooseRepsAndSets extends Activity {
         String weightText = getString(R.string.Kg, spinnerWeight.getSelectedItem().toString());
         if(Integer.parseInt(repetitionsFromSpinner) != 0)
         {
-            String buttonText = ((Button)view).getText().toString();
+            String buttonText = Globals.viewToString(view);
             if(buttonText.equals(getString(R.string.ChangeButton)))
             {
                 getRepetitionsTextView(currentExerciseDetailsId - 1).setText(repetitionsText);
@@ -294,10 +293,14 @@ public class ChooseRepsAndSets extends Activity {
     }
 
     public void fabClicked(View view) throws UnsupportedEncodingException {
-        String query = m_BodyPart + " " + m_WorkoutName + " workout";
-        String escapedQuery = URLEncoder.encode(query, "UTF-8");
-        Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
+        Intent i = new Intent();
+        i.putExtra(GET_EDIT_DATA, collectDataBeforeExiting());
+        setResult(RESULT_OK, i);
+        finish();
+//        String query = m_BodyPart + " " + m_WorkoutName + " workout";
+//        String escapedQuery = URLEncoder.encode(query, "UTF-8");
+//        Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(intent);
     }
 }

@@ -40,8 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
                 android:text="TextView"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
 
             <RelativeLayout
                 android:layout_below="@id/workoutNameText"

@@ -10,54 +10,50 @@
         android:baselineAligned="false">
 
         <RelativeLayout
-            android:id="@+id/leftRelativeLayout"
+            android:id="@+id/leftLayout"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="0.15"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:onClick="relativeLayoutClicked"/>
+
 
         <RelativeLayout
-            android:id="@+id/middleLayout"
+            android:id="@+id/backgroundLayout"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.7">
+            android:layout_weight="0.7"
+            android:onClick="relativeLayoutClicked"
+            >
 
             <LinearLayout
-                android:id="@+id/linear"
+                android:id="@+id/linearLayout_"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/rightRelativeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="117dp"
-                    android:layout_weight="0.15">
-                </RelativeLayout>
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonClicked"
-                    android:text="Bench press">
-                </Button>
-
-                <Button
-                    android:text="Bench press_"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-                </Button>
 
             </LinearLayout>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rightFill"
+            android:id="@+id/rightLayout"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.15"/>
+            android:layout_weight="0.15"
+            android:onClick="relativeLayoutClicked">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="end|bottom"
+                android:onClick="FABClicked"
+                android:src="@drawable/fab_add" />
+        </RelativeLayout>
 
     </LinearLayout>
 </ScrollView>

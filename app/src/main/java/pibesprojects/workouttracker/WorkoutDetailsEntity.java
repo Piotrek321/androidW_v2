@@ -17,8 +17,18 @@ public class WorkoutDetailsEntity implements Parcelable
     private ArrayList<Integer> repetitions;
     private ArrayList<Double> weights;
     private String workoutName;
-
     private String bodyPart;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private String date;
+
 
     @Ignore
     public WorkoutDetailsEntity(){}
@@ -95,7 +105,7 @@ public class WorkoutDetailsEntity implements Parcelable
         this.repetitions = repetitions;
     }
 
-    public ArrayList getWeights() {
+    public ArrayList<Double> getWeights() {
         return weights;
     }
 

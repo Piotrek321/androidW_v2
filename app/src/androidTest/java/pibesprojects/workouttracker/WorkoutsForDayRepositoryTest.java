@@ -28,7 +28,7 @@
 //            throw new AssertionError("Object must be null");
 //    }
 //
-//    private WorkoutForDayRepository m_WorkoutForDayRepository;
+//    private WorkoutsForDayRepository m_WorkoutsForDayRepository;
 //    private String date = "2019/03/01";
 //    private String date2 = "2019/03/30";
 //    private Helpers helpers;
@@ -38,17 +38,17 @@
 //    @Before
 //    public void initDb()  {
 //        helpers = new Helpers();
-//        m_WorkoutForDayRepository =  new WorkoutForDayRepository(InstrumentationRegistry.getContext());
-////        m_WorkoutForDayRepository = Room.inMemoryDatabaseBuilder(
+//        m_WorkoutsForDayRepository =  new WorkoutsForDayRepository(InstrumentationRegistry.getContext());
+////        m_WorkoutsForDayRepository = Room.inMemoryDatabaseBuilder(
 ////                InstrumentationRegistry.getContext(),
 ////                AppDatabase.class)
 ////                .build();
-//        m_WorkoutForDayRepository.deleteAll();
+//        m_WorkoutsForDayRepository.deleteAll();
 //    }
 //
 //    @After
 //    public void closeDb() throws Exception {
-//       // m_WorkoutForDayRepository.close();
+//       // m_WorkoutsForDayRepository.close();
 //    }
 //
 //    @Test
@@ -58,10 +58,10 @@
 //        workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity1().build());
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 //
 //
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //        helpers.compareWorkoutDetails1(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
@@ -76,10 +76,10 @@
 //
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 //
 //
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
@@ -100,10 +100,10 @@
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
 //
-//        WorkoutsForDay workoutForDayFromDB = m_WorkoutForDayRepository.getWorkoutForGivenDate(date);
-//        WorkoutsForDay workoutForDayFromDB2 = m_WorkoutForDayRepository.getWorkoutForGivenDate(date2);
+//        WorkoutsForDay workoutForDayFromDB = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date);
+//        WorkoutsForDay workoutForDayFromDB2 = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date2);
 //
 //        assertThat(workoutForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
 //        assertThat(workoutForDayFromDB2.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
@@ -127,10 +127,10 @@
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //        WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateAfterPeriod, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
 //
 //
-//        List<WorkoutsForDay> workoutForDayFromDB = m_WorkoutForDayRepository.getWorkoutsForGivenPeriod(date, date2);
+//        List<WorkoutsForDay> workoutForDayFromDB = m_WorkoutsForDayRepository.getWorkoutsForGivenPeriod(date, date2);
 //
 //        assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 //
@@ -153,10 +153,10 @@
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //        WorkoutsForDay workoutsForDay3 = new WorkoutsForDay(dateBeforePeriod, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2, workoutsForDay3);
 //
 //
-//        List<WorkoutsForDay> workoutForDayFromDB = m_WorkoutForDayRepository.getWorkoutsForGivenPeriod(date, date2);
+//        List<WorkoutsForDay> workoutForDayFromDB = m_WorkoutsForDayRepository.getWorkoutsForGivenPeriod(date, date2);
 //
 //        assertThat(workoutForDayFromDB.size(), comparesEqualTo(2));
 //
@@ -176,10 +176,10 @@
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
 //
-//        WorkoutsForDay workoutForDayFromDB = m_WorkoutForDayRepository.getWorkoutForGivenDate(date);
-//        WorkoutsForDay workoutForDayFromDB2 = m_WorkoutForDayRepository.getWorkoutForGivenDate(date2);
+//        WorkoutsForDay workoutForDayFromDB = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date);
+//        WorkoutsForDay workoutForDayFromDB2 = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date2);
 //
 //        assertNotNull(workoutForDayFromDB);
 //        assertNotNull(workoutForDayFromDB2);
@@ -189,9 +189,9 @@
 //        helpers.compareWorkoutDetails1(workoutForDayFromDB.getWorkoutDetailsEntityList().get(0));
 //        helpers.compareWorkoutDetails2(workoutForDayFromDB2.getWorkoutDetailsEntityList().get(0));
 //
-//        m_WorkoutForDayRepository.deleteForGivenDate(date);
-//        workoutForDayFromDB = m_WorkoutForDayRepository.getWorkoutForGivenDate(date);
-//        workoutForDayFromDB2 = m_WorkoutForDayRepository.getWorkoutForGivenDate(date2);
+//        m_WorkoutsForDayRepository.deleteForGivenDate(date);
+//        workoutForDayFromDB = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date);
+//        workoutForDayFromDB2 = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date2);
 //        assertNull(workoutForDayFromDB);
 //        assertNotNull(workoutForDayFromDB2);
 //
@@ -210,16 +210,16 @@
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
 //
 //
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
 //
-//        m_WorkoutForDayRepository.delete(workoutsForDayFromDB.get(0));
+//        m_WorkoutsForDayRepository.delete(workoutsForDayFromDB.get(0));
 //
-//        workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //    }
@@ -236,15 +236,15 @@
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date2, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay, workoutsForDay2);
 //
 //
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(2));
-//        m_WorkoutForDayRepository.deleteAll();
+//        m_WorkoutsForDayRepository.deleteAll();
 //
-//        workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(0));
 //    }
 //
@@ -260,11 +260,11 @@
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
 //        WorkoutsForDay workoutsForDay2 = new WorkoutsForDay(date, workoutDetailsEntities2);
 //
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay);
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay2);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay2);
 //
 //
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //        helpers.compareWorkoutDetails2(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0));
 //
@@ -278,14 +278,14 @@
 //        workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 //
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 //
 //
 //        String newBodyPartName = "newBodyPart";
 //        workoutsForDay.getWorkoutDetailsEntityList().get(0).setBodyPart(newBodyPartName);
 //
-//        m_WorkoutForDayRepository.update(workoutsForDay);
-//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+//        m_WorkoutsForDayRepository.update(workoutsForDay);
+//        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 //        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 //        assertThat(newBodyPartName, comparesEqualTo( workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().get(0).getBodyPart()));
 //    }
@@ -298,16 +298,16 @@
 //        workoutDetailsEntities.add(helpers.createTestWorkoutDetailsEntity2().build());
 //
 //        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities);
-//        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+//        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 //
-//        WorkoutsForDay workoutsForDayFromDB = m_WorkoutForDayRepository.getWorkoutForGivenDate(date);
+//        WorkoutsForDay workoutsForDayFromDB = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date);
 //        assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 //
 //        workoutsForDayFromDB.getWorkoutDetailsEntityList().remove(0);
-//        m_WorkoutForDayRepository.update(workoutsForDayFromDB);
+//        m_WorkoutsForDayRepository.update(workoutsForDayFromDB);
 //
 //
-//        workoutsForDayFromDB = m_WorkoutForDayRepository.getWorkoutForGivenDate(date);
+//        workoutsForDayFromDB = m_WorkoutsForDayRepository.getWorkoutForGivenDate(date);
 //        assertThat(workoutsForDayFromDB.getWorkoutDetailsEntityList().size(), comparesEqualTo(1));
 //    }
 //
@@ -318,13 +318,13 @@
 ////        workoutDetailsEntities1.add(helpers.createTestWorkoutDetailsEntity1().build());
 ////
 ////        WorkoutsForDay workoutsForDay = new WorkoutsForDay(date, workoutDetailsEntities1);
-////        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+////        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 ////
 ////
 ////        workoutsForDay.getWorkoutDetailsEntityList().add(helpers.createTestWorkoutDetailsEntity2().build());
 ////
-////        m_WorkoutForDayRepository.update(workoutsForDay);
-////        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutForDayRepository.getAll();
+////        m_WorkoutsForDayRepository.update(workoutsForDay);
+////        List<WorkoutsForDay> workoutsForDayFromDB = m_WorkoutsForDayRepository.getAll();
 ////        assertThat(workoutsForDayFromDB.size(), comparesEqualTo(1));
 ////        assertThat(workoutsForDayFromDB.get(0).getWorkoutDetailsEntityList().size(), comparesEqualTo(2));
 ////    }

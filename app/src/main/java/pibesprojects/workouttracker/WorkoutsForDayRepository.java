@@ -6,14 +6,12 @@ import android.os.AsyncTask;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class WorkoutForDayRepository {
+public class WorkoutsForDayRepository {
     private WorkoutsForDayDao m_WorkoutsForDayDao;
-    private List<WorkoutsForDay> allWorkoutForDays;
 
-    public WorkoutForDayRepository(Context context) {
+    public WorkoutsForDayRepository(Context context) {
         AppDatabase database = AppDatabase.getAppDatabase(context);
         m_WorkoutsForDayDao = database.workoutForDayDao();
-        allWorkoutForDays = getAll();
     }
 
     public List<WorkoutsForDay> getAll() {

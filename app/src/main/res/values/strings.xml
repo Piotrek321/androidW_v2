@@ -1,4 +1,6 @@
 <resources>
+
+    <string name="action_restore">actionRestore</string>
     <string name="app_name">WorkoutTracker</string>
     <string name="calendar">Calendar</string>
     <string name="addNewWorkout">AddNewWorkout</string>
@@ -13,6 +15,7 @@
     <string name="ChangeButton">Change</string>
     <string name="DeleteButton">Delete</string>
     <string name="Kg">%1s kg</string>
+    <string name="NoDataAvailable">No data available</string>
 
     <string name="Reps">Reps:    %1$s</string>
     <string name="Sets">Sets:      %1$s</string>
@@ -27,7 +30,7 @@
     <string name="triceps">Triceps</string>
     <string name="legs">Legs</string>
 
-    <string-array name="workouts">
+    <string-array name="bodyParts">
         <item>@string/abs</item>
         <item>@string/back</item>
         <item>@string/chest</item>

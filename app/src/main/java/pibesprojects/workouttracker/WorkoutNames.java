@@ -1,38 +1,52 @@
 package pibesprojects.workouttracker;
+
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 @Entity(tableName = "workoutNamesTable")
-public class WorkoutNamesEntity implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    public int uid;
+public class WorkoutNames implements Parcelable {
+    @PrimaryKey
+    @NotNull
     private String bodyPart;
     private ArrayList<String> workoutNames;
-
-    WorkoutNamesEntity()
+    @Ignore
+    WorkoutNames()
     {
         workoutNames = new ArrayList<>();
     }
+    @Ignore
 
-    private WorkoutNamesEntity(Parcel in) {
-        uid = in.readInt();
+    WorkoutNames(String bodyPart)
+    {
+        this.bodyPart = bodyPart;
+        workoutNames = new ArrayList<>();
+    }
+    WorkoutNames(String bodyPart, ArrayList<String> workoutNames)
+    {
+        this.bodyPart = bodyPart;
+        this.workoutNames = workoutNames;
+    }
+    private WorkoutNames(Parcel in) {
         bodyPart = in.readString();
         workoutNames = in.createStringArrayList();
     }
 
-    public static final Creator<WorkoutNamesEntity> CREATOR = new Creator<WorkoutNamesEntity>() {
+    public static final Creator<WorkoutNames> CREATOR = new Creator<WorkoutNames>() {
         @Override
-        public WorkoutNamesEntity createFromParcel(Parcel in) {
-            return new WorkoutNamesEntity(in);
+        public WorkoutNames createFromParcel(Parcel in) {
+            return new WorkoutNames(in);
         }
 
         @Override
-        public WorkoutNamesEntity[] newArray(int size) {
-            return new WorkoutNamesEntity[size];
+        public WorkoutNames[] newArray(int size) {
+            return new WorkoutNames[size];
         }
     };
 

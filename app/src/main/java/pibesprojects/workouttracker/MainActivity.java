@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private DateHandler m_DateHandler;
     public Menu m_menu;
     public TableLayout m_tableLayout;
-    public WorkoutForDayRepository m_WorkoutForDayRepository;
+    public WorkoutsForDayRepository m_WorkoutsForDayRepository;
+    public WorkoutNamesRepository m_WorkoutNamesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 );
-        m_WorkoutForDayRepository = new WorkoutForDayRepository(this);
+        m_WorkoutsForDayRepository = new WorkoutsForDayRepository(this);
+        m_WorkoutNamesRepository = new WorkoutNamesRepository(this);
         m_DateHandler = new DateHandler();
         m_tableLayout = findViewById(R.id.tableLayout);
         m_PreviousDayButton = findViewById(R.id.goToPreviousDayButton);
@@ -66,15 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent (Intent.ACTION_SEND);
         intent.setType("message/rfc822");
-
         intent.putExtra (Intent.EXTRA_EMAIL, new String[] {"piotrbelkner@gmail.com"});
-
         intent.putExtra (Intent.EXTRA_SUBJECT, "MyApp Crash log file");
-
         intent.putExtra (Intent.EXTRA_TEXT, stackTrace);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // required when starting from Application
-
         startActivity(intent);
 
     }
@@ -84,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         WorkoutsForDay workoutsForDay = new WorkoutsForDay(getCurrentDate(), workoutDetailsEntities);
         //TODO or UPDATE?
-        m_WorkoutForDayRepository.insertAll(workoutsForDay);
+        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 
         for (WorkoutDetailsEntity workoutDetailsEntity_ : workoutDetailsEntities) {
             m_tableLayout.addView(workoutDetailsEntity_.convertToWorkoutDataLayout(this));
@@ -93,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void insertCurrentWorkoutIntoLayout() {
-        WorkoutsForDay workoutsForDay = m_WorkoutForDayRepository.getWorkoutForGivenDate(getCurrentDate());
+        WorkoutsForDay workoutsForDay = m_WorkoutsForDayRepository.getWorkoutForGivenDate(getCurrentDate());
         if (workoutsForDay != null) {
             for (WorkoutDetailsEntity workoutDetailsEntity : workoutsForDay.getWorkoutDetailsEntityList()) {
                 m_tableLayout.addView(workoutDetailsEntity.convertToWorkoutDataLayout(this));
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
+                  case R.id.action_add:
                 Log.v("Debug", "R.id.action_add");
                 Intent chooseBodyPartIntent = new Intent(this, ChooseBodyPart.class);
                 startActivityForResult(chooseBodyPartIntent, ACTION_ADD);
@@ -121,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Debug", "R.id.action_showProgress");
                 Intent showProgressIntent = new Intent(this, ShowProgress.class);
                 startActivity(showProgressIntent);
+                break;
+            case R.id.action_restore:
+                m_WorkoutsForDayRepository.deleteAll();
+                m_WorkoutNamesRepository.deleteAll();
                 break;
             case R.id.createTestConfig:
                 Log.v("Debug", "R.id.action_showProgress");
@@ -145,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
                         workoutList.add(getWorkoutDataLayoutAt(i).convertToWorkoutDetailsEntity());
                     }
                     WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutForDayRepository.update(w);
+                    m_WorkoutsForDayRepository.update(w);
                 } else {
                     WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutForDayRepository.deleteForGivenDate(getCurrentDate());
-                    m_WorkoutForDayRepository.insertAll(w);
+                    m_WorkoutsForDayRepository.deleteForGivenDate(getCurrentDate());
+                    m_WorkoutsForDayRepository.insertAll(w);
                 }
 
                 break;
@@ -177,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
         insertCurrentWorkoutIntoLayout();
     }
 
+    public void imageClicked(View view) throws ParseException {
+        //TODO add changing image
+    }
+
     public String getCurrentDate() {
         return m_DateHandler.getCurrentDate();
     }
@@ -188,8 +193,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetApplication() {
         removeWorkoutDataLayouts();
-        m_WorkoutForDayRepository.deleteAll();
-        // m_AppDatabase.workoutNamesDao().deleteAll();
+        m_WorkoutsForDayRepository.deleteAll();
+        m_WorkoutNamesRepository.deleteAll();
+        String bodyParts[] = getResources().getStringArray(R.array.bodyParts);
+        WorkoutNames[] workoutNames = new WorkoutNames[bodyParts.length];
+        for(int i =0; i< bodyParts.length; ++i)
+        {
+            String[] workoutNames_ = getResources().getStringArray(Globals.getResId(bodyParts[i], R.array.class));
+            ArrayList<String> stringList = new ArrayList<String>(Arrays.asList(workoutNames_));
+            workoutNames[i] = new WorkoutNames(bodyParts[i], stringList);
+        }
+m_WorkoutNamesRepository.insertAll(workoutNames);
     }
 
 
@@ -221,11 +235,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (m_tableLayout.getChildCount() != 2) {
                     WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutForDayRepository.update(w);
+                    m_WorkoutsForDayRepository.update(w);
                 } else {
                     WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutForDayRepository.deleteForGivenDate(getCurrentDate());
-                    m_WorkoutForDayRepository.insertAll(w);
+                    m_WorkoutsForDayRepository.deleteForGivenDate(getCurrentDate());
+                    m_WorkoutsForDayRepository.insertAll(w);
                 }
 
                 // m_databaseHandler.populateDataBase(workoutList);
@@ -269,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
             workoutDetailsEntities.add(workoutDetailsEntity);
         }
         WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutDetailsEntities);
-        m_WorkoutForDayRepository.update(w);
+        m_WorkoutsForDayRepository.update(w);
 //        if(workoutList.size() == 0)
 //        {
 //            m_databaseHandler.deleteWorkoutForGivenDate(m_currentDate);
