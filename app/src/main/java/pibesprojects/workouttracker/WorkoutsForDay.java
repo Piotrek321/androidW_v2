@@ -32,6 +32,10 @@ public class WorkoutsForDay implements Parcelable
     }
 
     public List<WorkoutDetailsEntity> getWorkoutDetailsEntityList() {
+        for(WorkoutDetailsEntity workoutDetailsEntity: workoutDetailsEntityList)
+        {
+            workoutDetailsEntity.setDate(date);
+        }
         return workoutDetailsEntityList;
     }
 

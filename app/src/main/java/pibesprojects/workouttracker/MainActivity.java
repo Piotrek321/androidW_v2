@@ -28,6 +28,8 @@ import static pibesprojects.workouttracker.CommonData.GET_DATE_FROM_CALENDAR;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA_INT;
 import static pibesprojects.workouttracker.CommonData.dateFormat;
+import static pibesprojects.workouttracker.PreShowProgress.ONLY_AVAILABLE_WORKOUTS;
+import static pibesprojects.workouttracker.ShowProgress.SHOW_PROGRESS_DATA;
 
 public class MainActivity extends AppCompatActivity {
     public static int a = 0;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public TableLayout m_tableLayout;
     public WorkoutsForDayRepository m_WorkoutsForDayRepository;
     public WorkoutNamesRepository m_WorkoutNamesRepository;
-
+    private int m_IndexOfCurrent = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,43 +118,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_showProgress:
                 Log.v("Debug", "R.id.action_showProgress");
-                Intent showProgressIntent = new Intent(this, ShowProgress.class);
-                startActivity(showProgressIntent);
+               // Intent showProgressIntent = new Intent(this, ShowProgress.class);
+               // startActivity(showProgressIntent);
+                Log.v("Debug", "action_showProgress add to DB");
+                Calendar cal2 = Calendar.getInstance();
+                cal2.add(Calendar.MONTH, -1);
+                Date nextDate2 = cal2.getTime();
+                String strDt2 = m_DateHandler.getSimpleDateFormat().format(nextDate2);
+                List<WorkoutsForDay> workoutFromMonth2 =  m_WorkoutsForDayRepository.getWorkoutsForGivenPeriod(strDt2, getCurrentDate());
+                ArrayList<WorkoutsForDay> workoutFromMonthAL2 = new ArrayList<>(workoutFromMonth2);
+                Intent intent2 = new Intent(this, PreShowProgress.class);
+                intent2.putExtra(ONLY_AVAILABLE_WORKOUTS, 1);
+                intent2.putParcelableArrayListExtra(SHOW_PROGRESS_DATA, workoutFromMonthAL2);
+                startActivity(intent2);
                 break;
             case R.id.action_restore:
                 m_WorkoutsForDayRepository.deleteAll();
                 m_WorkoutNamesRepository.deleteAll();
                 break;
+
             case R.id.createTestConfig:
-                Log.v("Debug", "R.id.action_showProgress");
-                WorkoutDetailsEntityBuilder builder = new WorkoutDetailsEntityBuilder();
-                List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
-
-                for(int i =0; i< 10; ++i)
-                {
-                    WorkoutDetailsEntity workoutDetailsEntity= builder.setSets(1+a).
-                            setRepetitions(new ArrayList<>(Collections.singletonList(10+a))).
-                            setWeights(new ArrayList<>(Collections.singletonList(5.0))).
-                            setBodyPart("bodypart" +a).
-                            setWorkoutName("workout" + a).build();
-                    insertWorkoutDetailsEntityIntoMainLayout(workoutDetailsEntity);
-                    workoutList.add(workoutDetailsEntity);
-                    ++a;
-
-                }
-                if (m_tableLayout.getChildCount() != 2) {
-                    workoutList = new ArrayList<>();
-                    for(int i = 0; i< m_tableLayout.getChildCount()-1; ++i) {
-                        workoutList.add(getWorkoutDataLayoutAt(i).convertToWorkoutDetailsEntity());
-                    }
-                    WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutsForDayRepository.update(w);
-                } else {
-                    WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
-                    m_WorkoutsForDayRepository.deleteForGivenDate(getCurrentDate());
-                    m_WorkoutsForDayRepository.insertAll(w);
-                }
-
+                createTestConfig();
                 break;
         }
         return false;
@@ -244,15 +230,32 @@ m_WorkoutNamesRepository.insertAll(workoutNames);
 
                 // m_databaseHandler.populateDataBase(workoutList);
             }
+            case GET_EDIT_DATA_INT:
+            {
+                WorkoutDetailsEntity workoutDetailsEntity = data.getParcelableExtra(GET_EDIT_DATA);
+                if(m_tableLayout.getChildAt(m_IndexOfCurrent) != null) {
+
+
+                    m_tableLayout.removeViewAt(m_IndexOfCurrent);
+                    m_tableLayout.addView(workoutDetailsEntity.convertToWorkoutDataLayout(this), m_IndexOfCurrent);
+                }
+//                m_tableLayout.setChil
+//                (WorkoutDataLayout)(m_tableLayout.getChildAt(m_IndexOfCurrent)) = ;
+//                workoutDataLayout  = workoutDetailsEntity.convertToWorkoutDataLayout(this);
+               // convertWorkoutDetailsToWorkoutEntryList2(workoutDetailsEntityList, workoutEntryList);
+                return;
+            }
+
         }
     }
 
     public void workoutRowClicked(View view) {
         //HOW TO CAST IT TO WORKOUTENTRYLIST????
         ViewGroup parent = (ViewGroup) view.getParent();
-        //parent.indexOfChild()
+        //m_IndexOfCurrent = parent.indexOfChild(view);
         ViewGroup grandparent = (ViewGroup) parent.getParent();
         int childIndex = grandparent.indexOfChild(parent);
+        m_IndexOfCurrent = childIndex;
         Log.v("Debug", "a.indexOfChild(view); " + childIndex);
 
         WorkoutDataLayout workoutDataLayout = getWorkoutDataLayoutAt(childIndex - 1);
@@ -294,6 +297,41 @@ m_WorkoutNamesRepository.insertAll(workoutNames);
 //        }
 
     }
+
+    public void createTestConfig()
+    {
+        Log.v("Debug", "R.id.action_showProgress");
+        WorkoutDetailsEntityBuilder builder = new WorkoutDetailsEntityBuilder();
+        List<WorkoutDetailsEntity> workoutList = new ArrayList<>();
+
+        for(int i =0; i< 10; ++i)
+        {
+            WorkoutDetailsEntity workoutDetailsEntity= builder.setSets(1+a).
+                    setRepetitions(new ArrayList<>(Collections.singletonList(10+a))).
+                    setWeights(new ArrayList<>(Collections.singletonList(5.0))).
+                    setBodyPart("Abs").
+                    setWorkoutName("workout" + a).
+                    setDate(getCurrentDate()).build();
+            insertWorkoutDetailsEntityIntoMainLayout(workoutDetailsEntity);
+            workoutList.add(workoutDetailsEntity);
+            ++a;
+
+        }
+        if (m_tableLayout.getChildCount() != 2) {
+            workoutList = new ArrayList<>();
+            for(int i = 0; i< m_tableLayout.getChildCount()-1; ++i) {
+                workoutList.add(getWorkoutDataLayoutAt(i).convertToWorkoutDetailsEntity());
+            }
+            WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+            m_WorkoutsForDayRepository.update(w);
+        } else {
+            WorkoutsForDay w = new WorkoutsForDay(getCurrentDate(), workoutList);
+            m_WorkoutsForDayRepository.deleteForGivenDate(getCurrentDate());
+            m_WorkoutsForDayRepository.insertAll(w);
+        }
+
+    }
+
     public WorkoutDataLayout getWorkoutDataLayoutAt(int index) {
         return (WorkoutDataLayout) m_tableLayout.getChildAt(index + 1);
     }
@@ -306,7 +344,10 @@ m_WorkoutNamesRepository.insertAll(workoutNames);
             sdf = new SimpleDateFormat(dateFormat, Locale.US);
             m_currentDate = sdf.format(new Date());
         }
-
+        public SimpleDateFormat getSimpleDateFormat()
+        {
+            return sdf;
+        }
         public String getCurrentDate() {
             return m_currentDate;
         }

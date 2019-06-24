@@ -24,6 +24,7 @@ public class WorkoutDataLayout extends RelativeLayout {
     private ImageView m_WorkoutImage;
     private TextView m_BodyPart;
     private ImageView m_TrashButton;
+    public String m_Date;
 
     public WorkoutDataLayout(Context context, AttributeSet attrs)
     {
@@ -77,7 +78,7 @@ public class WorkoutDataLayout extends RelativeLayout {
         workoutDetailsEntity.setSets(Integer.parseInt(number));
         workoutDetailsEntity.setBodyPart(getBodyPart().getText().toString());
         Log.v("Debug", "convertToWorkoutDetailsEntity m_BodyPart: " + getBodyPart());
-
+        workoutDetailsEntity.setDate(m_Date);
         Log.v("Debug", "convertToWorkoutDetailsEntity workoutDetailsEntity.getWorkoutName(): " + workoutDetailsEntity.getWorkoutName());
 
         return workoutDetailsEntity;

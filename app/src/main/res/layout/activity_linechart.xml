@@ -14,7 +14,7 @@
         android:padding="10dip"
         android:text="Date" />
 
-    <com.example.aaa.workoutwithfriend.VerticalTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <pibesprojects.workouttracker.VerticalTextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/leftAxisLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

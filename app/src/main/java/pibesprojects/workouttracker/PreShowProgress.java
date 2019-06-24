@@ -2,12 +2,14 @@ package pibesprojects.workouttracker;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +40,22 @@ public class PreShowProgress extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        workoutDetailEntities = new ArrayList<>();
         setContentView(R.layout.activity_before_show_progress);
-        workoutDetailEntities = getIntent().getParcelableArrayListExtra(SHOW_PROGRESS_DATA);
+        ArrayList<WorkoutsForDay> workoutsForDays;
+        workoutsForDays = getIntent().getParcelableArrayListExtra(SHOW_PROGRESS_DATA);
+        if(workoutsForDays == null || workoutsForDays.size() == 0 )
+        {
+            Toast.makeText(this,
+                    "No data available" ,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        for(WorkoutsForDay workoutsForDay : workoutsForDays)
+        {
+            workoutDetailEntities.addAll(workoutsForDay.getWorkoutDetailsEntityList());
+        }
+
         Integer option = getIntent().getIntExtra(ONLY_AVAILABLE_WORKOUTS, 0);
         Boolean addNewChart = getIntent().getBooleanExtra(ADD_NEW_CHART, false);
         if (addNewChart) {

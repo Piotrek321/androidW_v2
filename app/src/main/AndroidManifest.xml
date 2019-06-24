@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pibesprojects.workouttracker">
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +16,37 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ChooseBodyPart"
+            android:parentActivityName=".MainActivity">
+            android:theme="@style/Theme.AppCompat" >
+
+            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".PreShowProgress"
+            android:parentActivityName=".MainActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity android:name=".ShowProgress"
+            android:parentActivityName=".PreShowProgress">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PreShowProgress" />
+        </activity>
+
+
         <activity
             android:name=".CustomCalendar"
             android:parentActivityName=".MainActivity">
@@ -26,45 +56,36 @@
         </activity>
 
         <activity android:name=".ChooseWorkout"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ChooseBodyPart">
             android:theme="@style/Theme.AppCompat" >
 
-            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+            <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar"The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".ChooseRepsAndSets"
-            android:parentActivityName=".MainActivity">
-            android:theme="@style/Theme.AppCompat" >
+            android:parentActivityName=".ChooseWorkout"
+            >
 
-            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
 
-        <activity android:name=".ChooseBodyPart"
-            android:parentActivityName=".MainActivity">
-            android:theme="@style/Theme.AppCompat" >
 
-            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
+        <activity android:name=".ChangePeriodActivity"
+            android:parentActivityName=".ShowProgress"
+            >
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ShowProgress" />
         </activity>
-        <activity android:name=".ShowProgress"
-            android:parentActivityName=".MainActivity">
-            android:theme="@style/Theme.AppCompat" >
 
-            <!--android:theme="@style/Theme.AppCompat" fajny widok -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
     </application>
-
-
 
 </manifest>

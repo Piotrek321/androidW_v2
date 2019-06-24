@@ -34,7 +34,7 @@ public class ChooseBodyPartTest {
     {
         ChooseBodyPart chooserBodyPart = rule.getActivity();
         LinearLayout linearLayout = chooserBodyPart.findViewById(R.id.linearLayout_);
-        String[] workouts = chooserBodyPart.getResources().getStringArray(R.array.workouts);
+        String[] workouts = chooserBodyPart.getResources().getStringArray(R.array.bodyParts);
         assertThat(linearLayout.getChildCount(), comparesEqualTo(workouts.length));
     }
 

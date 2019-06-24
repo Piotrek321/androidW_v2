@@ -45,7 +45,7 @@ public class WorkoutsForDayRepository {
 
     public WorkoutsForDay getWorkoutForGivenDate(String date){
         try {
-            return new getWorkoutsForGivenPeriodAsyncTask(m_WorkoutsForDayDao).execute(date).get();
+            return new GetWorkoutsForGivenDateAsyncTask(m_WorkoutsForDayDao).execute(date).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -54,26 +54,40 @@ public class WorkoutsForDayRepository {
 
     public List<WorkoutsForDay> getWorkoutsForGivenPeriod(String dateFirst, String dateLast)
     {
-
-        return m_WorkoutsForDayDao.getWorkoutsForGivenPeriod(dateFirst, dateLast);
-    }
+        try {
+            return new GetWorkoutsForGivenPeriodAsyncTask(m_WorkoutsForDayDao).execute(dateFirst,dateLast ).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;    }
 //
 //    public LiveData<List<WorkoutsForDay>> getAllNotes() {
 //        return allNotes;
 //    }
-private static class getWorkoutsForGivenPeriodAsyncTask extends AsyncTask<String, Void, WorkoutsForDay> {
+private static class GetWorkoutsForGivenPeriodAsyncTask extends AsyncTask<String, Void, List<WorkoutsForDay>> {
     private WorkoutsForDayDao workoutForDayDao;
 
 
-    private getWorkoutsForGivenPeriodAsyncTask(WorkoutsForDayDao workoutForDayDao) {
+    private GetWorkoutsForGivenPeriodAsyncTask(WorkoutsForDayDao workoutForDayDao) {
         this.workoutForDayDao = workoutForDayDao;
     }
     @Override
-    protected  WorkoutsForDay doInBackground(String ...date) {
-        return workoutForDayDao.getWorkoutForGivenDate(date[0]);
+    protected  List<WorkoutsForDay> doInBackground(String ...date) {
+        return workoutForDayDao.getWorkoutsForGivenPeriod(date[0], date[1]);
     }
 }
+    private static class GetWorkoutsForGivenDateAsyncTask extends AsyncTask<String, Void, WorkoutsForDay> {
+        private WorkoutsForDayDao workoutForDayDao;
 
+
+        private GetWorkoutsForGivenDateAsyncTask(WorkoutsForDayDao workoutForDayDao) {
+            this.workoutForDayDao = workoutForDayDao;
+        }
+        @Override
+        protected  WorkoutsForDay doInBackground(String ...date) {
+            return workoutForDayDao.getWorkoutForGivenDate(date[0]);
+        }
+    }
 private static class GetAllWorkoutsAsyncTask extends AsyncTask<Void, Void, List<WorkoutsForDay>> {
     private WorkoutsForDayDao workoutForDayDao;
 

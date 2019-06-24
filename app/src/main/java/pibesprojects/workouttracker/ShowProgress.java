@@ -1,8 +1,8 @@
 package pibesprojects.workouttracker;
 
-import android.app.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
+import android.widget.Toast;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -31,6 +33,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,8 +42,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import android.content.Context;
-import android.widget.Toast;
 
 import static pibesprojects.workouttracker.CommonData.EXTRA_MESSAGE_WORKOUT_NAME;
 import static pibesprojects.workouttracker.PreShowProgress.ONLY_AVAILABLE_WORKOUTS;
@@ -71,7 +72,7 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
         m_Sdf = new SimpleDateFormat("yyyy/MM/dd");
         m_WorkoutsForDayRepository = new WorkoutsForDayRepository(this);
         m_Colors = m_Context.getResources().getIntArray(R.array.rainbow);
-        ArrayList<WorkoutsForDay> workoutDetailEntities = getIntent().getParcelableArrayListExtra(SHOW_PROGRESS_DATA);
+        ArrayList<WorkoutDetailsEntity> workoutDetailEntities = getIntent().getParcelableArrayListExtra(SHOW_PROGRESS_DATA);
         String workoutName = getIntent().getStringExtra(EXTRA_MESSAGE_WORKOUT_NAME);
         m_CurrentWorkoutName = workoutName;
         setUpChart();
@@ -104,8 +105,8 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
         }
         else if (view.getId() == R.id.changePeriod)
         {
-            Intent intent = new Intent(m_Context, ChangePeriodActivity.class);
-            startActivityForResult(intent, 1);
+            //Intent intent = new Intent(m_Context, ChangePeriodActivity.class);
+            //startActivityForResult(intent, 1);
         }
     }
 
@@ -119,7 +120,12 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
         Date nextDate = cal.getTime();
         String strDt = m_Sdf.format(nextDate);
         List<WorkoutsForDay> workoutFromMonth2 =  m_WorkoutsForDayRepository.getWorkoutsForGivenPeriod(strDt, m_CurrentDate);
-        ArrayList<WorkoutsForDay> workoutFromMonthAL2 = new ArrayList<>(workoutFromMonth2);
+        ArrayList<WorkoutDetailsEntity> workoutDetailsEntities = new ArrayList<>();
+        for(WorkoutsForDay workoutsForDay : workoutFromMonth2)
+        {
+            workoutDetailsEntities.addAll(workoutsForDay.getWorkoutDetailsEntityList());
+        }
+
         m_LineData = new LineData();
         mChart.invalidate();
         mChart.clear();
@@ -127,28 +133,28 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
 
         if(requestCode == 1)
         {
-            generateCharts(workoutFromMonthAL2, m_CurrentWorkoutName);
+            generateCharts(workoutDetailsEntities, m_CurrentWorkoutName);
         }
         else if(requestCode == 2)
         {
             String workoutName= data_.getStringExtra(ADD_NEW_CHART_WORKOUT_NAME);
-            generateCharts(workoutFromMonthAL2, workoutName);
+            generateCharts(workoutDetailsEntities, workoutName);
             // setData(values, workoutName);
         }
     }
 
-    private class WorkoutDetailsComparator implements Comparator<WorkoutsForDay> {
-        public int compare(WorkoutsForDay left, WorkoutsForDay right) {
+    private class WorkoutDetailsComparator implements Comparator<WorkoutDetailsEntity> {
+        public int compare(WorkoutDetailsEntity left, WorkoutDetailsEntity right) {
             return left.getDate().compareTo(right.getDate());
         }
     }
 
-    private ArrayList<WorkoutsForDay> getWorkoutDetailsListForGivenWorkout(String workoutName, ArrayList<WorkoutsForDay> workoutDetailEntities)
+    private ArrayList<WorkoutDetailsEntity> getWorkoutDetailsListForGivenWorkout(String workoutName, ArrayList<WorkoutDetailsEntity> workoutDetailEntities)
     {
-        ArrayList<WorkoutsForDay> list = new ArrayList<>();
-        for(WorkoutsForDay workout : workoutDetailEntities)
+        ArrayList<WorkoutDetailsEntity> list = new ArrayList<>();
+        for(WorkoutDetailsEntity workout : workoutDetailEntities)
         {
-            for(WorkoutDetailsEntity workout_ : workout.getWorkoutDetailsEntityList())
+            for(WorkoutDetailsEntity workout_ : workoutDetailEntities)
             if(workout_.getWorkoutName().equals(workoutName))
             {
                 list.add(workout);
@@ -228,14 +234,14 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
 
         mChart.getAxisRight().setEnabled(false);
     }
-    private void generateCharts(ArrayList<WorkoutsForDay> workoutDetailEntities, String workoutName)
+    private void generateCharts(ArrayList<WorkoutDetailsEntity> workoutDetailEntities, String workoutName)
     {
         Collections.sort(workoutDetailEntities, new WorkoutDetailsComparator());
         if (workoutDetailEntities.size() == 0) {
             return;
         }
 
-        ArrayList<WorkoutsForDay> details = getWorkoutDetailsListForGivenWorkout(workoutName, workoutDetailEntities);
+        ArrayList<WorkoutDetailsEntity> details = getWorkoutDetailsListForGivenWorkout(workoutName, workoutDetailEntities);
         if(details.size() == 0)
         {
             Toast.makeText(this,
@@ -247,9 +253,9 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
         float max = 0;
         for (int i = 0; i < details.size(); ++i) {
             float sum = 0;
-            for (Double j : details.get(i).get()) {
-                sum += j;
-            }
+//            for (Double j : details.get(i).get()) {
+//                sum += j;
+//            }
             if (sum > max) max = sum;
             Date date = new Date();
             try {
@@ -283,12 +289,12 @@ public class ShowProgress extends Activity implements SeekBar.OnSeekBarChangeLis
         mChart.invalidate();
 
 //
-//                mChart.setAutoScaleMinMaxEnabled(true);
+////                mChart.setAutoScaleMinMaxEnabled(true);
 //        mChart.notifyDataSetChanged();
-
+//
 //        List<ILineDataSet> sets = mChart.getData()
 //                .getDataSets();
-
+//
 //        for (ILineDataSet iSet : sets) {
 //
 //            LineDataSet set = (LineDataSet) iSet;

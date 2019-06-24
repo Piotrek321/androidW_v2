@@ -18,6 +18,7 @@ public class WorkoutDetailsEntity implements Parcelable
     private ArrayList<Double> weights;
     private String workoutName;
     private String bodyPart;
+    private String date;
 
     public String getDate() {
         return date;
@@ -27,7 +28,6 @@ public class WorkoutDetailsEntity implements Parcelable
         this.date = date;
     }
 
-    private String date;
 
 
     @Ignore
@@ -64,6 +64,7 @@ public class WorkoutDetailsEntity implements Parcelable
         pc.writeList(weights);
         pc.writeString(workoutName);
         pc.writeString(bodyPart);
+        pc.writeString(date);
     }
 
     /**Ctor from Parcel, reads back fields IN THE ORDER they were written */
@@ -79,6 +80,7 @@ public class WorkoutDetailsEntity implements Parcelable
             message += " number of sets must be equal to repetitions size and weights size";
             throw new RuntimeException(message);
         }
+        date = pc.readString();
     }
 
     public Integer getSets() {
@@ -145,7 +147,7 @@ public class WorkoutDetailsEntity implements Parcelable
                 context.getString(R.string.Weight, getWeightAsString()),
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher),//benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
                 getBodyPart());
-
+        workoutDataLayout.m_Date = date;
         return workoutDataLayout;
     }
 }
