@@ -23,7 +23,7 @@
         />
 
     <RelativeLayout
-        android:id="@+id/relLayout"
+        android:id="@+id/backgroundLayout"
         android:layout_width="0dip"
         android:layout_height="fill_parent"
         android:layout_weight="0.7"
@@ -77,20 +77,21 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relLayout_"
+        android:id="@+id/rightLayout"
         android:layout_width="0dip"
         android:layout_height="fill_parent"
         android:layout_weight="0.15"
         android:onClick="relativeLayoutClicked">
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/fab_add"
-        android:onClick="FABClicked"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="end|bottom"
+            android:onClick="FABClicked"
+            android:src="@drawable/fab_add" />
     </RelativeLayout>
 
 </LinearLayout>

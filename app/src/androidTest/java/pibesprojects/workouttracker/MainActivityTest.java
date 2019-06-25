@@ -146,7 +146,7 @@ public class MainActivityTest {
 
         activity.onOptionsItemSelected(menu.findItem(R.id.action_showProgress));
         android.os.SystemClock.sleep(1000);
-        intended(hasComponent(ShowProgress.class.getName()));
+        intended(hasComponent(PreShowProgress.class.getName()));
         Intents.release();
     }
 

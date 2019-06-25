@@ -14,8 +14,8 @@
             android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_weight="0.15"
-            android:orientation="horizontal"
-            android:onClick="relativeLayoutClicked"/>
+            android:onClick="relativeLayoutClicked"
+            android:orientation="horizontal" />
 
 
         <RelativeLayout

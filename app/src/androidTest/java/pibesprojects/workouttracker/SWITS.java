@@ -66,7 +66,7 @@ public class SWITS {
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
         intended(hasComponent(pibesprojects.workouttracker.ChooseBodyPart.class.getName()));
 
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.CableChops)).perform(click());
 
         //Set reps
@@ -94,7 +94,7 @@ public class SWITS {
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
         intended(hasComponent(pibesprojects.workouttracker.ChooseBodyPart.class.getName()));
 
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.CableChops)).perform(click());
 
         //Set reps
@@ -127,7 +127,7 @@ public class SWITS {
     public void createTwoWorkoutEntryWithOneSets_ChecksIfProperEntryWasAdded()
     {
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.TRXPushup)).perform(click());
 
         //Set reps
@@ -142,7 +142,7 @@ public class SWITS {
 
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
 
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.CableChops)).perform(click());
 
         //Set reps
@@ -170,7 +170,7 @@ public class SWITS {
     public void createTwoWorkoutEntryWithOneSets_ChecksIfProperEntryWasAdded_RestartMainActivity_CheckIfEverythingIsOk()
     {
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.TRXPushup)).perform(click());
 
         //Set reps
@@ -185,7 +185,7 @@ public class SWITS {
 
         m_MainActivity.onOptionsItemSelected(m_Menu.findItem(R.id.action_add));
 
-        onView(withId(R.id.absButton)).perform(click());
+        onView(withText("Abs")).perform(click());
         onView(withText(R.string.CableChops)).perform(click());
 
         //Set reps
