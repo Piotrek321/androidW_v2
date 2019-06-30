@@ -17,10 +17,10 @@
     <string name="Kg">%1s kg</string>
     <string name="NoDataAvailable">No data available</string>
 
-    <string name="Reps">Reps:    %1$s</string>
-    <string name="Sets">Sets:      %1$s</string>
-    <string name="SetsInteger">Sets:      %1$d</string>
+    <string name="Reps">Reps: %1$s</string>
     <string name="Weight">Weight: %1$s</string>
+    <string name="Sets">Sets: %1$s</string>
+    <string name="SetsInteger">Sets: %1$d</string>
     <string name="SetNumberOfSets">%1$d</string>
     <!--WORKOUTS-->
     <string name="abs">Abs</string>

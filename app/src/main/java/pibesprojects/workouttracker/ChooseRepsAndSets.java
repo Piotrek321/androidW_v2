@@ -281,13 +281,7 @@ public class ChooseRepsAndSets extends Activity {
 
         Intent i = new Intent();
         i.putExtra(GET_EDIT_DATA, collectDataBeforeExiting());
-//        if(childsIndex != 999)
-//        {
-//            i.putExtra(CHILD_INDEX, childsIndex);
-//
-//            setResult(GET_EDIT_DATA_INT, i);
-//            finish();
-//        }
+
         setResult(RESULT_OK, i);
         finish();
     }

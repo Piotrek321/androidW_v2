@@ -140,11 +140,30 @@ public class WorkoutDetailsEntity implements Parcelable
 
     WorkoutDataLayout convertToWorkoutDataLayout(Context context) {
         WorkoutDataLayout workoutDataLayout = new WorkoutDataLayout(context, null);
+        String weights = getWeightAsString();
+        String repetitions = getRepetitionsAsString();
+        if(weights.length() > repetitions.length())
+        {
+            int firstIndex = weights.indexOf(" ");
+
+            int secondIndex = repetitions.indexOf(" ");
+            while (firstIndex >= 0) {
+                firstIndex = weights.indexOf(" " , firstIndex + 1);
+                secondIndex = repetitions.indexOf(" ", secondIndex+ 1);
+                int x =0;
+            }
+
+
+        }
+        else
+        {
+
+        }
         workoutDataLayout.createEntry(
                 getWorkoutName(),
                 context.getString(R.string.SetsInteger, getRepetitions().size()),
-                context.getString(R.string.Reps, getRepetitionsAsString()),
-                context.getString(R.string.Weight, getWeightAsString()),
+                context.getString(R.string.Reps, repetitions),
+                context.getString(R.string.Weight, weights ),
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher),//benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
                 getBodyPart());
         workoutDataLayout.m_Date = date;

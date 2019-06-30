@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> stringList = new ArrayList<String>(Arrays.asList(workoutNames_));
             workoutNames[i] = new WorkoutNames(bodyParts[i], stringList);
         }
-m_WorkoutNamesRepository.insertAll(workoutNames);
+        m_WorkoutNamesRepository.insertAll(workoutNames);
     }
 
 
