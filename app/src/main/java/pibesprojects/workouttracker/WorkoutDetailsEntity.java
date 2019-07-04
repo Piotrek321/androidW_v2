@@ -136,6 +136,80 @@ public class WorkoutDetailsEntity implements Parcelable
     {
         return arrayToString(weights);
     }
+    static String separator = " ";
+
+
+        public static String getEmpty
+                (int times) {
+            String tmp = "";
+            for (int i = 0; i <times; i++) {
+                tmp += separator;
+            }
+            return tmp;
+        }
+
+        public static String adjustString(String original, String toAdjust)
+        {
+            if(original.length() > toAdjust.length())
+            {
+                return adjustString2(original, toAdjust);
+            }
+            return  adjustString2(toAdjust, original);
+
+        }
+        public static String adjustString2(String original, String toAdjust)
+        {
+            String[] parts = toAdjust.split(" ");
+            int index = 0;
+
+            StringBuilder builder = new StringBuilder(getEmpty(original.length()));
+            int indexFirstBegin = 0, indexSecondBegin =0;
+            int indexFirstEnd = toAdjust.indexOf(separator), indexSecondEnd = original.indexOf(separator);
+            System.out.println("indexFirstBegin: " + indexFirstBegin);
+            System.out.println("indexFirstEnd: "  + indexFirstEnd);
+            System.out.println("indexSecondBegin: " + indexSecondBegin);
+            System.out.println("indexSecondEnd: " + indexSecondEnd);
+            int sizeFirst;
+            int sizeSecond;
+
+            while(true)
+            {
+                sizeFirst = indexFirstEnd - indexFirstBegin ;
+                sizeSecond = indexSecondEnd - indexSecondBegin ;
+                System.out.println("sizeFirst: " + sizeFirst);
+                System.out.println("sizeSecond: " + sizeSecond);
+                int divider = (sizeSecond - sizeFirst)/2;
+                System.out.println("divider: " + divider);
+
+                int padding = divider ;///2;
+                System.out.println("padding: " + padding);
+                builder.insert(indexSecondBegin + padding + (index *2), parts[index]);
+                System.out.println("builder:" + builder);
+                System.out.println("second :" + original);
+               // ++index;
+                if(indexFirstEnd == toAdjust.length() || indexFirstEnd == toAdjust.length())
+                {
+                    return builder.toString();//.substring(0, original.length());
+                }
+                ++index;
+                indexFirstBegin = indexFirstEnd + 1;
+                indexSecondBegin = indexSecondEnd + 1;
+                indexFirstEnd = toAdjust.indexOf(separator, indexFirstBegin);
+                if(indexFirstEnd == -1)
+                {
+                    indexFirstEnd = toAdjust.length();
+                }
+                indexSecondEnd = original.indexOf(separator, indexSecondBegin);
+                if(indexSecondEnd == -1)
+                {
+                    indexSecondEnd = original.length();
+                }
+                System.out.println("indexFirstBegin: " + indexFirstBegin);
+                System.out.println("indexFirstEnd: "  + indexFirstEnd);
+                System.out.println("indexSecondBegin: " + indexSecondBegin);
+                System.out.println("indexSecondEnd: " + indexSecondEnd);
+            }
+        }
 
 
     WorkoutDataLayout convertToWorkoutDataLayout(Context context) {
@@ -144,21 +218,24 @@ public class WorkoutDetailsEntity implements Parcelable
         String repetitions = getRepetitionsAsString();
         if(weights.length() > repetitions.length())
         {
-            int firstIndex = weights.indexOf(" ");
-
-            int secondIndex = repetitions.indexOf(" ");
-            while (firstIndex >= 0) {
-                firstIndex = weights.indexOf(" " , firstIndex + 1);
-                secondIndex = repetitions.indexOf(" ", secondIndex+ 1);
-                int x =0;
-            }
-
-
+            repetitions = adjustString2(weights, repetitions);
+            StringBuilder builder = new StringBuilder(repetitions);
+            builder.insert(0, "    ");
+            weights = weights.replace(" ", "  ");
+            repetitions = builder.toString();//.substring(0, repetitions.length());
         }
         else
         {
+            weights = adjustString2(weights, repetitions);
+            StringBuilder builder = new StringBuilder(weights);
+            builder.insert(0, "   ");
+            weights = builder.toString();//.substring(0, weights.length());
+            repetitions.replace(" ", "  ");
 
         }
+
+        System.out.println("repetitions: " + repetitions);
+        System.out.println("weights:     " + weights);
         workoutDataLayout.createEntry(
                 getWorkoutName(),
                 context.getString(R.string.SetsInteger, getRepetitions().size()),
@@ -167,6 +244,35 @@ public class WorkoutDetailsEntity implements Parcelable
                 BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher),//benchpress), //m_workoutImageMap.get(wd.getWorkoutName())),
                 getBodyPart());
         workoutDataLayout.m_Date = date;
+        System.out.println("123:" + workoutDataLayout.getNumberOfReps().getText().toString());
+        System.out.println("123:" + workoutDataLayout.getWeight().getText().toString());
         return workoutDataLayout;
     }
 }
+
+/*
+      public static void main(String []args)
+        {
+            System.out.println("Hello World");
+            String original = "0.0 11.1 334.5";
+            String first =  "12 1 111";
+            String adjusted = adjustString(original, first);//.substring(0, original.length());
+            System.out.println("adjustet:" + adjusted);
+            System.out.println("original:" + original);
+
+
+            original = "0.2220 113213.1 32234.5";
+            first =  "12 1 111";
+            adjusted = adjustString(original, first);//.substring(0, original.length());
+            System.out.println("adjustet:" + adjusted);
+            System.out.println("original:" + original);
+
+            original = "12 1 111";
+            first =  "0.2220 113213.1 32234.5";
+            adjusted = adjustString(original, first);//.substring(0, original.length());
+            System.out.println("adjustet:" + adjusted);
+            System.out.println("original:" + first);
+
+
+        }
+ */
