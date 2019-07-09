@@ -183,7 +183,12 @@ public class WorkoutDetailsEntity implements Parcelable
 
                 int padding = divider ;///2;
                 System.out.println("padding: " + padding);
-                builder.insert(indexSecondBegin + padding + (index *2), parts[index]);
+                int offset = indexSecondBegin + padding + (index *2);
+                if(index >= parts.length || offset >  builder.length())
+                {
+                    return builder.toString();
+                }
+                builder.insert(offset, parts[index]);
                 System.out.println("builder:" + builder);
                 System.out.println("second :" + original);
                // ++index;

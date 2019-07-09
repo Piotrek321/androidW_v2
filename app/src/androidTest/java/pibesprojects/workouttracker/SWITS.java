@@ -118,8 +118,8 @@ public class SWITS {
         pressBack();
 
         onView(withIndex(withId(R.id.numberOfSets), 0)).check(matches(withSubstring("2")));
-        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("2 6")));
-        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring("5.0 10.0")));
+        onView(withIndex(withId(R.id.numberOfReps), 0)).check(matches(withSubstring("2     6")));
+        onView(withIndex(withId(R.id.weight), 0)).check(matches(withSubstring(" 5.0  10.0")));
         onView(withIndex(withId(R.id.workoutName), 0)).check(matches(withSubstring(m_Context.getString(R.string.CableChops))));
     }
 
