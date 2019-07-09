@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public WorkoutsForDayRepository m_WorkoutsForDayRepository;
     public WorkoutNamesRepository m_WorkoutNamesRepository;
     private int m_IndexOfCurrent = -1;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
