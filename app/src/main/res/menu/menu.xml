@@ -28,6 +28,17 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_add_black_24dp">
     </item>
+
+    <item
+    android:id="@+id/copyWorkout"
+    android:title="@string/copyWorkout"
+    android:visible="false">
+</item>
+    <item
+        android:id="@+id/copyThisDay"
+        android:title="@string/copyThisDay"
+        android:visible="false">
+    </item>
     <item
         android:id="@+id/createTestConfig"
         android:title="createTestConfig">

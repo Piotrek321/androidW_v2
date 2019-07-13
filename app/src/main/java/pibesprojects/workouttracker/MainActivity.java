@@ -27,11 +27,14 @@ import static pibesprojects.workouttracker.CommonData.EXTRA_DATE;
 import static pibesprojects.workouttracker.CommonData.GET_DATE_FROM_CALENDAR;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA;
 import static pibesprojects.workouttracker.CommonData.GET_EDIT_DATA_INT;
+import static pibesprojects.workouttracker.CommonData.IS_COPY_MODE;
 import static pibesprojects.workouttracker.CommonData.dateFormat;
 import static pibesprojects.workouttracker.PreShowProgress.ONLY_AVAILABLE_WORKOUTS;
 import static pibesprojects.workouttracker.ShowProgress.SHOW_PROGRESS_DATA;
 
 public class MainActivity extends AppCompatActivity {
+
+
     public static int a = 0;
     public ImageButton m_PreviousDayButton;
     public ImageButton m_NextDayButton;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public WorkoutsForDayRepository m_WorkoutsForDayRepository;
     public WorkoutNamesRepository m_WorkoutNamesRepository;
     private int m_IndexOfCurrent = -1;
-    
+    private WorkoutCopier m_WorkoutCopier;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 handleUncaughtException(thread, ex);
             }
         }
-);
+        );
         m_WorkoutsForDayRepository = new WorkoutsForDayRepository(this);
         m_WorkoutNamesRepository = new WorkoutNamesRepository(this);
         m_DateHandler = new DateHandler();
+        m_WorkoutCopier = new WorkoutCopier();
         m_tableLayout = findViewById(R.id.tableLayout);
         m_PreviousDayButton = findViewById(R.id.goToPreviousDayButton);
         m_NextDayButton = findViewById(R.id.goToNextDayButton);
@@ -87,9 +91,25 @@ public class MainActivity extends AppCompatActivity {
         m_WorkoutsForDayRepository.insertAll(workoutsForDay);
 
         for (WorkoutDetailsEntity workoutDetailsEntity_ : workoutDetailsEntities) {
+            if(workoutDetailsEntity_.convertToWorkoutDataLayout(this).getParent() != null) {
+                ((ViewGroup)workoutDetailsEntity_.convertToWorkoutDataLayout(this).getParent()).removeView(workoutDetailsEntity_.convertToWorkoutDataLayout(this)); // <- fix
+            }
             m_tableLayout.addView(workoutDetailsEntity_.convertToWorkoutDataLayout(this));
 
         }
+    }
+
+    public void insertWorkoutDataLayoutIntoMainLayout(ArrayList<WorkoutDataLayout> workoutDataLayouts) {
+        List<WorkoutDetailsEntity> workoutDetailsEntities= new ArrayList<>();
+
+        for (WorkoutDataLayout workoutDataLayout : workoutDataLayouts)
+        {
+            workoutDetailsEntities.add(workoutDataLayout.convertToWorkoutDetailsEntity());
+            m_tableLayout.addView(workoutDataLayout);
+        }
+        WorkoutsForDay workoutsForDay = new WorkoutsForDay(getCurrentDate(), workoutDetailsEntities);
+        //TODO or UPDATE?
+        m_WorkoutsForDayRepository.insertAll(workoutsForDay);
     }
 
     public void insertCurrentWorkoutIntoLayout() {
@@ -104,7 +124,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-                  case R.id.action_add:
+            case R.id.copyWorkout:
+                m_WorkoutCopier.handleCopyButtonClicked(this);
+                break;
+            case R.id.copyThisDay:
+                m_WorkoutCopier.handleCopyThisDayButtonClicked(this);
+                break;
+            case R.id.action_add:
                 Log.v("Debug", "R.id.action_add");
                 Intent chooseBodyPartIntent = new Intent(this, ChooseBodyPart.class);
                 startActivityForResult(chooseBodyPartIntent, ACTION_ADD);
@@ -149,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         m_menu = menu;
         getMenuInflater().inflate(R.menu.menu, menu);
+        m_WorkoutCopier.createCopyButton(this);
+
         return true;
     }
 
@@ -193,6 +221,12 @@ public class MainActivity extends AppCompatActivity {
         m_WorkoutNamesRepository.insertAll(workoutNames);
     }
 
+    public void changeDate(String newDate)
+    {
+        m_DateHandler.setCurrentDate(newDate);
+        TextView dateText = findViewById(R.id.currentDateText);
+        dateText.setText(m_DateHandler.getCurrentDate());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -202,9 +236,16 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case GET_DATE_FROM_CALENDAR: {
                 String date = data.getStringExtra(EXTRA_DATE);
-                m_DateHandler.setCurrentDate(date);
-                TextView dateText = findViewById(R.id.currentDateText);
-                dateText.setText(m_DateHandler.getCurrentDate());
+                removeWorkoutDataLayouts();
+                changeDate(date);
+                insertCurrentWorkoutIntoLayout();
+
+                if(data.getBooleanExtra(IS_COPY_MODE, false))
+                {
+                    m_WorkoutCopier.createCopyThisDayButton(this);
+                    this.setTitle(getApplicationInfo().loadLabel(getPackageManager()).toString() + " copy mode");
+                }
+
                 //m_tableLayout.removeAllViews();
                 //generateActivityViewForDate();
                 break;
@@ -331,6 +372,16 @@ public class MainActivity extends AppCompatActivity {
             m_WorkoutsForDayRepository.insertAll(w);
         }
 
+    }
+
+    public ArrayList<WorkoutDataLayout> getAllWorkoutDataLayout()
+    {
+        ArrayList<WorkoutDataLayout> workoutDataLayouts = new ArrayList<>();
+        for(int i =0; i < m_tableLayout.getChildCount() - 1; ++i)
+        {
+            workoutDataLayouts.add(getWorkoutDataLayoutAt(i));
+        }
+        return workoutDataLayouts;
     }
 
     public WorkoutDataLayout getWorkoutDataLayoutAt(int index) {

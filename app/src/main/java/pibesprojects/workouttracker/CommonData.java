@@ -6,6 +6,8 @@ public class CommonData {
     static final String dateFormat = "yyyy/MM/dd";
     static final String EXTRA_MESSAGE_BODYPART_NAME = "BODYPART_NAME";
     static final String EXTRA_MESSAGE_WORKOUT_NAME = "WORKOUT_NAME";
+    static final String IS_COPY_MODE = "isCopyMode";
+    static final String DATE_TO_BE_COPIED_IN = "dateToBeCopiedIn";
 
     static final int GET_DATE_FROM_CALENDAR= 10;
     static final int ACTION_ADD = 20;

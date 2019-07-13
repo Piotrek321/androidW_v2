@@ -12,12 +12,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static pibesprojects.workouttracker.CommonData.DATE_TO_BE_COPIED_IN;
 import static pibesprojects.workouttracker.CommonData.EXTRA_DATE;
+import static pibesprojects.workouttracker.CommonData.IS_COPY_MODE;
 import static pibesprojects.workouttracker.CommonData.dateFormat;
 
 public class CustomCalendar extends AppCompatActivity {
     public CalendarView m_calendarView;
     private String m_currentDate;
+    boolean isCopyMode;
     //TODO it is done for testing purpose, is there any way to call onSelectedDayChange from
     //tests?
     public CalendarView.OnDateChangeListener m_listener;
@@ -31,11 +34,12 @@ public class CustomCalendar extends AppCompatActivity {
         sdf = new SimpleDateFormat(dateFormat, Locale.US);
         m_calendarView = findViewById(R.id.calendarView);
         m_currentDate = sdf.format(new Date());
+       // isCopyMode = getIntent().getBooleanExtra(IS_COPY_MODE, false);
+//        if(getIntent().getExtras() != null)
+//        {
+//            m_currentDate =  getIntent().getExtras().getString(EXTRA_DATE);
+//        }
 
-        if(getIntent().getExtras() != null)
-        {
-            m_currentDate =  getIntent().getExtras().getString(EXTRA_DATE);
-        }
         //setTitle(getIntent().getStringExtra(WINDOW_NAME));
 
         //isCopyMode = getIntent().getBooleanExtra(IS_COPY_MODE, false);
@@ -60,13 +64,15 @@ public class CustomCalendar extends AppCompatActivity {
                 parseDate(year, month, dayOfMonth);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(EXTRA_DATE, m_currentDate);
+                returnIntent.putExtra(IS_COPY_MODE, getIntent().getBooleanExtra(IS_COPY_MODE, false));
+                returnIntent.putExtra(DATE_TO_BE_COPIED_IN, getIntent().getStringExtra(DATE_TO_BE_COPIED_IN));
+
                 //returnIntent.putExtra(IS_COPY_MODE, isCopyMode);
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
             }
         };
         m_calendarView.setOnDateChangeListener(m_listener);
-
     }
     void parseDate(int year, int month, int dayOfMonth)
     {
